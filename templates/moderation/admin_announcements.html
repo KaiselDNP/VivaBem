@@ -2,11 +2,11 @@
 {% block title %}Avisos administrativos — VivaBem{% endblock %}
 {% block body %}
 {% include "includes/app_header.html" %}
-<main id="conteudo" class="module-page admin-page">
-    <div class="container">
-        {% include "includes/admin_nav.html" %}{% include "includes/messages.html" %}
-        <div class="module-heading"><div><span class="eyebrow">Comunicação interna</span><h1>Avisos enviados</h1><p>Envie mensagens para uma conta específica ou para um grupo de usuários.</p></div><a class="button button-primary" href="{% url 'moderation:admin_announcement_create' %}">Novo aviso</a></div>
-        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Data</th><th>Aviso</th><th>Público</th><th>Destinatários</th><th>Administrador</th></tr></thead><tbody>{% for announcement in announcements %}<tr><td>{{ announcement.created_at|date:"d/m/Y H:i" }}</td><td><strong>{{ announcement.title }}</strong><small>{{ announcement.message|truncatechars:120 }}</small></td><td>{% if announcement.recipient %}{{ announcement.recipient.get_full_name|default:announcement.recipient.email }}{% else %}{{ announcement.get_audience_display }}{% endif %}</td><td>{{ announcement.recipients_count }}</td><td>{{ announcement.created_by.get_full_name|default:announcement.created_by.email }}</td></tr>{% empty %}<tr><td colspan="5">Nenhum aviso enviado.</td></tr>{% endfor %}</tbody></table></div>
-    </div>
-</main>
+<main id="conteudo" class="module-page admin-page"><div class="container">
+    {% include "includes/admin_nav.html" %}{% include "includes/messages.html" %}
+    <section class="admin-section-header"><div><span class="eyebrow">Comunicação interna</span><h1>Avisos</h1><p>Comunique atualizações a uma conta específica ou a um grupo de usuários.</p></div><a class="button button-primary" href="{% url 'moderation:admin_announcement_create' %}">Criar novo aviso</a></section>
+    <section class="admin-summary-strip admin-summary-three" aria-label="Resumo de avisos"><div><span>Avisos enviados</span><strong>{{ announcement_summary.total }}</strong></div><div><span>Entregas geradas</span><strong>{{ announcement_summary.recipients }}</strong></div><div><span>Envios individuais</span><strong>{{ announcement_summary.individual }}</strong></div></section>
+    <div class="admin-table-heading"><div><h2>Histórico de comunicação</h2><p>Registro dos últimos 100 avisos enviados.</p></div></div>
+    <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Data</th><th>Aviso</th><th>Público</th><th>Entregas</th><th>Administrador</th></tr></thead><tbody>{% for announcement in announcements %}<tr><td><span class="table-primary">{{ announcement.created_at|date:"d/m/Y" }}</span><small>{{ announcement.created_at|date:"H:i" }}</small></td><td><strong>{{ announcement.title }}</strong><small>{{ announcement.message|truncatechars:120 }}</small></td><td>{% if announcement.recipient %}<span class="category-chip">Individual</span><small>{{ announcement.recipient.get_full_name|default:announcement.recipient.email }}</small>{% else %}<span class="category-chip">{{ announcement.get_audience_display }}</span>{% endif %}</td><td><span class="delivery-count">{{ announcement.recipients_count }}</span></td><td><span class="table-primary">{{ announcement.created_by.get_full_name|default:announcement.created_by.email }}</span></td></tr>{% empty %}<tr><td colspan="5"><div class="table-empty"><strong>Nenhum aviso enviado</strong><span>Use “Criar novo aviso” para iniciar uma comunicação.</span></div></td></tr>{% endfor %}</tbody></table></div>
+</div></main>
 {% endblock %}

@@ -9,15 +9,22 @@
         <span class="eyebrow">Transparência</span>
         <h1>Aviso de privacidade do protótipo</h1>
         <p class="lead">Este aviso descreve como os dados serão tratados durante o desenvolvimento acadêmico do VivaBem.</p>
-        <h2>Dados do cadastro</h2>
-        <p>Nesta etapa são armazenados nome, e-mail, senha protegida, perfil de acesso e data de aceite deste aviso.</p>
+        <h2>Quais dados são tratados</h2>
+        <p>O protótipo armazena dados de cadastro e perfil, necessidades e solicitações informadas pelo usuário, vínculos e permissões, dados profissionais, notificações, denúncias e registros administrativos. As senhas são armazenadas somente de forma protegida.</p>
         <h2>Finalidade</h2>
-        <p>Os dados são usados para identificar a conta, controlar o acesso e permitir os recursos correspondentes a cada perfil.</p>
+        <p>Os dados são usados para identificar a conta, controlar permissões, organizar pedidos de apoio, permitir a comunicação entre os perfis autorizados e manter a segurança e a rastreabilidade das ações administrativas.</p>
+        <h2>Necessidade e minimização</h2>
+        <p>Informe somente os dados necessários para utilizar cada funcionalidade. Não envie senhas, documentos, diagnósticos, prontuários ou informações médicas detalhadas nos campos de texto.</p>
         <h2>Compartilhamento e controle</h2>
         <p>Informações de pessoas idosas não serão liberadas automaticamente a familiares ou profissionais. Os vínculos e permissões dependerão de autorização registrada no sistema.</p>
+        <h2>Acesso, correção e solicitação de exclusão</h2>
+        <p>Os dados básicos podem ser corrigidos no perfil. Solicitações relacionadas à privacidade, acesso ou exclusão podem ser registradas na área de denúncias, escolhendo a categoria “Privacidade ou uso indevido de dados”, para análise administrativa.</p>
+        <h2>Conservação e segurança</h2>
+        <p>Os registros serão mantidos enquanto forem necessários para o funcionamento e a demonstração acadêmica do protótipo. O acesso é separado por perfil, as ações sensíveis exigem autenticação e decisões administrativas importantes são registradas para auditoria.</p>
         <h2>Limites do protótipo</h2>
         <p>O VivaBem é um projeto acadêmico em desenvolvimento. Ele não substitui serviços ou profissionais de saúde e não deve ser utilizado para emergências.</p>
-        <p><a class="button button-secondary" href="{% url 'accounts:signup_choice' %}">Voltar ao cadastro</a></p>
+        {% if user.is_authenticated %}<p><a href="{% url 'moderation:report_create' %}">Registrar uma solicitação sobre privacidade</a></p>{% endif %}
+        <p>{% if user.is_authenticated %}<a class="button button-secondary" href="{% url 'accounts:dashboard' %}">Voltar ao painel</a>{% else %}<a class="button button-secondary" href="{% url 'accounts:signup_choice' %}">Voltar ao cadastro</a>{% endif %}</p>
     </article>
 </main>
 {% endblock %}

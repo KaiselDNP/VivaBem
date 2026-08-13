@@ -16,7 +16,7 @@
             {% endif %}
             <a href="{% url 'professionals:directory' %}">Profissionais</a>
             <a href="{% url 'moderation:report_list' %}">Denúncias</a>
-            {% if user.is_superuser %}<a href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% elif user.role == 'admin' and user.is_staff %}<a href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% endif %}
+            {% if user.is_superuser %}<a {% if request.resolver_match.namespace == 'moderation' and 'admin_' in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% elif user.role == 'admin' and user.is_staff %}<a {% if request.resolver_match.namespace == 'moderation' and 'admin_' in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% endif %}
         </nav>
         <div class="dashboard-account">
             {% include "includes/theme_toggle.html" %}

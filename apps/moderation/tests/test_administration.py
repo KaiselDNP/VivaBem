@@ -46,6 +46,35 @@ class AdministrationTests(TestCase):
         response = self.client.get(reverse("moderation:admin_users"))
         self.assertEqual(response.status_code, 403)
 
+    def test_admin_menu_highlights_current_section(self):
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("moderation:admin_users"))
+
+        self.assertContains(response, "Central de gestão")
+        self.assertContains(response, 'class="is-active" aria-current="page"', count=1)
+        self.assertContains(response, "Contas e acessos")
+
+    def test_user_management_shows_account_summary(self):
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("moderation:admin_users"))
+
+        self.assertEqual(response.context["user_summary"]["total"], 3)
+        self.assertEqual(response.context["user_summary"]["active"], 3)
+        self.assertEqual(response.context["user_summary"]["professionals"], 1)
+        self.assertContains(response, "Contas cadastradas")
+
+    def test_django_admin_uses_vivabem_interface(self):
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("admin:index"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Administração técnica")
+        self.assertContains(response, "Gestão visual")
+        self.assertContains(response, "Voltar ao sistema")
+
     def test_admin_can_verify_complete_professional(self):
         self.client.force_login(self.admin)
         response = self.client.post(

@@ -1,5 +1,10 @@
+import re
+from urllib.parse import urlsplit
+
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.core import mail
+from django.core.cache import cache
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from apps.accounts.models import UserRole
@@ -85,6 +90,7 @@ class LoginAndAccessTests(TestCase):
     password = "UmaSenhaBemSegura123!"
 
     def setUp(self):
+        cache.clear()
         self.user = get_user_model().objects.create_user(
             email="familiar@example.com",
             password=self.password,
@@ -124,3 +130,94 @@ class LoginAndAccessTests(TestCase):
         self.assertEqual(get_response.status_code, 405)
         self.assertRedirects(post_response, reverse("core:home"))
         self.assertNotIn("_auth_user_id", self.client.session)
+
+    @override_settings(LOGIN_MAX_ATTEMPTS=3, LOGIN_LOCKOUT_SECONDS=60)
+    def test_repeated_invalid_logins_are_temporarily_limited(self):
+        for _ in range(3):
+            response = self.client.post(
+                reverse("accounts:login"),
+                {"username": self.user.email, "password": "senha-incorreta"},
+            )
+            self.assertEqual(response.status_code, 200)
+
+        blocked = self.client.post(
+            reverse("accounts:login"),
+            {"username": self.user.email, "password": self.password},
+        )
+
+        self.assertEqual(blocked.status_code, 429)
+        self.assertContains(blocked, "Muitas tentativas", status_code=429)
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+        cache.clear()
+        allowed = self.client.post(
+            reverse("accounts:login"),
+            {"username": self.user.email, "password": self.password},
+        )
+        self.assertRedirects(allowed, reverse("accounts:dashboard"))
+
+
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+class PasswordResetFlowTests(TestCase):
+    old_password = "UmaSenhaBemSegura123!"
+    new_password = "OutraSenhaAindaMaisSegura456!"
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            email="recuperar@example.com",
+            password=self.old_password,
+            first_name="Helena",
+            role=UserRole.SENIOR,
+        )
+
+    def test_login_page_offers_password_recovery(self):
+        response = self.client.get(reverse("accounts:login"))
+
+        self.assertContains(response, reverse("accounts:password_reset"))
+        self.assertContains(response, "Esqueci minha senha")
+
+    def test_unknown_email_receives_same_response_without_sending_email(self):
+        response = self.client.post(
+            reverse("accounts:password_reset"),
+            {"email": "nao-cadastrado@example.com"},
+        )
+
+        self.assertRedirects(response, reverse("accounts:password_reset_done"))
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_active_user_can_reset_password_with_single_use_link(self):
+        response = self.client.post(
+            reverse("accounts:password_reset"),
+            {"email": self.user.email.upper()},
+        )
+
+        self.assertRedirects(response, reverse("accounts:password_reset_done"))
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertNotIn(self.old_password, mail.outbox[0].body)
+
+        match = re.search(r"http://testserver(?P<path>/redefinir-senha/\S+)", mail.outbox[0].body)
+        self.assertIsNotNone(match)
+        token_path = urlsplit(match.group("path")).path
+
+        token_response = self.client.get(token_path)
+        self.assertEqual(token_response.status_code, 302)
+        set_password_url = token_response.url
+
+        form_response = self.client.get(set_password_url)
+        self.assertContains(form_response, "Crie uma nova senha")
+
+        complete = self.client.post(
+            set_password_url,
+            {
+                "new_password1": self.new_password,
+                "new_password2": self.new_password,
+            },
+        )
+        self.assertRedirects(complete, reverse("accounts:password_reset_complete"))
+
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.check_password(self.old_password))
+        self.assertTrue(self.user.check_password(self.new_password))
+
+        reused = self.client.get(token_path, follow=True)
+        self.assertContains(reused, "Este link não é mais válido")

@@ -49,6 +49,7 @@
                 <article class="dashboard-card"><span>03</span><h2>Denúncias</h2><p>Analise relatos enviados pelos usuários da plataforma.</p><a class="card-link" href="{% url 'moderation:admin_reports' %}">Analisar denúncias →</a></article>
             {% endif %}
         </section>
+        <p class="privacy-shortcut"><a href="{% url 'core:privacy' %}">Consultar privacidade e controle dos meus dados</a></p>
         {% if user.is_staff %}<p class="admin-shortcut"><a class="button button-secondary" href="{% url 'admin:index' %}">Abrir administração</a></p>{% endif %}
     </div>
 </main>

@@ -1,12 +1,27 @@
+from hashlib import sha256
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import (
+    LoginView,
+    PasswordResetCompleteView,
+    PasswordResetConfirmView,
+    PasswordResetDoneView,
+    PasswordResetView,
+)
+from django.core.cache import cache
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
 
-from .forms import EmailAuthenticationForm, SignUpForm
+from .forms import (
+    EmailAuthenticationForm,
+    SignUpForm,
+    VivaBemPasswordResetForm,
+    VivaBemSetPasswordForm,
+)
 from .models import UserRole
 
 
@@ -21,6 +36,59 @@ class VivaBemLoginView(AnonymousOnlyMixin, LoginView):
     authentication_form = EmailAuthenticationForm
     template_name = "accounts/login.html"
     redirect_authenticated_user = True
+
+    def get_throttle_key(self):
+        email = self.request.POST.get("username", "").strip().lower()
+        remote_address = self.request.META.get("REMOTE_ADDR", "unknown")
+        digest = sha256(f"{remote_address}|{email}".encode()).hexdigest()
+        return f"vivabem:login-attempts:{digest}"
+
+    def post(self, request, *args, **kwargs):
+        self.throttle_key = self.get_throttle_key()
+        attempts = int(cache.get(self.throttle_key, 0))
+        if attempts >= settings.LOGIN_MAX_ATTEMPTS:
+            form = self.get_form()
+            form.add_error(
+                None,
+                "Muitas tentativas de entrada. Aguarde alguns minutos e tente novamente.",
+            )
+            return self.render_to_response(self.get_context_data(form=form), status=429)
+        return super().post(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        key = getattr(self, "throttle_key", None)
+        if key:
+            if not cache.add(key, 1, timeout=settings.LOGIN_LOCKOUT_SECONDS):
+                cache.incr(key)
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        key = getattr(self, "throttle_key", None)
+        if key:
+            cache.delete(key)
+        return super().form_valid(form)
+
+
+class VivaBemPasswordResetView(AnonymousOnlyMixin, PasswordResetView):
+    template_name = "accounts/password_reset_form.html"
+    email_template_name = "accounts/password_reset_email.txt"
+    subject_template_name = "accounts/password_reset_subject.txt"
+    form_class = VivaBemPasswordResetForm
+    success_url = reverse_lazy("accounts:password_reset_done")
+
+
+class VivaBemPasswordResetDoneView(AnonymousOnlyMixin, PasswordResetDoneView):
+    template_name = "accounts/password_reset_done.html"
+
+
+class VivaBemPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = "accounts/password_reset_confirm.html"
+    form_class = VivaBemSetPasswordForm
+    success_url = reverse_lazy("accounts:password_reset_complete")
+
+
+class VivaBemPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = "accounts/password_reset_complete.html"
 
 
 class SignUpChoiceView(AnonymousOnlyMixin, TemplateView):

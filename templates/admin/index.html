@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static log %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/css/dashboard.css' %}">{% endblock %}
+{% block coltype %}colMS{% endblock %}
+{% block bodyclass %}{{ block.super }} dashboard vivabem-admin-dashboard{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+
+{% block content %}
+<section class="vivabem-admin-hero">
+    <div><span>Ferramentas internas</span><h1>Administração técnica</h1><p>Gerencie diretamente os registros do VivaBem. Para as atividades diárias, prefira o painel de gestão visual.</p></div>
+    <a href="{% url 'moderation:admin_dashboard' %}">Abrir gestão visual</a>
+</section>
+<div class="vivabem-admin-layout">
+    <section id="content-main" aria-labelledby="admin-modules-title">
+        <div class="vivabem-section-heading"><span>Banco de dados</span><h2 id="admin-modules-title">Módulos do sistema</h2><p>Escolha uma categoria para consultar ou manter seus registros.</p></div>
+        {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    </section>
+    <aside id="content-related" aria-labelledby="recent-actions-title">
+        <div class="module" id="recent-actions-module">
+            <span class="vivabem-panel-kicker">Histórico pessoal</span><h2 id="recent-actions-title">Ações recentes</h2><p class="vivabem-panel-intro">Últimas alterações feitas por esta conta.</p>
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if not admin_log %}<div class="vivabem-empty"><strong>Nenhuma ação recente</strong><span>Suas alterações aparecerão aqui.</span></div>{% else %}
+            <ul class="actionlist">{% for entry in admin_log %}<li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">{% if entry.is_deletion or not entry.get_admin_url %}<strong>{{ entry.object_repr }}</strong>{% else %}<a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>{% endif %}{% if entry.content_type %}<span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>{% endif %}</li>{% endfor %}</ul>
+            {% endif %}
+        </div>
+    </aside>
+</div>
+{% endblock %}

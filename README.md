@@ -30,6 +30,7 @@ As credenciais reais nunca devem ser adicionadas ao Git.
 - Página inicial pública e responsiva.
 - Cadastro separado para pessoa idosa e familiar.
 - Autenticação por e-mail e senha.
+- Recuperação de senha por link temporário enviado por e-mail.
 - Painel protegido conforme o perfil da conta.
 - Perfil pessoal editável com uma única foto privada.
 - Perfil profissional com atuação, credencial, modalidade e verificação administrativa.
@@ -45,7 +46,14 @@ As credenciais reais nunca devem ser adicionadas ao Git.
 - Auditoria das decisões administrativas importantes.
 - Avisos internos para uma conta específica ou grupos por tipo de usuário.
 - Encerramento de sessão por requisição POST protegida por CSRF.
+- Limite temporário de tentativas repetidas de entrada.
 - Administração de usuários pelo Django Admin.
+
+## E-mail e recuperação de senha
+
+No desenvolvimento local, o link de recuperação é exibido no terminal que executa o servidor.
+Para envio real, configure um servidor SMTP pelas variáveis `VIVABEM_EMAIL_*` descritas em
+`.env.example`. Nenhuma senha de e-mail deve ser salva no Git.
 
 ## Comandos de verificação
 
@@ -58,3 +66,8 @@ ruff check .
 ## Documentação
 
 As decisões arquiteturais ficam em `docs/architecture/` para apoiar a explicação do TCC.
+
+- [Fluxograma geral](docs/fluxograma.md)
+- [Visão geral funcional](docs/visao-geral-do-sistema.md)
+- [Guia de publicação no Render](docs/publicacao-render.md)
+- [Revisão final do MVP](docs/revisao-final.md)

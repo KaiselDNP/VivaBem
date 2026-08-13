@@ -1,0 +1,166 @@
+:root {
+    --primary: #557469;
+    --secondary: #314c43;
+    --accent: #edf3f0;
+    --header-bg: #243a33;
+    --header-color: #f7faf8;
+    --header-link-color: #e4ede9;
+    --breadcrumbs-bg: #314c43;
+    --breadcrumbs-link-fg: #e6efeb;
+    --link-fg: #46685c;
+    --link-hover-color: #243a33;
+    --button-bg: #557469;
+    --button-hover-bg: #314c43;
+    --default-button-bg: #557469;
+    --default-button-hover-bg: #314c43;
+    --hairline-color: #d8dfdc;
+    --border-color: #d8dfdc;
+    --body-bg: #f2f5f3;
+    --body-fg: #273630;
+}
+
+html[data-theme="dark"] {
+    --primary: #94b4a8;
+    --secondary: #bed1ca;
+    --accent: #263832;
+    --header-bg: #16231f;
+    --header-color: #f2f7f5;
+    --header-link-color: #dce9e4;
+    --breadcrumbs-bg: #263832;
+    --breadcrumbs-link-fg: #dce9e4;
+    --link-fg: #a8c7bb;
+    --link-hover-color: #d8e8e2;
+    --button-bg: #557469;
+    --button-hover-bg: #6e9285;
+    --default-button-bg: #557469;
+    --default-button-hover-bg: #6e9285;
+    --hairline-color: #3b4944;
+    --border-color: #3b4944;
+    --body-bg: #17201d;
+    --body-fg: #edf3f0;
+}
+
+body { font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif; }
+
+#header { min-height: 76px; display: flex; align-items: center; gap: 26px; padding: 10px 28px; box-shadow: 0 8px 30px rgba(19, 35, 29, 0.15); }
+
+#branding { flex: 0 0 auto; }
+
+.vivabem-admin-brand { display: inline-flex; align-items: center; gap: 12px; color: var(--header-color) !important; text-decoration: none; }
+
+.vivabem-admin-brand > span:last-child { display: grid; }
+
+.vivabem-admin-brand strong { font-size: 1.2rem; line-height: 1.1; }
+
+.vivabem-admin-brand small { margin-top: 3px; color: var(--header-link-color); font-size: 0.68rem; font-weight: 600; }
+
+.vivabem-admin-mark { width: 44px; height: 44px; display: grid; place-items: center; color: #243a33; background: #f7faf8; border-radius: 13px 13px 13px 5px; font-size: 1.15rem; font-weight: 900; }
+
+#user-tools { margin-left: auto; }
+
+.vivabem-admin-links { display: flex; gap: 8px; order: 3; }
+
+.vivabem-admin-links a { min-height: 38px; display: inline-flex; align-items: center; padding: 7px 12px; color: var(--header-color); border: 1px solid rgba(255, 255, 255, 0.24); border-radius: 8px; font-size: 0.72rem; font-weight: 800; text-decoration: none; }
+
+.vivabem-admin-links a:first-child { color: #243a33; background: #f7faf8; border-color: #f7faf8; }
+
+.vivabem-admin-links a:hover, .vivabem-admin-links a:focus-visible { background: rgba(255, 255, 255, 0.12); outline: none; }
+
+.vivabem-admin-links a:first-child:hover { background: #e5ece8; }
+
+div.breadcrumbs { padding: 13px 28px; }
+
+.content { padding: 28px; }
+
+#content { max-width: 1600px; margin-inline: auto; }
+
+.vivabem-admin-dashboard #content {
+    width: min(1600px, 100%);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.vivabem-admin-dashboard.colMS { margin-right: 0; }
+
+#content h1 { color: var(--body-fg); font-size: 2rem; font-weight: 750; }
+
+.module, .inline-group { overflow: hidden; border: 1px solid var(--border-color); border-radius: 14px; }
+
+.module h2, .module caption, .inline-group h2 { padding: 12px 16px; color: var(--header-color); background: var(--secondary); font-weight: 800; }
+
+.module table { border-collapse: collapse; }
+
+.module table th, .module table td { padding: 12px 14px; }
+
+.module table tr:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); }
+
+.button, input[type="submit"], input[type="button"], .submit-row input, a.button { min-height: 40px; border-radius: 8px; font-weight: 750; }
+
+.object-tools a { border-radius: 8px; }
+
+#changelist-filter { border-radius: 14px; }
+
+.messagelist li { border-radius: 10px; }
+
+.vivabem-admin-hero { display: flex; justify-content: space-between; gap: 32px; align-items: end; margin-bottom: 26px; padding: 34px; color: #f7faf8; background: #314c43; border-radius: 20px; box-shadow: 0 18px 45px rgba(45, 68, 60, 0.15); }
+
+.vivabem-admin-hero > div > span, .vivabem-panel-kicker, .vivabem-section-heading > span { display: block; margin-bottom: 8px; color: #cddbd5; font-size: 0.72rem; font-weight: 850; letter-spacing: 0.09em; text-transform: uppercase; }
+
+.vivabem-admin-hero h1 { margin: 0 0 10px !important; color: #f7faf8 !important; font-size: clamp(2rem, 4vw, 3.4rem) !important; }
+
+.vivabem-admin-hero p { max-width: 680px; margin: 0; color: #d6e0dc; font-size: 0.92rem; }
+
+.vivabem-admin-hero > a { min-height: 42px; display: inline-flex; align-items: center; flex: 0 0 auto; padding: 8px 14px; color: #243a33; background: #f7faf8; border-radius: 9px; font-weight: 800; text-decoration: none; }
+
+.vivabem-admin-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 0.3fr); gap: 28px; align-items: start; }
+
+.vivabem-section-heading { margin-bottom: 16px; }
+
+.vivabem-section-heading > span, .vivabem-panel-kicker { color: var(--primary); }
+
+.vivabem-section-heading h2 { margin: 0 0 5px; font-size: 1.4rem; }
+
+.vivabem-section-heading p, .vivabem-panel-intro { margin: 0; color: var(--body-quiet-color); font-size: 0.82rem; }
+
+.vivabem-admin-dashboard #content-main { width: auto; float: none; }
+
+.vivabem-admin-dashboard #content-main .module { margin-bottom: 16px; background: var(--body-bg); }
+
+.vivabem-admin-dashboard #content-main .module caption { padding: 13px 16px; }
+
+.vivabem-admin-dashboard #content-main .module caption a { color: var(--header-color); font-size: 0.82rem; letter-spacing: 0.035em; }
+
+.vivabem-admin-dashboard #content-related { width: auto; float: none; margin: 0; }
+
+.vivabem-admin-dashboard #content-related .module { padding: 20px; background: var(--body-bg); }
+
+.vivabem-admin-dashboard #content-related .module h2 { margin: 0 0 5px; padding: 0; color: var(--body-fg); background: transparent; font-size: 1.2rem; }
+
+.vivabem-admin-dashboard .actionlist { margin: 18px 0 0; padding: 0; }
+
+.vivabem-admin-dashboard .actionlist li { display: grid; gap: 3px; padding: 12px 0 12px 22px; border-top: 1px solid var(--border-color); }
+
+.vivabem-admin-dashboard .actionlist li::before { top: 17px; }
+
+.vivabem-admin-dashboard .actionlist a, .vivabem-admin-dashboard .actionlist strong { color: var(--body-fg); font-size: 0.82rem; font-weight: 750; }
+
+.vivabem-empty { display: grid; gap: 4px; margin-top: 18px; padding: 25px 14px; text-align: center; background: var(--darkened-bg); border-radius: 10px; }
+
+.vivabem-empty span { color: var(--body-quiet-color); font-size: 0.78rem; }
+
+@media (max-width: 1024px) {
+    #header { flex-wrap: wrap; }
+    #user-tools { order: 3; width: 100%; margin: 0; text-align: left; }
+    .vivabem-admin-links { margin-left: auto; }
+    .vivabem-admin-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 700px) {
+    #header { padding: 12px 16px; }
+    .vivabem-admin-brand small { display: none; }
+    .vivabem-admin-links { width: 100%; order: 4; }
+    .vivabem-admin-links a { flex: 1; justify-content: center; }
+    .content { padding: 18px 14px; }
+    .vivabem-admin-hero { display: block; padding: 25px 20px; }
+    .vivabem-admin-hero > a { margin-top: 20px; }
+}

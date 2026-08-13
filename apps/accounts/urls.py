@@ -10,12 +10,32 @@ from .views import (
     SeniorSignUpView,
     SignUpChoiceView,
     VivaBemLoginView,
+    VivaBemPasswordResetCompleteView,
+    VivaBemPasswordResetConfirmView,
+    VivaBemPasswordResetDoneView,
+    VivaBemPasswordResetView,
 )
 
 app_name = "accounts"
 
 urlpatterns = [
     path("entrar/", VivaBemLoginView.as_view(), name="login"),
+    path("recuperar-acesso/", VivaBemPasswordResetView.as_view(), name="password_reset"),
+    path(
+        "recuperar-acesso/enviado/",
+        VivaBemPasswordResetDoneView.as_view(),
+        name="password_reset_done",
+    ),
+    path(
+        "redefinir-senha/<uidb64>/<token>/",
+        VivaBemPasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path(
+        "redefinir-senha/concluido/",
+        VivaBemPasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
     path("sair/", LogoutView.as_view(), name="logout"),
     path("cadastro/", SignUpChoiceView.as_view(), name="signup_choice"),
     path("cadastro/idoso/", SeniorSignUpView.as_view(), name="signup_senior"),

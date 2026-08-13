@@ -1,7 +1,12 @@
 from typing import ClassVar
 
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    PasswordResetForm,
+    SetPasswordForm,
+    UserCreationForm,
+)
 from django.utils import timezone
 
 from .models import User, UserRole
@@ -32,6 +37,33 @@ class EmailAuthenticationForm(AuthenticationForm):
 
     def clean_username(self):
         return self.cleaned_data["username"].strip().lower()
+
+
+class VivaBemPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        label="E-mail da conta",
+        widget=forms.EmailInput(
+            attrs={
+                "autocomplete": "email",
+                "autofocus": True,
+                "placeholder": "voce@exemplo.com",
+            }
+        ),
+    )
+
+    def clean_email(self):
+        return self.cleaned_data["email"].strip().lower()
+
+
+class VivaBemSetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["new_password1"].label = "Nova senha"
+        self.fields["new_password1"].widget.attrs.update(
+            {"autocomplete": "new-password", "autofocus": True}
+        )
+        self.fields["new_password2"].label = "Confirme a nova senha"
+        self.fields["new_password2"].widget.attrs.update({"autocomplete": "new-password"})
 
 
 class SignUpForm(UserCreationForm):

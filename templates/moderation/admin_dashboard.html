@@ -5,16 +5,27 @@
 <main id="conteudo" class="module-page admin-page">
     <div class="container">
         {% include "includes/admin_nav.html" %}{% include "includes/messages.html" %}
-        <div class="module-heading"><div><span class="eyebrow">Administração do protótipo</span><h1>Visão geral</h1><p>Acompanhe pendências e registre decisões importantes da plataforma.</p></div></div>
-        <section class="admin-stat-grid" aria-label="Resumo administrativo">
-            <a href="{% url 'moderation:admin_reports' %}?status=open"><strong>{{ report_counts.open }}</strong><span>Denúncias recebidas</span></a>
-            <a href="{% url 'moderation:admin_reports' %}?status=in_review"><strong>{{ report_counts.in_review }}</strong><span>Denúncias em análise</span></a>
-            <a href="{% url 'moderation:admin_professionals' %}?status=pending"><strong>{{ pending_professionals }}</strong><span>Profissionais pendentes</span></a>
-            <a href="{% url 'moderation:admin_users' %}"><strong>{{ active_users }}</strong><span>Contas ativas</span></a>
+        <section class="admin-hero">
+            <div><span class="eyebrow">Administração do protótipo</span><h1>Controle do VivaBem</h1><p>Olá, {{ user.first_name|default:"administrador" }}. Aqui estão os números e as pendências mais importantes da plataforma.</p></div>
+            <div class="admin-hero-actions"><a class="button button-primary" href="{% url 'moderation:admin_announcement_create' %}">Enviar aviso</a><a class="button button-secondary" href="{% url 'moderation:admin_users' %}">Ver usuários</a></div>
         </section>
-        <div class="admin-columns">
-            <section class="admin-panel"><div class="section-heading"><h2>Denúncias recentes</h2><a href="{% url 'moderation:admin_reports' %}">Ver todas</a></div>{% for report in recent_reports %}<a class="admin-list-row" href="{% url 'moderation:admin_report_review' report.pk %}"><span><strong>#{{ report.pk }} · {{ report.subject }}</strong><small>{{ report.reporter.get_full_name|default:report.reporter.email }}</small></span><span class="record-status status-{{ report.status }}">{{ report.get_status_display }}</span></a>{% empty %}<p class="muted-copy">Nenhuma denúncia registrada.</p>{% endfor %}</section>
-            <section class="admin-panel"><div class="section-heading"><h2>Atividade recente</h2><a href="{% url 'moderation:admin_audit' %}">Ver auditoria</a></div>{% for log in recent_actions %}<div class="admin-list-row"><span><strong>{{ log.get_action_display }}</strong><small>{{ log.description }}</small></span><time>{{ log.created_at|date:"d/m H:i" }}</time></div>{% empty %}<p class="muted-copy">Nenhuma ação administrativa registrada.</p>{% endfor %}</section>
+        <section class="admin-metric-grid" aria-label="Resumo administrativo">
+            <a class="admin-metric-card metric-attention" href="{% url 'moderation:admin_reports' %}?status=open"><span class="metric-label">Denúncias recebidas</span><strong>{{ report_counts.open }}</strong><small>Precisam de triagem</small><span class="metric-link">Analisar agora →</span></a>
+            <a class="admin-metric-card" href="{% url 'moderation:admin_reports' %}?status=in_review"><span class="metric-label">Em análise</span><strong>{{ report_counts.in_review }}</strong><small>Com atendimento iniciado</small><span class="metric-link">Acompanhar →</span></a>
+            <a class="admin-metric-card metric-attention" href="{% url 'moderation:admin_professionals' %}?status=pending"><span class="metric-label">Profissionais pendentes</span><strong>{{ pending_professionals }}</strong><small>Aguardando conferência</small><span class="metric-link">Revisar cadastros →</span></a>
+            <a class="admin-metric-card" href="{% url 'moderation:admin_users' %}"><span class="metric-label">Contas ativas</span><strong>{{ user_counts.active }}</strong><small>de {{ user_counts.total }} cadastradas</small><span class="metric-link">Gerenciar contas →</span></a>
+        </section>
+        <section class="admin-quick-actions" aria-labelledby="quick-actions-title">
+            <div class="section-heading"><div><span class="eyebrow">Acesso rápido</span><h2 id="quick-actions-title">Ações frequentes</h2></div></div>
+            <div class="admin-action-grid">
+                <a href="{% url 'moderation:admin_reports' %}"><span aria-hidden="true">01</span><strong>Analisar denúncias</strong><small>Veja relatos recebidos e registre um retorno.</small></a>
+                <a href="{% url 'moderation:admin_professionals' %}"><span aria-hidden="true">02</span><strong>Revisar profissionais</strong><small>Confira dados e atualize o indicador do cadastro.</small></a>
+                <a href="{% url 'moderation:admin_announcement_create' %}"><span aria-hidden="true">03</span><strong>Enviar comunicado</strong><small>Avise uma conta específica ou um grupo.</small></a>
+            </div>
+        </section>
+        <div class="admin-columns admin-dashboard-columns">
+            <section class="admin-panel"><div class="section-heading"><div><span class="panel-kicker">Moderação</span><h2>Denúncias recentes</h2></div><a href="{% url 'moderation:admin_reports' %}">Ver todas</a></div>{% for report in recent_reports %}<a class="admin-list-row" href="{% url 'moderation:admin_report_review' report.pk %}"><span><strong>#{{ report.pk }} · {{ report.subject }}</strong><small>{{ report.reporter.get_full_name|default:report.reporter.email }} · {{ report.created_at|date:"d/m H:i" }}</small></span><span class="record-status status-{{ report.status }}">{{ report.get_status_display }}</span></a>{% empty %}<div class="admin-panel-empty"><strong>Tudo em ordem</strong><p>Nenhuma denúncia registrada.</p></div>{% endfor %}</section>
+            <section class="admin-panel"><div class="section-heading"><div><span class="panel-kicker">Rastreabilidade</span><h2>Atividade recente</h2></div><a href="{% url 'moderation:admin_audit' %}">Ver auditoria</a></div>{% for log in recent_actions %}<div class="admin-list-row"><span><strong>{{ log.get_action_display }}</strong><small>{{ log.description }}</small></span><time>{{ log.created_at|date:"d/m H:i" }}</time></div>{% empty %}<div class="admin-panel-empty"><strong>Sem alterações</strong><p>Nenhuma ação administrativa registrada.</p></div>{% endfor %}</section>
         </div>
     </div>
 </main>

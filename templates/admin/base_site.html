@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | VivaBem Admin{% endblock %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/css/vivabem-admin.css' %}">{% endblock %}
+
+{% block branding %}
+<a class="vivabem-admin-brand" href="{% url 'admin:index' %}" aria-label="VivaBem Admin, página inicial">
+    <span class="vivabem-admin-mark" aria-hidden="true">V</span>
+    <span><strong>VivaBem</strong><small>Administração técnica</small></span>
+</a>
+{% if user.is_anonymous %}{% include "admin/color_theme_toggle.html" %}{% endif %}
+{% endblock %}
+
+{% block nav-global %}
+{% if user.is_authenticated %}
+<nav class="vivabem-admin-links" aria-label="Atalhos do VivaBem">
+    <a href="{% url 'moderation:admin_dashboard' %}">Gestão visual</a>
+    <a href="{% url 'accounts:dashboard' %}">Voltar ao sistema</a>
+</nav>
+{% endif %}
+{% endblock %}

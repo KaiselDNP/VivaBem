@@ -3,7 +3,7 @@ from functools import wraps
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -87,15 +87,22 @@ def report_detail(request, pk):
 @administration_required
 def administration_dashboard(request):
     report_counts = Report.objects.aggregate(
+        total=Count("id"),
         open=Count("id", filter=Q(status=ReportStatus.OPEN)),
         in_review=Count("id", filter=Q(status=ReportStatus.IN_REVIEW)),
+        resolved=Count("id", filter=Q(status=ReportStatus.RESOLVED)),
+    )
+    user_counts = User.objects.aggregate(
+        total=Count("id"),
+        active=Count("id", filter=Q(is_active=True)),
+        inactive=Count("id", filter=Q(is_active=False)),
     )
     context = {
         "report_counts": report_counts,
         "pending_professionals": ProfessionalProfile.objects.filter(
             verification_status=VerificationStatus.PENDING
         ).count(),
-        "active_users": User.objects.filter(is_active=True).count(),
+        "user_counts": user_counts,
         "recent_reports": Report.objects.select_related("reporter")[:6],
         "recent_actions": AdminAuditLog.objects.select_related("actor")[:6],
     }
@@ -107,6 +114,15 @@ def administration_reports(request):
     status = request.GET.get("status", "").strip()
     query = request.GET.get("q", "").strip()
     reports = Report.objects.select_related("reporter", "reported_user", "assigned_to")
+    report_summary = Report.objects.aggregate(
+        total=Count("id"),
+        open=Count("id", filter=Q(status=ReportStatus.OPEN)),
+        in_review=Count("id", filter=Q(status=ReportStatus.IN_REVIEW)),
+        closed=Count(
+            "id",
+            filter=Q(status__in=(ReportStatus.RESOLVED, ReportStatus.DISMISSED)),
+        ),
+    )
     if status in ReportStatus.values:
         reports = reports.filter(status=status)
     if query:
@@ -124,6 +140,7 @@ def administration_reports(request):
             "status": status,
             "query": query,
             "statuses": ReportStatus.choices,
+            "report_summary": report_summary,
         },
     )
 
@@ -176,6 +193,12 @@ def administration_professionals(request):
     status = request.GET.get("status", "").strip()
     query = request.GET.get("q", "").strip()
     profiles = ProfessionalProfile.objects.select_related("user", "verified_by")
+    professional_summary = ProfessionalProfile.objects.aggregate(
+        total=Count("id"),
+        pending=Count("id", filter=Q(verification_status=VerificationStatus.PENDING)),
+        verified=Count("id", filter=Q(verification_status=VerificationStatus.VERIFIED)),
+        review=Count("id", filter=Q(verification_status=VerificationStatus.NEEDS_REVIEW)),
+    )
     if status in VerificationStatus.values:
         profiles = profiles.filter(verification_status=status)
     if query:
@@ -194,6 +217,7 @@ def administration_professionals(request):
             "status": status,
             "query": query,
             "statuses": VerificationStatus.choices,
+            "professional_summary": professional_summary,
         },
     )
 
@@ -246,6 +270,14 @@ def administration_users(request):
     role = request.GET.get("role", "").strip()
     query = request.GET.get("q", "").strip()
     users = User.objects.all()
+    user_summary = User.objects.aggregate(
+        total=Count("id"),
+        active=Count("id", filter=Q(is_active=True)),
+        inactive=Count("id", filter=Q(is_active=False)),
+        seniors=Count("id", filter=Q(role=UserRole.SENIOR)),
+        families=Count("id", filter=Q(role=UserRole.FAMILY)),
+        professionals=Count("id", filter=Q(role=UserRole.PROFESSIONAL)),
+    )
     if role in UserRole.values:
         users = users.filter(role=role)
     if query:
@@ -262,6 +294,7 @@ def administration_users(request):
             "role": role,
             "query": query,
             "roles": UserRole.choices,
+            "user_summary": user_summary,
         },
     )
 
@@ -334,10 +367,19 @@ def administration_announcement_create(request):
 @administration_required
 def administration_announcements(request):
     announcements = AdminAnnouncement.objects.select_related("created_by", "recipient")[:100]
+    announcement_summary = AdminAnnouncement.objects.aggregate(
+        total=Count("id"),
+        recipients=Sum("recipients_count"),
+        individual=Count("id", filter=Q(audience=AnnouncementAudience.INDIVIDUAL)),
+    )
+    announcement_summary["recipients"] = announcement_summary["recipients"] or 0
     return render(
         request,
         "moderation/admin_announcements.html",
-        {"announcements": announcements},
+        {
+            "announcements": announcements,
+            "announcement_summary": announcement_summary,
+        },
     )
 
 
@@ -372,4 +414,14 @@ def administration_user_status(request, pk, action):
 @administration_required
 def administration_audit(request):
     logs = AdminAuditLog.objects.select_related("actor")[:200]
-    return render(request, "moderation/admin_audit.html", {"logs": logs})
+    audit_summary = AdminAuditLog.objects.aggregate(
+        total=Count("id"),
+        reports=Count("id", filter=Q(action=AuditAction.REPORT_REVIEW)),
+        professionals=Count("id", filter=Q(action=AuditAction.PROFESSIONAL_REVIEW)),
+        notices=Count("id", filter=Q(action=AuditAction.NOTICE_SENT)),
+    )
+    return render(
+        request,
+        "moderation/admin_audit.html",
+        {"logs": logs, "audit_summary": audit_summary},
+    )

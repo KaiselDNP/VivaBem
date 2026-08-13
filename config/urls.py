@@ -4,6 +4,8 @@ from django.urls import include, path
 admin.site.site_header = "Administração VivaBem"
 admin.site.site_title = "VivaBem"
 admin.site.index_title = "Gestão da plataforma"
+admin.site.site_url = "/painel/"
+admin.site.empty_value_display = "—"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
