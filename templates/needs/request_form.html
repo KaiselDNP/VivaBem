@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Nova solicitação — VivaBem{% endblock %}
+{% block body %}{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page"><div class="container narrow-container"><a class="back-link" href="{% url 'needs:request_list' %}">← Voltar às solicitações</a><section class="form-card"><div class="form-card-heading"><span class="eyebrow">Pedido de apoio</span><h1 class="form-page-title">Nova solicitação</h1><p>Este recurso não atende emergências. Em situação urgente, procure os serviços públicos adequados.</p></div><form method="post" novalidate>{% csrf_token %}{% include "includes/form_fields.html" %}<button class="button button-primary button-block" type="submit">Publicar solicitação</button></form></section></div></main>
+{% endblock %}

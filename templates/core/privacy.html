@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Aviso de privacidade — VivaBem{% endblock %}
+
+{% block body %}
+{% include "accounts/_header.html" %}
+<main id="conteudo" class="legal-page">
+    <article class="container legal-content">
+        <span class="eyebrow">Transparência</span>
+        <h1>Aviso de privacidade do protótipo</h1>
+        <p class="lead">Este aviso descreve como os dados serão tratados durante o desenvolvimento acadêmico do VivaBem.</p>
+        <h2>Dados do cadastro</h2>
+        <p>Nesta etapa são armazenados nome, e-mail, senha protegida, perfil de acesso e data de aceite deste aviso.</p>
+        <h2>Finalidade</h2>
+        <p>Os dados são usados para identificar a conta, controlar o acesso e permitir os recursos correspondentes a cada perfil.</p>
+        <h2>Compartilhamento e controle</h2>
+        <p>Informações de pessoas idosas não serão liberadas automaticamente a familiares ou profissionais. Os vínculos e permissões dependerão de autorização registrada no sistema.</p>
+        <h2>Limites do protótipo</h2>
+        <p>O VivaBem é um projeto acadêmico em desenvolvimento. Ele não substitui serviços ou profissionais de saúde e não deve ser utilizado para emergências.</p>
+        <p><a class="button button-secondary" href="{% url 'accounts:signup_choice' %}">Voltar ao cadastro</a></p>
+    </article>
+</main>
+{% endblock %}

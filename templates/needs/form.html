@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }} — VivaBem{% endblock %}
+{% block body %}{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page"><div class="container narrow-container"><a class="back-link" href="{% url 'needs:list' %}">← Voltar às necessidades</a><section class="form-card"><div class="form-card-heading"><span class="eyebrow">Necessidade</span><h1 class="form-page-title">{{ page_title }}</h1><p>Não inclua documentos, senhas ou informações médicas desnecessárias.</p></div><form method="post" novalidate>{% csrf_token %}{% include "includes/form_fields.html" %}<button class="button button-primary button-block" type="submit">Salvar necessidade</button></form></section></div></main>
+{% endblock %}

@@ -1,0 +1,35 @@
+<header class="dashboard-header app-header">
+    <div class="container header-inner">
+        <a class="brand" href="{% url 'accounts:dashboard' %}" aria-label="VivaBem, meu painel">
+            <span class="brand-mark" aria-hidden="true">V</span><span>VivaBem</span>
+        </a>
+        <nav class="app-nav" aria-label="Área autenticada">
+            <a href="{% url 'accounts:dashboard' %}">Painel</a>
+            {% if user.role == 'senior' %}
+                <a href="{% url 'needs:list' %}">Necessidades</a>
+                <a href="{% url 'needs:request_list' %}">Solicitações</a>
+                <a href="{% url 'relationships:list' %}">Familiares</a>
+            {% elif user.role == 'family' %}
+                <a href="{% url 'relationships:list' %}">Vínculos</a>
+            {% elif user.role == 'professional' %}
+                <a href="{% url 'needs:opportunities' %}">Oportunidades</a>
+            {% endif %}
+            <a href="{% url 'professionals:directory' %}">Profissionais</a>
+            <a href="{% url 'moderation:report_list' %}">Denúncias</a>
+            {% if user.is_superuser %}<a href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% elif user.role == 'admin' and user.is_staff %}<a href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% endif %}
+        </nav>
+        <div class="dashboard-account">
+            {% include "includes/theme_toggle.html" %}
+            <a class="notification-link" href="{% url 'notifications:list' %}" aria-label="Notificações{% if unread_notification_count %}: {{ unread_notification_count }} não lidas{% endif %}">
+                Avisos{% if unread_notification_count %}<span>{{ unread_notification_count }}</span>{% endif %}
+            </a>
+            <a class="dashboard-avatar-link" href="{% url 'accounts:profile_edit' %}" aria-label="Editar meu perfil">
+                <span class="avatar avatar-small avatar-initials" aria-hidden="true">{{ user.first_name|first|upper|default:"V" }}</span>
+            </a>
+            <form class="logout-form" method="post" action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button class="text-button" type="submit">Sair</button>
+            </form>
+        </div>
+    </div>
+</header>

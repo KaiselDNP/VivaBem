@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Editar perfil — VivaBem{% endblock %}
+
+{% block body %}
+{% include "accounts/_header.html" %}
+<main id="conteudo" class="profile-page">
+    <div class="container profile-layout">
+        <aside class="profile-summary">
+            <a class="back-link" href="{% url 'accounts:dashboard' %}">← Voltar ao painel</a>
+            <div class="profile-photo-wrap">
+                {% if profile.photo %}
+                    <img class="avatar avatar-large" data-photo-preview src="{% url 'accounts:profile_photo' %}" alt="Foto de perfil atual de {{ user.first_name }}">
+                    <span class="avatar avatar-large avatar-initials preview-fallback" data-photo-fallback hidden aria-hidden="true">{{ user.first_name|first|upper|default:"V" }}</span>
+                {% else %}
+                    <img class="avatar avatar-large" data-photo-preview alt="Prévia da nova foto" hidden>
+                    <span class="avatar avatar-large avatar-initials" data-photo-fallback aria-hidden="true">{{ user.first_name|first|upper|default:"V" }}</span>
+                {% endif %}
+            </div>
+            <h1>{{ user.get_full_name|default:user.email }}</h1>
+            <span class="profile-pill profile-{{ user.role }}">{{ user.get_role_display }}</span>
+            {% if professional_profile %}
+                <span class="verification-badge verification-{{ professional_profile.verification_status }}">
+                    {{ professional_profile.get_verification_status_display }}
+                </span>
+            {% endif %}
+            <p>Esta foto é privada e, nesta etapa, somente você pode acessá-la.</p>
+        </aside>
+
+        <section class="form-card profile-form-card" aria-labelledby="profile-form-title">
+            {% if messages %}
+                {% for message in messages %}<div class="success-message" role="status">{{ message }}</div>{% endfor %}
+            {% endif %}
+            <div class="form-card-heading">
+                <span class="eyebrow">Personalização</span>
+                <h2 id="profile-form-title">Seu perfil</h2>
+                <p>Atualize apenas as informações que quiser compartilhar no VivaBem.</p>
+            </div>
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {% if account_form.non_field_errors or profile_form.non_field_errors or professional_form.non_field_errors %}
+                    <div class="form-alert" role="alert">{{ account_form.non_field_errors }}{{ profile_form.non_field_errors }}{{ professional_form.non_field_errors }}</div>
+                {% endif %}
+                <div class="form-row">
+                    {% for field in account_form %}
+                        <div class="form-field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% for field in profile_form %}
+                    {% if field.name != 'photo' and field.name != 'remove_photo' %}
+                        <div class="form-field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}
+                            {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="photo-field">
+                    <label for="{{ profile_form.photo.id_for_label }}">Foto de perfil</label>
+                    <p>JPG, PNG ou WebP, com no máximo 5 MB. Uma nova foto substitui a atual.</p>
+                    {{ profile_form.photo }}
+                    {% if profile_form.photo.errors %}<div class="field-error" role="alert">{{ profile_form.photo.errors }}</div>{% endif %}
+                </div>
+                {% if profile.photo %}
+                    <div class="consent-field remove-photo-field">
+                        {{ profile_form.remove_photo }}
+                        <label for="{{ profile_form.remove_photo.id_for_label }}">Remover minha foto atual</label>
+                    </div>
+                {% endif %}
+                {% if professional_form %}
+                    <fieldset class="professional-fields">
+                        <legend>Dados profissionais</legend>
+                        <p class="fieldset-intro">Essas informações ajudam a encontrar solicitações compatíveis com sua atuação.</p>
+                        <div class="form-row">
+                            {% for field in professional_form %}
+                                <div class="form-field {% if field.name == 'service_region' or field.name == 'service_mode' %}form-field-full{% endif %}">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}
+                                    {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="verification-notice">
+                            <strong>Sobre a verificação</strong>
+                            <p>A verificação é uma análise administrativa deste protótipo e não representa fiscalização ou validação oficial de conselho profissional.</p>
+                            {% if professional_profile.verification_status == 'verified' %}
+                                <p>Alterar os dados profissionais fará o cadastro voltar para análise.</p>
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                {% endif %}
+                <button class="button button-primary button-block" type="submit">Salvar alterações</button>
+            </form>
+        </section>
+    </div>
+</main>
+<script src="{% static 'js/profile-photo.js' %}" defer></script>
+{% endblock %}

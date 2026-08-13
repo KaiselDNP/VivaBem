@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Auditoria administrativa — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page admin-page"><div class="container">{% include "includes/admin_nav.html" %}<div class="module-heading"><div><span class="eyebrow">Histórico administrativo</span><h1>Auditoria</h1><p>Registro somente para consulta das ações importantes realizadas no painel.</p></div></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Data</th><th>Administrador</th><th>Ação</th><th>Registro</th><th>Descrição</th></tr></thead><tbody>{% for log in logs %}<tr><td>{{ log.created_at|date:"d/m/Y H:i" }}</td><td>{{ log.actor.get_full_name|default:log.actor.email|default:"Conta removida" }}</td><td>{{ log.get_action_display }}</td><td>{{ log.target_label }}</td><td>{{ log.description }}</td></tr>{% empty %}<tr><td colspan="5">Nenhuma ação registrada.</td></tr>{% endfor %}</tbody></table></div></div></main>
+{% endblock %}

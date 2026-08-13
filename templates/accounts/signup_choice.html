@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Criar conta — VivaBem{% endblock %}
+
+{% block body %}
+{% include "accounts/_header.html" %}
+<main id="conteudo" class="choice-page">
+    <div class="container choice-container">
+        <div class="choice-heading">
+            <span class="eyebrow">Primeiro passo</span>
+            <h1>Como você usará o VivaBem?</h1>
+            <p>Escolha o seu perfil. Essa informação define quais recursos estarão disponíveis.</p>
+        </div>
+        <div class="signup-options">
+            <a class="signup-option" href="{% url 'accounts:signup_senior' %}">
+                <span class="option-mark option-senior" aria-hidden="true">1</span>
+                <span class="option-copy">
+                    <strong>Sou uma pessoa idosa</strong>
+                    <span>Quero registrar necessidades, solicitar apoio e controlar meus acessos.</span>
+                </span>
+                <span class="option-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="signup-option" href="{% url 'accounts:signup_family' %}">
+                <span class="option-mark option-family" aria-hidden="true">2</span>
+                <span class="option-copy">
+                    <strong>Sou familiar</strong>
+                    <span>Quero solicitar um vínculo e acompanhar informações autorizadas.</span>
+                </span>
+                <span class="option-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="signup-option" href="{% url 'accounts:signup_professional' %}">
+                <span class="option-mark option-professional" aria-hidden="true">3</span>
+                <span class="option-copy">
+                    <strong>Sou profissional</strong>
+                    <span>Quero oferecer apoio voluntário, remunerado ou nas duas modalidades.</span>
+                </span>
+                <span class="option-arrow" aria-hidden="true">→</span>
+            </a>
+        </div>
+        <p class="choice-login">Já possui uma conta? <a href="{% url 'accounts:login' %}">Entrar no VivaBem</a></p>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Nova denúncia — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page">
+    <div class="container narrow-container">
+        <a class="back-link" href="{% url 'moderation:report_list' %}">← Voltar às denúncias</a>
+        <section class="form-card profile-form-card">
+            <span class="eyebrow">Canal de segurança</span><h1 class="form-page-title">Nova denúncia</h1>
+            <p>Descreva o fato com clareza. Não inclua senhas, documentos ou informações médicas desnecessárias.</p>
+            {% if reported_user %}<div class="target-summary"><strong>Conta relacionada:</strong> {{ reported_user.get_full_name|default:"Usuário cadastrado" }} · {{ reported_user.get_role_display }}</div>{% endif %}
+            <form method="post">
+                {% csrf_token %}
+                {% include "includes/form_fields.html" %}
+                <button class="button button-primary" type="submit">Enviar denúncia</button>
+            </form>
+        </section>
+    </div>
+</main>
+{% endblock %}

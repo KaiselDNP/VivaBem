@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Demonstrar interesse — VivaBem{% endblock %}
+{% block body %}{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page"><div class="container narrow-container"><a class="back-link" href="{% url 'needs:opportunities' %}">← Voltar às oportunidades</a><section class="form-card"><div class="form-card-heading"><span class="eyebrow">{{ help_request.need.get_category_display }}</span><h1 class="form-page-title">{{ help_request.need.title }}</h1><p>Envie uma apresentação breve. A pessoa idosa decidirá se deseja aceitar o contato.</p></div><form method="post" novalidate>{% csrf_token %}{% include "includes/form_fields.html" %}<button class="button button-primary button-block" type="submit">Enviar interesse</button></form></section></div></main>
+{% endblock %}

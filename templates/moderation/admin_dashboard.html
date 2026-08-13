@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Gestão — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page admin-page">
+    <div class="container">
+        {% include "includes/admin_nav.html" %}{% include "includes/messages.html" %}
+        <div class="module-heading"><div><span class="eyebrow">Administração do protótipo</span><h1>Visão geral</h1><p>Acompanhe pendências e registre decisões importantes da plataforma.</p></div></div>
+        <section class="admin-stat-grid" aria-label="Resumo administrativo">
+            <a href="{% url 'moderation:admin_reports' %}?status=open"><strong>{{ report_counts.open }}</strong><span>Denúncias recebidas</span></a>
+            <a href="{% url 'moderation:admin_reports' %}?status=in_review"><strong>{{ report_counts.in_review }}</strong><span>Denúncias em análise</span></a>
+            <a href="{% url 'moderation:admin_professionals' %}?status=pending"><strong>{{ pending_professionals }}</strong><span>Profissionais pendentes</span></a>
+            <a href="{% url 'moderation:admin_users' %}"><strong>{{ active_users }}</strong><span>Contas ativas</span></a>
+        </section>
+        <div class="admin-columns">
+            <section class="admin-panel"><div class="section-heading"><h2>Denúncias recentes</h2><a href="{% url 'moderation:admin_reports' %}">Ver todas</a></div>{% for report in recent_reports %}<a class="admin-list-row" href="{% url 'moderation:admin_report_review' report.pk %}"><span><strong>#{{ report.pk }} · {{ report.subject }}</strong><small>{{ report.reporter.get_full_name|default:report.reporter.email }}</small></span><span class="record-status status-{{ report.status }}">{{ report.get_status_display }}</span></a>{% empty %}<p class="muted-copy">Nenhuma denúncia registrada.</p>{% endfor %}</section>
+            <section class="admin-panel"><div class="section-heading"><h2>Atividade recente</h2><a href="{% url 'moderation:admin_audit' %}">Ver auditoria</a></div>{% for log in recent_actions %}<div class="admin-list-row"><span><strong>{{ log.get_action_display }}</strong><small>{{ log.description }}</small></span><time>{{ log.created_at|date:"d/m H:i" }}</time></div>{% empty %}<p class="muted-copy">Nenhuma ação administrativa registrada.</p>{% endfor %}</section>
+        </div>
+    </div>
+</main>
+{% endblock %}

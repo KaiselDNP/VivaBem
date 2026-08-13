@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar — VivaBem{% endblock %}
+
+{% block body %}
+{% include "accounts/_header.html" %}
+<main id="conteudo" class="auth-page">
+    <div class="container auth-layout">
+        <section class="auth-intro" aria-labelledby="login-title">
+            <span class="eyebrow">Acesso seguro</span>
+            <h1 id="login-title">Que bom ter você de volta.</h1>
+            <p>Use seu e-mail e sua senha para acessar as informações permitidas para o seu perfil.</p>
+            <div class="auth-safety-note">
+                <strong>Seus dados são pessoais.</strong>
+                <span>Não compartilhe sua senha com outras pessoas.</span>
+            </div>
+        </section>
+        <section class="form-card" aria-label="Formulário de entrada">
+            <div class="form-card-heading">
+                <h2>Entrar no VivaBem</h2>
+                <p>A mesma entrada funciona para pessoas idosas, familiares e profissionais.</p>
+            </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="form-alert" role="alert">{{ form.non_field_errors }}</div>
+                {% endif %}
+                {% for field in form %}
+                    <div class="form-field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                    </div>
+                {% endfor %}
+                {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+                <button class="button button-primary button-block" type="submit">Entrar com segurança</button>
+            </form>
+            <div class="form-footer">
+                <span>Ainda não tem cadastro?</span>
+                <a href="{% url 'accounts:signup_choice' %}">Criar uma conta</a>
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock %}

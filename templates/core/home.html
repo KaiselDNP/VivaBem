@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}VivaBem — cuidado conectado{% endblock %}
+
+{% block body %}
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="/" aria-label="VivaBem, página inicial">
+            <span class="brand-mark" aria-hidden="true">V</span>
+            <span>VivaBem</span>
+        </a>
+        <div class="header-controls">
+            <nav class="main-nav" aria-label="Navegação principal">
+                <a href="#como-funciona">Como funciona</a>
+                <a href="#para-quem">Para quem</a>
+                <a href="#seguranca">Privacidade</a>
+            </nav>
+            <div class="account-actions">
+                {% include "includes/theme_toggle.html" %}
+                {% if user.is_authenticated %}
+                    <a class="header-login" href="{% url 'accounts:dashboard' %}">Meu painel</a>
+                {% else %}
+                    <a class="header-login" href="{% url 'accounts:login' %}">Entrar</a>
+                    <a class="header-signup" href="{% url 'accounts:signup_choice' %}">Criar conta</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>
+
+<main id="conteudo">
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-copy">
+                <span class="eyebrow">Projeto acadêmico para Avaré-SP</span>
+                <h1>Cuidado conectado, com respeito e autonomia.</h1>
+                <p class="lead">
+                    Uma plataforma para organizar pedidos de ajuda e aproximar pessoas idosas,
+                    familiares autorizados e profissionais de apoio.
+                </p>
+                <div class="hero-actions">
+                    {% if user.is_authenticated %}
+                        <a class="button button-primary" href="{% url 'accounts:dashboard' %}">Ir para meu painel</a>
+                    {% else %}
+                        <a class="button button-primary" href="{% url 'accounts:signup_choice' %}">Criar minha conta</a>
+                        <a class="button button-secondary" href="{% url 'accounts:login' %}">Já tenho uma conta</a>
+                    {% endif %}
+                </div>
+                <p class="scope-note">
+                    O VivaBem não realiza diagnósticos, não prescreve tratamentos e não substitui
+                    serviços ou profissionais de saúde.
+                </p>
+            </div>
+            <aside class="summary-card" aria-label="Resumo da plataforma">
+                <div class="summary-icon" aria-hidden="true">+</div>
+                <p class="summary-kicker">Tudo em um só lugar</p>
+                <h2>Ajuda mais simples de acompanhar</h2>
+                <ul class="check-list">
+                    <li>Pedidos organizados</li>
+                    <li>Acessos autorizados</li>
+                    <li>Comunicação mais clara</li>
+                </ul>
+            </aside>
+        </div>
+    </section>
+
+    <section class="section" id="para-quem" aria-labelledby="para-quem-title">
+        <div class="container">
+            <div class="section-heading">
+                <span class="eyebrow">Feito para conectar</span>
+                <h2 id="para-quem-title">Cada pessoa acessa somente o que precisa</h2>
+                <p>Perfis diferentes, responsabilidades claras e privacidade desde o início.</p>
+            </div>
+            <div class="role-grid">
+                <article class="role-card role-senior">
+                    <span class="role-number">01</span>
+                    <h3>Pessoa idosa</h3>
+                    <p>Registra necessidades, solicita apoio e decide quem pode acompanhar suas informações.</p>
+                </article>
+                <article class="role-card role-family">
+                    <span class="role-number">02</span>
+                    <h3>Familiar</h3>
+                    <p>Acompanha somente as informações autorizadas e recebe atualizações importantes.</p>
+                </article>
+                <article class="role-card role-professional">
+                    <span class="role-number">03</span>
+                    <h3>Profissional</h3>
+                    <p>Encontra solicitações compatíveis e demonstra interesse para avaliação da pessoa idosa.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-soft" id="como-funciona" aria-labelledby="como-funciona-title">
+        <div class="container process-layout">
+            <div class="section-heading process-heading">
+                <span class="eyebrow">Passo a passo</span>
+                <h2 id="como-funciona-title">Um caminho direto para pedir e receber apoio</h2>
+            </div>
+            <ol class="process-list">
+                <li>
+                    <span>1</span>
+                    <div><h3>Conte o que precisa</h3><p>Cadastre uma necessidade usando informações simples e objetivas.</p></div>
+                </li>
+                <li>
+                    <span>2</span>
+                    <div><h3>Escolha quem acompanha</h3><p>Autorize familiares e controle quais dados cada pessoa pode consultar.</p></div>
+                </li>
+                <li>
+                    <span>3</span>
+                    <div><h3>Acompanhe a solicitação</h3><p>Veja atualizações e avalie o interesse de profissionais disponíveis.</p></div>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="section" id="seguranca" aria-labelledby="seguranca-title">
+        <div class="container privacy-card">
+            <div>
+                <span class="eyebrow eyebrow-light">Privacidade por princípio</span>
+                <h2 id="seguranca-title">A pessoa idosa mantém o controle.</h2>
+            </div>
+            <p>
+                Informações pessoais não são compartilhadas automaticamente. Vínculos precisam de
+                autorização e cada acesso será limitado ao necessário para a finalidade informada.
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div><strong>VivaBem</strong><p>Organização, comunicação e conexão.</p></div>
+        <p>Protótipo acadêmico de ADS — Avaré-SP</p>
+    </div>
+</footer>
+{% endblock %}

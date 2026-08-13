@@ -1,0 +1,43 @@
+from typing import ClassVar
+
+from django import forms
+
+from apps.accounts.models import User, UserRole
+
+from .models import FamilyPermission
+
+
+class FamilyLinkRequestForm(forms.Form):
+    senior_email = forms.EmailField(
+        label="E-mail da pessoa idosa",
+        widget=forms.EmailInput(
+            attrs={"autocomplete": "email", "placeholder": "idoso@exemplo.com"}
+        ),
+    )
+
+    def clean_senior_email(self):
+        return self.cleaned_data["senior_email"].strip().lower()
+
+    def get_senior(self):
+        return User.objects.filter(
+            email__iexact=self.cleaned_data["senior_email"],
+            role=UserRole.SENIOR,
+            is_active=True,
+        ).first()
+
+
+class FamilyPermissionForm(forms.ModelForm):
+    class Meta:
+        model = FamilyPermission
+        fields = (
+            "can_view_needs",
+            "can_view_requests",
+            "can_view_professional_interests",
+            "can_receive_notifications",
+        )
+        labels: ClassVar[dict[str, str]] = {
+            "can_view_needs": "Pode visualizar minhas necessidades",
+            "can_view_requests": "Pode acompanhar minhas solicitações de ajuda",
+            "can_view_professional_interests": "Pode visualizar profissionais interessados",
+            "can_receive_notifications": "Pode receber notificações de acompanhamento",
+        }

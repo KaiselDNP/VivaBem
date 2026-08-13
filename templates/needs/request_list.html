@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Solicitações de ajuda — VivaBem{% endblock %}
+{% block body %}{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page"><div class="container">{% include "includes/messages.html" %}<div class="module-heading"><div><span class="eyebrow">Acompanhamento</span><h1>Solicitações de ajuda</h1><p>Acompanhe o status e avalie profissionais interessados.</p></div><a class="button button-primary" href="{% url 'needs:request_create' %}">Nova solicitação</a></div><div class="record-grid">{% for item in help_requests %}<a class="record-card record-card-link" href="{% url 'needs:request_detail' item.pk %}"><div class="record-meta"><span>{{ item.need.get_category_display }}</span><span class="record-status status-{{ item.status }}">{{ item.get_status_display }}</span></div><h2>{{ item.need.title }}</h2><p>{{ item.details|truncatechars:180 }}</p><small>{{ item.region }} · {{ item.get_priority_display }}</small></a>{% empty %}<div class="empty-state"><h2>Nenhuma solicitação</h2><p>Cadastre uma necessidade antes de publicar um pedido.</p></div>{% endfor %}</div></div></main>
+{% endblock %}

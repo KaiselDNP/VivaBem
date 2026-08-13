@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Minhas denúncias — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page">
+    <div class="container">
+        {% include "includes/messages.html" %}
+        <div class="module-heading">
+            <div><span class="eyebrow">Segurança e confiança</span><h1>Minhas denúncias</h1><p>Acompanhe somente os registros enviados pela sua conta.</p></div>
+            <a class="button button-primary" href="{% url 'moderation:report_create' %}">Nova denúncia</a>
+        </div>
+        <div class="record-grid">
+            {% for report in reports %}
+                <a class="record-card record-card-link" href="{% url 'moderation:report_detail' report.pk %}">
+                    <div class="record-meta"><span>#{{ report.pk }} · {{ report.get_category_display }}</span><span class="record-status status-{{ report.status }}">{{ report.get_status_display }}</span></div>
+                    <h2>{{ report.subject }}</h2>
+                    <p>{{ report.description|truncatechars:180 }}</p>
+                    <small>Enviada em {{ report.created_at|date:"d/m/Y H:i" }}</small>
+                </a>
+            {% empty %}
+                <div class="empty-state"><h2>Nenhuma denúncia enviada</h2><p>Se precisar relatar algo, use o botão “Nova denúncia”.</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}

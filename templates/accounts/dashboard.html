@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Meu painel — VivaBem{% endblock %}
+
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="dashboard-page">
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}<div class="success-message" role="status">{{ message }}</div>{% endfor %}
+        {% endif %}
+        <section class="welcome-panel">
+            <div>
+                <span class="eyebrow">Seu espaço no VivaBem</span>
+                <h1>Olá, {{ user.first_name|default:"boas-vindas" }}!</h1>
+                {% if user.role == 'senior' %}
+                    <p>Seu cadastro de pessoa idosa está ativo. Em breve, este painel reunirá suas necessidades e solicitações de apoio.</p>
+                {% elif user.role == 'family' %}
+                    <p>Seu cadastro de familiar está ativo. Em breve, você poderá solicitar um vínculo e acompanhar informações autorizadas.</p>
+                {% elif user.role == 'professional' %}
+                    {% if professional_profile.is_complete %}
+                        <p>Seu perfil profissional está preenchido e pronto para as próximas etapas do VivaBem.</p>
+                    {% else %}
+                        <p>Seu acesso profissional está ativo. Complete os dados de atuação para preparar seu perfil.</p>
+                    {% endif %}
+                {% else %}
+                    <p>Seu acesso administrativo está ativo.</p>
+                {% endif %}
+            </div>
+            {% if user.role == 'professional' %}
+                <span class="verification-badge verification-{{ professional_profile.verification_status }}">{{ professional_profile.get_verification_status_display }}</span>
+            {% else %}
+                <span class="status-badge">Conta ativa</span>
+            {% endif %}
+        </section>
+        <section class="dashboard-grid" aria-label="Próximos recursos">
+            <article class="dashboard-card"><span>01</span><h2>Complete seu perfil</h2><p>Adicione seus dados básicos e uma foto para personalizar sua conta.</p><a class="card-link" href="{% url 'accounts:profile_edit' %}">Editar perfil →</a></article>
+            {% if user.role == 'senior' %}
+                <article class="dashboard-card"><span>02</span><h2>Organize suas necessidades</h2><p>Registre necessidades e publique solicitações de ajuda.</p><a class="card-link" href="{% url 'needs:list' %}">Ver necessidades →</a></article>
+                <article class="dashboard-card"><span>03</span><h2>Controle os acessos</h2><p>Autorize familiares e escolha permissões específicas.</p><a class="card-link" href="{% url 'relationships:list' %}">Gerenciar familiares →</a></article>
+            {% elif user.role == 'family' %}
+                <article class="dashboard-card"><span>02</span><h2>Solicite um vínculo</h2><p>A pessoa idosa precisa autorizar antes de qualquer acesso.</p><a class="card-link" href="{% url 'relationships:list' %}">Ver vínculos →</a></article>
+                <article class="dashboard-card"><span>03</span><h2>Acompanhe com permissão</h2><p>Consulte somente necessidades e solicitações liberadas.</p></article>
+            {% elif user.role == 'professional' %}
+                <article class="dashboard-card"><span>02</span><h2>Encontre oportunidades</h2><p>Consulte solicitações sem exposição da identidade da pessoa idosa.</p><a class="card-link" href="{% url 'needs:opportunities' %}">Ver oportunidades →</a></article>
+                <article class="dashboard-card"><span>03</span><h2>Consulte a rede</h2><p>Pesquise profissionais por atuação, região e modalidade.</p><a class="card-link" href="{% url 'professionals:directory' %}">Pesquisar profissionais →</a></article>
+            {% else %}
+                <article class="dashboard-card"><span>02</span><h2>Administração</h2><p>Gerencie usuários, profissionais, denúncias e auditoria.</p><a class="card-link" href="{% url 'moderation:admin_dashboard' %}">Abrir gestão →</a></article>
+                <article class="dashboard-card"><span>03</span><h2>Denúncias</h2><p>Analise relatos enviados pelos usuários da plataforma.</p><a class="card-link" href="{% url 'moderation:admin_reports' %}">Analisar denúncias →</a></article>
+            {% endif %}
+        </section>
+        {% if user.is_staff %}<p class="admin-shortcut"><a class="button button-secondary" href="{% url 'admin:index' %}">Abrir administração</a></p>{% endif %}
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro de {{ role_label }} — VivaBem{% endblock %}
+
+{% block body %}
+{% include "accounts/_header.html" %}
+<main id="conteudo" class="auth-page signup-page">
+    <div class="container signup-layout">
+        <section class="auth-intro" aria-labelledby="signup-title">
+            <a class="back-link" href="{% url 'accounts:signup_choice' %}">← Trocar tipo de perfil</a>
+            <span class="eyebrow">Cadastro de {{ role_label }}</span>
+            <h1 id="signup-title">Vamos criar seu acesso.</h1>
+            <p>Pedimos somente os dados necessários para identificar sua conta neste primeiro momento.</p>
+            <ul class="privacy-points">
+                <li>Senha armazenada de forma protegida</li>
+                <li>Informações não compartilhadas automaticamente</li>
+                <li>Você poderá revisar seu perfil depois</li>
+            </ul>
+        </section>
+        <section class="form-card form-card-wide" aria-label="Formulário de cadastro">
+            <div class="form-card-heading">
+                <span class="profile-pill profile-{{ role_slug }}">{{ role_label }}</span>
+                <h2>Dados de acesso</h2>
+                <p>Todos os campos abaixo são obrigatórios.</p>
+            </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="form-alert" role="alert">{{ form.non_field_errors }}</div>
+                {% endif %}
+                <div class="form-row">
+                    {% for field in form %}
+                        {% if field.name == 'first_name' or field.name == 'last_name' %}
+                            <div class="form-field">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% for field in form %}
+                    {% if field.name != 'first_name' and field.name != 'last_name' and field.name != 'accepted_privacy' %}
+                        <div class="form-field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}<div class="field-help">{{ field.help_text|safe }}</div>{% endif %}
+                            {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="consent-field">
+                    {{ form.accepted_privacy }}
+                    <label for="{{ form.accepted_privacy.id_for_label }}">
+                        Li e aceito o <a href="{% url 'core:privacy' %}" target="_blank" rel="noopener">aviso de privacidade</a> do VivaBem.
+                    </label>
+                </div>
+                {% if form.accepted_privacy.errors %}<div class="field-error" role="alert">{{ form.accepted_privacy.errors }}</div>{% endif %}
+                <button class="button button-primary button-block" type="submit">Criar minha conta</button>
+            </form>
+            <div class="form-footer"><span>Já possui cadastro?</span> <a href="{% url 'accounts:login' %}">Entrar</a></div>
+        </section>
+    </div>
+</main>
+{% endblock %}

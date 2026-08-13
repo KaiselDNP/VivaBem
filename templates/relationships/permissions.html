@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Permissões familiares — VivaBem{% endblock %}
+{% block body %}{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page"><div class="container narrow-container"><a class="back-link" href="{% url 'relationships:list' %}">← Voltar aos vínculos</a><section class="form-card"><div class="form-card-heading"><span class="eyebrow">Controle de acesso</span><h1 class="form-page-title">Permissões de {{ link.family.get_full_name|default:link.family.email }}</h1><p>Permissões desmarcadas permanecem bloqueadas. Você pode mudar estas escolhas quando quiser.</p></div><form method="post" novalidate>{% csrf_token %}{% include "includes/form_fields.html" %}<button class="button button-primary button-block" type="submit">Salvar permissões</button></form></section></div></main>
+{% endblock %}

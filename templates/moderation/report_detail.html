@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Denúncia #{{ report.pk }} — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page">
+    <div class="container narrow-container">
+        <a class="back-link" href="{% url 'moderation:report_list' %}">← Voltar às denúncias</a>
+        <section class="detail-panel">
+            <div class="record-meta"><span>#{{ report.pk }} · {{ report.get_category_display }}</span><span class="record-status status-{{ report.status }}">{{ report.get_status_display }}</span></div>
+            <h1>{{ report.subject }}</h1><p>{{ report.description|linebreaksbr }}</p>
+            <dl class="detail-list"><div><dt>Enviada</dt><dd>{{ report.created_at|date:"d/m/Y H:i" }}</dd></div><div><dt>Atualizada</dt><dd>{{ report.updated_at|date:"d/m/Y H:i" }}</dd></div><div><dt>Andamento</dt><dd>{{ report.get_status_display }}</dd></div></dl>
+            {% if report.resolution_notes %}<div class="resolution-box"><h2>Retorno da administração</h2><p>{{ report.resolution_notes|linebreaksbr }}</p></div>{% endif %}
+        </section>
+    </div>
+</main>
+{% endblock %}

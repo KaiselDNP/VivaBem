@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Analisar denúncia #{{ report.pk }} — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page admin-page"><div class="container">{% include "includes/admin_nav.html" %}<a class="back-link" href="{% url 'moderation:admin_reports' %}">← Voltar às denúncias</a><div class="review-layout"><section class="detail-panel"><div class="record-meta"><span>#{{ report.pk }} · {{ report.get_category_display }}</span><span class="record-status status-{{ report.status }}">{{ report.get_status_display }}</span></div><h1>{{ report.subject }}</h1><p>{{ report.description|linebreaksbr }}</p><dl class="review-facts"><div><dt>Enviada por</dt><dd>{{ report.reporter.get_full_name|default:report.reporter.email }}</dd></div><div><dt>Conta relacionada</dt><dd>{% if report.reported_user %}{{ report.reported_user.get_full_name|default:report.reported_user.email }}{% else %}Não informada{% endif %}</dd></div><div><dt>Data</dt><dd>{{ report.created_at|date:"d/m/Y H:i" }}</dd></div></dl></section><section class="form-card profile-form-card"><h2>Registrar análise</h2><form method="post">{% csrf_token %}{% include "includes/form_fields.html" %}<button class="button button-primary" type="submit">Salvar análise</button></form></section></div></div></main>
+{% endblock %}

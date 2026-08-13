@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Enviar aviso — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page admin-page">
+    <div class="container narrow-container">
+        {% include "includes/admin_nav.html" %}
+        <a class="back-link" href="{% url 'moderation:admin_announcements' %}">← Voltar aos avisos</a>
+        <section class="form-card profile-form-card">
+            <span class="eyebrow">Comunicação interna</span><h1 class="form-page-title">Enviar aviso</h1>
+            <p>O aviso aparecerá na central de notificações das contas selecionadas. Escolha uma conta ou um grupo.</p>
+            {% if selected_user %}<div class="target-summary"><strong>Conta selecionada:</strong> {{ selected_user.get_full_name|default:selected_user.email }} · {{ selected_user.get_role_display }}</div>{% endif %}
+            <form method="post">{% csrf_token %}{% include "includes/form_fields.html" %}<button class="button button-primary" type="submit">Enviar aviso agora</button></form>
+        </section>
+    </div>
+</main>
+{% endblock %}
