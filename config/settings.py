@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "apps.needs.apps.NeedsConfig",
     "apps.relationships.apps.RelationshipsConfig",
     "apps.notifications.apps.NotificationsConfig",
+    "apps.chat.apps.ChatConfig",
     "apps.moderation.apps.ModerationConfig",
     "apps.core.apps.CoreConfig",
 ]
@@ -91,6 +92,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.notifications.context_processors.notification_counts",
+                "apps.chat.context_processors.unread_chat_messages",
             ],
         },
     },

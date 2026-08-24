@@ -1,0 +1,10 @@
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+    dependencies = [("notifications", "0003_alter_notification_kind")]
+    operations = [migrations.AlterField(
+        model_name="notification",
+        name="kind",
+        field=models.CharField(choices=[("family_link", "Vínculo familiar"), ("help_request", "Solicitação de ajuda"), ("professional_interest", "Interesse profissional"), ("interest_response", "Resposta ao interesse"), ("report_update", "Atualização de denúncia"), ("professional_review", "Análise do perfil profissional"), ("account_status", "Situação da conta"), ("admin_notice", "Aviso da administração"), ("chat_moderation", "Moderação do chat")], max_length=30, verbose_name="tipo"),
+    )]

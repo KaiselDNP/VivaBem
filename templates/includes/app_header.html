@@ -6,16 +6,17 @@
         <nav class="app-nav" aria-label="Menu principal">
             <a {% if request.resolver_match.namespace == 'accounts' and request.resolver_match.url_name == 'dashboard' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'accounts:dashboard' %}">Painel</a>
             {% if user.role == 'senior' %}
-                <a {% if request.resolver_match.namespace == 'needs' and request.resolver_match.url_name == 'request_create' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'needs:request_create' %}">Pedir ajuda</a>
+                <a {% if request.resolver_match.namespace == 'needs' and request.resolver_match.url_name == 'quick_request' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'needs:quick_request' %}">Pedir ajuda</a>
                 <a {% if request.resolver_match.namespace == 'needs' and request.resolver_match.url_name == 'request_list' or request.resolver_match.namespace == 'needs' and request.resolver_match.url_name == 'request_detail' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'needs:request_list' %}">Meus pedidos</a>
-                <a {% if request.resolver_match.namespace == 'relationships' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'relationships:list' %}">Minha família</a>
+                <a {% if request.resolver_match.namespace == 'chat' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'chat:list' %}">Conversar{% if unread_chat_count %} ({{ unread_chat_count }}){% endif %}</a>
             {% elif user.role == 'family' %}
                 <a {% if request.resolver_match.namespace == 'relationships' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'relationships:list' %}">Pessoas acompanhadas</a>
             {% elif user.role == 'professional' %}
                 <a {% if request.resolver_match.namespace == 'needs' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'needs:opportunities' %}">Oportunidades</a>
             {% endif %}
-            <a {% if request.resolver_match.namespace == 'professionals' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'professionals:directory' %}">Conhecer profissionais</a>
-            <a {% if request.resolver_match.namespace == 'moderation' and 'admin_' not in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:report_list' %}">Segurança</a>
+            {% if user.role != 'senior' %}<a {% if request.resolver_match.namespace == 'professionals' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'professionals:directory' %}">Conhecer profissionais</a>{% endif %}
+            {% if user.role != 'admin' and user.role != 'senior' %}<a {% if request.resolver_match.namespace == 'chat' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'chat:list' %}">Conversas{% if unread_chat_count %} ({{ unread_chat_count }}){% endif %}</a>{% endif %}
+            {% if user.role != 'senior' %}<a {% if request.resolver_match.namespace == 'moderation' and 'admin_' not in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:report_list' %}">Segurança</a>{% endif %}
             {% if user.is_superuser %}<a {% if request.resolver_match.namespace == 'moderation' and 'admin_' in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% elif user.role == 'admin' and user.is_staff %}<a {% if request.resolver_match.namespace == 'moderation' and 'admin_' in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% endif %}
         </nav>
         <div class="dashboard-account">
@@ -24,7 +25,11 @@
                 Avisos{% if unread_notification_count %}<span>{{ unread_notification_count }}</span>{% endif %}
             </a>
             <a class="dashboard-avatar-link" href="{% url 'accounts:profile_edit' %}" aria-label="Editar meu perfil">
-                <span class="avatar avatar-small avatar-initials" aria-hidden="true">{{ user.first_name|first|upper|default:"V" }}</span>
+                {% if user.profile.photo %}
+                    <img class="avatar avatar-small" src="{% url 'accounts:profile_photo' %}?v={{ user.profile.updated_at|date:'Uu' }}" alt="">
+                {% else %}
+                    <span class="avatar avatar-small avatar-initials" aria-hidden="true">{{ user.first_name|first|upper|default:"V" }}</span>
+                {% endif %}
             </a>
             <form class="logout-form" method="post" action="{% url 'accounts:logout' %}">
                 {% csrf_token %}

@@ -12,8 +12,9 @@ from apps.accounts.models import UserRole
 from apps.notifications.models import NotificationKind
 from apps.notifications.services import notify
 from apps.professionals.models import ProfessionalProfile
+from apps.relationships.models import FamilyLink, FamilyLinkStatus
 
-from .forms import HelpRequestForm, NeedForm, ProfessionalInterestForm
+from .forms import HelpRequestForm, NeedForm, ProfessionalInterestForm, QuickHelpRequestForm
 from .models import (
     HelpRequest,
     HelpRequestStatus,
@@ -29,6 +30,75 @@ def require_role(request, role, message):
     if request.user.role != role:
         return HttpResponseForbidden(message)
     return None
+
+
+def _quick_request_senior(request, senior_id=None):
+    if request.user.role == UserRole.SENIOR and senior_id is None:
+        return request.user, None
+    if request.user.role == UserRole.FAMILY and senior_id:
+        link = get_object_or_404(
+            FamilyLink.objects.select_related("senior", "permissions"),
+            senior_id=senior_id,
+            family=request.user,
+            status=FamilyLinkStatus.APPROVED,
+        )
+        if link.permissions.can_create_requests:
+            return link.senior, link
+    return None, None
+
+
+@login_required
+@transaction.atomic
+def quick_request_create(request, senior_id=None):
+    senior, family_link = _quick_request_senior(request, senior_id)
+    if not senior:
+        return HttpResponseForbidden(
+            "Somente a pessoa idosa ou um familiar autorizado pode criar este pedido."
+        )
+
+    form = QuickHelpRequestForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        details = form.cleaned_data["details"].strip()
+        need = Need.objects.create(
+            senior=senior,
+            title=form.cleaned_data["title"].strip(),
+            category=form.cleaned_data["category"],
+            description=details,
+        )
+        help_request = HelpRequest.objects.create(
+            need=need,
+            created_by=request.user,
+            details=details,
+            region=form.cleaned_data["region"].strip(),
+            priority=form.cleaned_data["priority"],
+            preferred_service_mode=form.cleaned_data["preferred_service_mode"],
+        )
+        notify_family_about_request(
+            help_request,
+            "Novo pedido de ajuda",
+            f"{request.user} criou um pedido que você pode acompanhar.",
+        )
+        if family_link:
+            notify(
+                recipient=senior,
+                kind=NotificationKind.HELP_REQUEST,
+                title="Pedido criado com sua autorização",
+                message=f"{request.user} criou o pedido “{need.title}” em seu nome.",
+                target_url=reverse("needs:request_detail", args=(help_request.pk,)),
+            )
+            messages.success(
+                request,
+                f"Pedido criado para {senior.get_full_name() or senior.email}.",
+            )
+            return redirect("relationships:senior_overview", pk=family_link.pk)
+        messages.success(request, "Seu pedido foi publicado. Agora é só acompanhar.")
+        return redirect("needs:request_detail", pk=help_request.pk)
+
+    return render(
+        request,
+        "needs/quick_request_form.html",
+        {"form": form, "assisted_senior": senior if family_link else None},
+    )
 
 
 @login_required
@@ -117,7 +187,9 @@ def request_create(request):
         return redirect(f"{reverse('needs:create')}?continuar=pedido")
     form = HelpRequestForm(request.POST or None, senior=request.user)
     if request.method == "POST" and form.is_valid():
-        help_request = form.save()
+        help_request = form.save(commit=False)
+        help_request.created_by = request.user
+        help_request.save()
         notify_family_about_request(
             help_request,
             "Nova solicitação de ajuda",

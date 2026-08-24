@@ -149,7 +149,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             senior_requests = HelpRequest.objects.filter(
                 need__senior=self.request.user
             ).select_related("need")
-            context["recent_help_requests"] = senior_requests[:3]
+            context["recent_help_requests"] = senior_requests[:1]
             context["active_request_count"] = senior_requests.filter(
                 status__in=(HelpRequestStatus.OPEN, HelpRequestStatus.ACCEPTED)
             ).count()

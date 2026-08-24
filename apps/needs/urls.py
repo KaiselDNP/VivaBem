@@ -6,6 +6,8 @@ app_name = "needs"
 
 urlpatterns = [
     path("", views.need_list, name="list"),
+    path("pedir-ajuda/", views.quick_request_create, name="quick_request"),
+    path("pedir-ajuda/<int:senior_id>/", views.quick_request_create, name="assisted_quick_request"),
     path("nova/", views.need_create, name="create"),
     path("<int:pk>/editar/", views.need_edit, name="edit"),
     path("<int:pk>/resolver/", views.need_resolve, name="resolve"),

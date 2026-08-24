@@ -41,11 +41,16 @@ As credenciais reais nunca devem ser adicionadas ao Git.
 - Perfil profissional com atuação, credencial, modalidade e verificação administrativa.
 - Cadastro e acompanhamento de necessidades da pessoa idosa.
 - Solicitações de ajuda com ciclo de status: aberta, aceita, concluída ou cancelada.
+- Pedido de ajuda completo em um único passo a passo, sem cadastro prévio separado.
 - Vínculo familiar dependente da autorização da pessoa idosa.
 - Permissões separadas para necessidades, solicitações, interesses e notificações.
+- Familiar pode criar um pedido assistido somente quando a pessoa idosa autorizar explicitamente.
 - Pesquisa de profissionais por nome, profissão, especialidade, região e modalidade.
 - Interesse profissional sujeito à aceitação ou recusa da pessoa idosa.
 - Central de notificações privadas com indicador de itens não lidos.
+- Chat privado entre pessoas vinculadas, com bloqueio, denúncia e limite de mensagens.
+- Moderação do chat bloqueia ameaças, ofensas e pedidos suspeitos de dados ou dinheiro,
+  preserva apenas o evento de segurança e avisa a administração.
 - Envio e acompanhamento privado de denúncias.
 - Painel administrativo para denúncias, profissionais e situação das contas.
 - Auditoria das decisões administrativas importantes.

@@ -11,7 +11,7 @@
             <a class="back-link" href="{% url 'accounts:dashboard' %}">← Voltar ao painel</a>
             <div class="profile-photo-wrap">
                 {% if profile.photo %}
-                    <img class="avatar avatar-large" data-photo-preview src="{% url 'accounts:profile_photo' %}" alt="Foto de perfil atual de {{ user.first_name }}">
+                    <img class="avatar avatar-large" data-photo-preview src="{% url 'accounts:profile_photo' %}?v={{ profile.updated_at|date:'Uu' }}" alt="Foto de perfil atual de {{ user.first_name }}">
                     <span class="avatar avatar-large avatar-initials preview-fallback" data-photo-fallback hidden aria-hidden="true">{{ user.first_name|first|upper|default:"V" }}</span>
                 {% else %}
                     <img class="avatar avatar-large" data-photo-preview alt="Prévia da nova foto" hidden>

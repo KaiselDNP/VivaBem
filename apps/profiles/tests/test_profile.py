@@ -77,6 +77,21 @@ class ProfileTests(TestCase):
         self.assertEqual(anonymous_response.status_code, 302)
         self.assertEqual(authenticated_response.status_code, 200)
         self.assertEqual(authenticated_response["Content-Type"], "image/png")
+        self.assertIn("no-store", authenticated_response["Cache-Control"])
+
+    def test_app_header_uses_current_profile_photo(self):
+        profile = UserProfile.objects.create(user=self.user)
+        profile.photo.save(
+            "perfil.png",
+            SimpleUploadedFile("perfil.png", PNG_1X1, content_type="image/png"),
+        )
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("accounts:dashboard"))
+
+        photo_url = reverse("accounts:profile_photo")
+        self.assertContains(response, f'src="{photo_url}?v=')
+        self.assertNotContains(response, "avatar avatar-small avatar-initials")
 
     def test_user_can_remove_current_photo(self):
         profile = UserProfile.objects.create(user=self.user, city="Avaré")

@@ -2,7 +2,49 @@ from typing import ClassVar
 
 from django import forms
 
-from .models import HelpRequest, Need, ProfessionalInterest
+from apps.professionals.models import ServiceMode
+
+from .models import (
+    HelpRequest,
+    Need,
+    NeedCategory,
+    ProfessionalInterest,
+    RequestPriority,
+)
+
+
+class QuickHelpRequestForm(forms.Form):
+    title = forms.CharField(
+        label="Com o que você precisa de ajuda?",
+        max_length=100,
+        widget=forms.TextInput(attrs={"placeholder": "Ex.: Ajuda para usar o celular"}),
+    )
+    category = forms.ChoiceField(
+        label="Que tipo de ajuda é essa?",
+        choices=NeedCategory.choices,
+    )
+    details = forms.CharField(
+        label="Conte um pouco mais",
+        max_length=800,
+        help_text="Não escreva senhas, documentos ou informações médicas desnecessárias.",
+        widget=forms.Textarea(attrs={"rows": 5, "placeholder": "Explique de forma simples."}),
+    )
+    region = forms.CharField(
+        label="Onde você precisa da ajuda?",
+        max_length=150,
+        initial="Avaré-SP",
+        help_text="Informe somente a cidade ou a região.",
+    )
+    priority = forms.ChoiceField(
+        label="Quando você precisa?",
+        choices=RequestPriority.choices,
+        initial=RequestPriority.ROUTINE,
+    )
+    preferred_service_mode = forms.ChoiceField(
+        label="Como prefere receber a ajuda?",
+        choices=ServiceMode.choices,
+        initial=ServiceMode.BOTH,
+    )
 
 
 class NeedForm(forms.ModelForm):

@@ -13,6 +13,7 @@ class NotificationKind(models.TextChoices):
     PROFESSIONAL_REVIEW = "professional_review", "Análise do perfil profissional"
     ACCOUNT_STATUS = "account_status", "Situação da conta"
     ADMIN_NOTICE = "admin_notice", "Aviso da administração"
+    CHAT_MODERATION = "chat_moderation", "Moderação do chat"
 
 
 class Notification(models.Model):

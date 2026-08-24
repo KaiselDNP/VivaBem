@@ -162,7 +162,7 @@ def senior_overview(request, pk):
     if permissions.can_view_requests:
         context["help_requests"] = HelpRequest.objects.filter(
             need__senior=link.senior
-        ).select_related("need")
+        ).select_related("need", "created_by")
     if permissions.can_view_professional_interests:
         context["professional_interests"] = ProfessionalInterest.objects.filter(
             help_request__need__senior=link.senior

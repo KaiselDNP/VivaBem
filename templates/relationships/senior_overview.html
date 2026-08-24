@@ -5,12 +5,14 @@
 <main id="conteudo" class="module-page">
     <div class="container">
         <a class="back-link" href="{% url 'relationships:list' %}">← Voltar às pessoas acompanhadas</a>
+        {% include "includes/messages.html" %}
         <div class="module-heading">
             <div>
                 <span class="eyebrow">Informações compartilhadas</span>
                 <h1>{{ link.senior.get_full_name|default:link.senior.email }}</h1>
                 <p>Aqui aparecem somente as informações que essa pessoa permitiu que você acompanhasse.</p>
             </div>
+            {% if permissions.can_create_requests %}<a class="button button-primary" href="{% url 'needs:assisted_quick_request' link.senior.pk %}">Criar pedido de ajuda</a>{% endif %}
         </div>
         {% if permissions.can_view_needs %}
             <section class="module-section">
@@ -27,7 +29,7 @@
                 <h2>Pedidos de ajuda</h2>
                 <div class="record-grid">
                     {% for item in help_requests %}
-                        <article class="record-card"><div class="record-meta"><span>{{ item.need.get_category_display }}</span><span>{% if item.status == 'open' %}Esperando profissional{% elif item.status == 'accepted' %}Profissional escolhido{% elif item.status == 'completed' %}Ajuda concluída{% else %}Pedido cancelado{% endif %}</span></div><h3>{{ item.need.title }}</h3><p>{{ item.details }}</p></article>
+                        <article class="record-card"><div class="record-meta"><span>{{ item.need.get_category_display }}</span><span>{% if item.status == 'open' %}Esperando profissional{% elif item.status == 'accepted' %}Profissional escolhido{% elif item.status == 'completed' %}Ajuda concluída{% else %}Pedido cancelado{% endif %}</span></div><h3>{{ item.need.title }}</h3><p>{{ item.details }}</p>{% if item.created_by and item.created_by != link.senior %}<small>Criado com autorização por {{ item.created_by.get_full_name|default:item.created_by.email }}</small>{% endif %}</article>
                     {% empty %}<div class="empty-state"><p>Nenhum pedido de ajuda foi enviado ainda.</p></div>{% endfor %}
                 </div>
             </section>
@@ -42,7 +44,7 @@
                 </div>
             </section>
         {% endif %}
-        {% if not permissions.can_view_needs and not permissions.can_view_requests and not permissions.can_view_professional_interests %}
+        {% if not permissions.can_view_needs and not permissions.can_view_requests and not permissions.can_view_professional_interests and not permissions.can_create_requests %}
             <div class="empty-state"><h2>Nenhuma informação compartilhada</h2><p>A pessoa idosa ainda não escolheu quais informações você pode acompanhar.</p></div>
         {% endif %}
     </div>

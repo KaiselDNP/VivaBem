@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Conversa com {{ other.get_full_name|default:other.email }} — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page chat-page"><div class="container narrow-container">
+    <a class="back-link" href="{% url 'chat:list' %}">← Voltar às conversas</a>
+    {% include "includes/messages.html" %}
+    <section class="chat-panel">
+        <header class="chat-heading">
+            <span class="avatar avatar-small avatar-initials" aria-hidden="true">{{ other.first_name|first|upper|default:"V" }}</span>
+            <div class="chat-heading-copy"><h1>{{ other.get_full_name|default:other.email }}</h1><p>{{ other.get_role_display }}</p></div>
+            <div class="chat-safety-actions"><a href="{% url 'moderation:report_create' %}?usuario={{ other.pk }}">Denunciar</a>{% if blocked_by_me %}<form method="post" action="{% url 'chat:unblock' conversation.pk %}">{% csrf_token %}<button type="submit">Desbloquear</button></form>{% elif not blocked_by_other %}<form method="post" action="{% url 'chat:block' conversation.pk %}">{% csrf_token %}<button type="submit" data-confirm="Bloquear esta pessoa e interromper novas mensagens?">Bloquear</button></form>{% endif %}</div>
+        </header>
+        <div class="chat-safety-note" role="note"><strong>Proteja seus dados:</strong> nunca envie senha, código de acesso, documento ou dinheiro pelo chat.</div>
+        {% with last_message=chat_messages.last %}<div class="chat-thread" aria-live="polite" data-chat-thread data-messages-url="{% url 'chat:messages' conversation.pk %}" data-last-message-id="{{ last_message.pk|default:0 }}">
+            {% for item in chat_messages %}<article class="chat-bubble {% if item.sender == user %}chat-bubble-own{% else %}chat-bubble-other{% endif %}" data-message-id="{{ item.pk }}"><span class="visually-hidden">{% if item.sender == user %}Você disse:{% else %}{{ item.sender.get_full_name|default:item.sender.email }} disse:{% endif %}</span><p>{{ item.body|linebreaksbr }}</p><time datetime="{{ item.created_at|date:'c' }}">{{ item.created_at|date:"d/m/Y H:i" }}</time></article>{% empty %}<div class="empty-state" data-empty-chat><h2>Inicie a conversa</h2><p>Escolha uma resposta rápida ou escreva sua mensagem.</p></div>{% endfor %}
+        </div>{% endwith %}
+        {% if blocked_by_me %}<div class="chat-blocked-notice"><strong>Você bloqueou esta conta.</strong><p>Desbloqueie para voltar a conversar.</p></div>
+        {% elif blocked_by_other %}<div class="chat-blocked-notice"><strong>Esta conversa não está disponível.</strong><p>Não é possível enviar novas mensagens.</p></div>
+        {% else %}
+            <div class="quick-replies" aria-label="Respostas rápidas"><span>Respostas rápidas:</span><button type="button" data-quick-reply="Tudo bem, obrigado.">Tudo bem</button><button type="button" data-quick-reply="Qual horário fica melhor para você?">Qual horário?</button><button type="button" data-quick-reply="Pode explicar novamente, por favor?">Explique novamente</button></div>
+            <form class="chat-form" method="post" novalidate data-chat-form>{% csrf_token %}{{ form.body.label_tag }}{{ form.body }}{% if form.body.errors %}<div class="field-error" role="alert">{{ form.body.errors }}</div>{% endif %}<button class="button button-primary" type="submit">Enviar mensagem</button></form>
+        {% endif %}
+    </section>
+</div></main>
+<script src="{% static 'js/chat.js' %}" defer></script>
+{% endblock %}

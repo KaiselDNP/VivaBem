@@ -81,6 +81,10 @@ class FamilyPermission(models.Model):
         "receber notificações de acompanhamento",
         default=False,
     )
+    can_create_requests = models.BooleanField(
+        "criar pedidos de ajuda em meu nome",
+        default=False,
+    )
     updated_at = models.DateTimeField("atualizado em", auto_now=True)
 
     class Meta:

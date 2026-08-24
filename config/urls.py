@@ -13,6 +13,7 @@ urlpatterns = [
     path("vinculos/", include("apps.relationships.urls")),
     path("profissionais/", include("apps.professionals.urls")),
     path("notificacoes/", include("apps.notifications.urls")),
+    path("conversas/", include("apps.chat.urls")),
     path("", include("apps.moderation.urls")),
     path("", include("apps.accounts.urls")),
     path("", include("apps.core.urls")),

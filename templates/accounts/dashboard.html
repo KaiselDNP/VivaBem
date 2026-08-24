@@ -9,12 +9,12 @@
         {% if messages %}
             {% for message in messages %}<div class="success-message" role="status">{{ message }}</div>{% endfor %}
         {% endif %}
-        <section class="welcome-panel">
+        <section class="welcome-panel{% if user.role == 'senior' %} senior-welcome-panel{% endif %}">
             <div>
                 <span class="eyebrow">Seu espaço no VivaBem</span>
                 <h1>Olá, {{ user.first_name|default:"boas-vindas" }}!</h1>
                 {% if user.role == 'senior' %}
-                    <p>O que você quer fazer hoje? Escolha uma das opções abaixo.</p>
+                    <p>O que você quer fazer hoje?</p>
                 {% elif user.role == 'family' %}
                     <p>Seu cadastro de familiar está ativo. Em breve, você poderá solicitar um vínculo e acompanhar informações autorizadas.</p>
                 {% elif user.role == 'professional' %}
@@ -29,49 +29,49 @@
             </div>
             {% if user.role == 'professional' %}
                 <span class="verification-badge verification-{{ professional_profile.verification_status }}">{{ professional_profile.get_verification_status_display }}</span>
-            {% else %}
+            {% elif user.role != 'senior' %}
                 <span class="status-badge">Conta ativa</span>
             {% endif %}
         </section>
         {% if user.role == 'senior' %}
-            <section class="senior-action-grid" aria-label="Ações principais">
-                <a class="senior-action-card senior-action-primary" href="{% url 'needs:request_create' %}">
+            {% if pending_family_count %}
+                <a class="senior-attention-card" href="{% url 'relationships:list' %}">
+                    <span aria-hidden="true">!</span>
+                    <strong>{{ pending_family_count }} familiar{{ pending_family_count|pluralize:"es" }} esperando sua autorização</strong>
+                    <span>Ver agora →</span>
+                </a>
+            {% endif %}
+
+            <section class="senior-action-grid senior-simple-actions" aria-label="O que você deseja fazer?">
+                <a class="senior-action-card senior-action-primary" href="{% url 'needs:quick_request' %}">
                     <span class="senior-action-icon" aria-hidden="true">🤝</span>
                     <span class="senior-action-copy">
                         <strong>Pedir ajuda</strong>
-                        <span>Conte o que você precisa em passos simples.</span>
+                        <span>Conte do que precisa.</span>
                     </span>
-                    <span class="senior-action-arrow" aria-hidden="true">→</span>
                 </a>
                 <a class="senior-action-card" href="{% url 'needs:request_list' %}">
                     <span class="senior-action-icon" aria-hidden="true">📋</span>
                     <span class="senior-action-copy">
-                        <strong>Ver meus pedidos</strong>
-                        <span>{{ active_request_count }} pedido{{ active_request_count|pluralize }} em andamento.</span>
+                        <strong>Ver pedidos</strong>
+                        <span>{{ active_request_count }} em andamento.</span>
                     </span>
-                    <span class="senior-action-arrow" aria-hidden="true">→</span>
                 </a>
-                <a class="senior-action-card" href="{% url 'relationships:list' %}">
-                    <span class="senior-action-icon" aria-hidden="true">👨‍👩‍👧</span>
+                <a class="senior-action-card" href="{% url 'chat:list' %}">
+                    <span class="senior-action-icon" aria-hidden="true">💬</span>
                     <span class="senior-action-copy">
-                        <strong>Minha família</strong>
-                        {% if pending_family_count %}
-                            <span>{{ pending_family_count }} pessoa{{ pending_family_count|pluralize }} aguardando sua autorização.</span>
-                        {% else %}
-                            <span>Escolha quem pode acompanhar você.</span>
-                        {% endif %}
+                        <strong>Conversar</strong>
+                        <span>Fale com pessoas autorizadas.</span>
                     </span>
-                    <span class="senior-action-arrow" aria-hidden="true">→</span>
                 </a>
             </section>
 
-            <section class="senior-recent-section" aria-labelledby="recent-requests-title">
+            {% if recent_help_requests %}<section class="senior-recent-section" aria-labelledby="recent-requests-title">
                 <div class="section-heading compact-heading">
                     <div>
-                        <span class="eyebrow">Acompanhamento</span>
-                        <h2 id="recent-requests-title">Seus pedidos recentes</h2>
+                        <span class="eyebrow">Acompanhar</span>
+                        <h2 id="recent-requests-title">Seu último pedido</h2>
                     </div>
-                    <a href="{% url 'needs:request_list' %}">Ver todos</a>
                 </div>
                 <div class="simple-request-list">
                     {% for item in recent_help_requests %}
@@ -80,21 +80,19 @@
                             <span><strong>{{ item.need.title }}</strong><small>{% if item.status == 'open' %}Esperando profissional{% elif item.status == 'accepted' %}Profissional escolhido{% elif item.status == 'completed' %}Ajuda concluída{% else %}Pedido cancelado{% endif %}</small></span>
                             <span aria-hidden="true">→</span>
                         </a>
-                    {% empty %}
-                        <div class="simple-empty-state">
-                            <span aria-hidden="true">🤝</span>
-                            <p>Você ainda não enviou um pedido. Quando precisar, use o botão “Pedir ajuda”.</p>
-                        </div>
                     {% endfor %}
                 </div>
-            </section>
+            </section>{% endif %}
 
-            <nav class="senior-secondary-links" aria-label="Outras opções">
-                <a href="{% url 'accounts:profile_edit' %}">Editar meu perfil</a>
-                <a href="{% url 'needs:list' %}">Ajuda que cadastrei</a>
-                <a href="{% url 'professionals:directory' %}">Conhecer profissionais</a>
-                <a href="{% url 'moderation:report_list' %}">Segurança e denúncias</a>
-            </nav>
+            <details class="senior-more-options">
+                <summary>Outras opções</summary>
+                <nav class="senior-secondary-links" aria-label="Outras opções">
+                    <a href="{% url 'relationships:list' %}">Minha família</a>
+                    <a href="{% url 'accounts:profile_edit' %}">Meu perfil</a>
+                    <a href="{% url 'professionals:directory' %}">Profissionais</a>
+                    <a href="{% url 'moderation:report_list' %}">Segurança</a>
+                </nav>
+            </details>
         {% else %}
         <section class="dashboard-grid" aria-label="Próximos recursos">
             <article class="dashboard-card"><span>01</span><h2>Complete seu perfil</h2><p>Adicione seus dados básicos e uma foto para personalizar sua conta.</p><a class="card-link" href="{% url 'accounts:profile_edit' %}">Editar perfil →</a></article>

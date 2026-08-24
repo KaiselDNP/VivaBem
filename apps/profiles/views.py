@@ -94,6 +94,6 @@ def profile_photo(request):
 
     content_type = mimetypes.guess_type(photo.name)[0] or "application/octet-stream"
     response = FileResponse(photo.open("rb"), content_type=content_type)
-    response["Cache-Control"] = "private, max-age=300"
+    response["Cache-Control"] = "private, no-cache, no-store, max-age=0"
     response["X-Content-Type-Options"] = "nosniff"
     return response

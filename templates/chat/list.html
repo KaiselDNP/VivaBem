@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Conversas — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page chat-page">
+    <div class="container narrow-container">
+        {% include "includes/messages.html" %}
+        <div class="module-heading"><div><span class="eyebrow">Comunicação privada</span><h1>Conversas</h1><p>Fale somente com familiares e profissionais que já tenham autorização.</p></div></div>
+        <div class="chat-safety-note chat-list-safety" role="note"><strong>Não compartilhe senhas, códigos, documentos ou dinheiro.</strong> Se algo parecer estranho, bloqueie e denuncie.</div>
+        <section class="chat-list" aria-label="Conversas existentes">
+            {% for item in conversation_items %}
+                <a class="chat-list-item" href="{% url 'chat:detail' item.conversation.pk %}">
+                    <span class="avatar avatar-small avatar-initials" aria-hidden="true">{{ item.other.first_name|first|upper|default:"V" }}</span>
+                    <span class="chat-list-copy"><strong>{{ item.other.get_full_name|default:item.other.email }}</strong><small>{{ item.other.get_role_display }}</small>{% if item.last_message %}<span>{{ item.last_message.body|truncatechars:90 }}</span>{% else %}<span>Conversa iniciada. Envie a primeira mensagem.</span>{% endif %}</span>
+                    {% if item.unread_count %}<span class="chat-unread" aria-label="{{ item.unread_count }} mensagens não lidas">{{ item.unread_count }}</span>{% endif %}
+                </a>
+            {% empty %}
+                <div class="empty-state"><h2>Nenhuma conversa iniciada</h2><p>Os contatos autorizados aparecem abaixo.</p></div>
+            {% endfor %}
+        </section>
+        {% if contacts %}
+            <section class="module-section"><div class="section-heading"><span class="eyebrow">Contatos autorizados</span><h2>Iniciar conversa</h2></div><div class="record-grid">
+                {% for contact in contacts %}<article class="record-card"><div class="record-meta"><span>{{ contact.get_role_display }}</span></div><h3>{{ contact.get_full_name|default:contact.email }}</h3><form method="post" action="{% url 'chat:start' contact.pk %}">{% csrf_token %}<button class="button button-primary compact-button" type="submit">Conversar</button></form></article>{% endfor %}
+            </div></section>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
