@@ -35,6 +35,16 @@ class HelpRequestForm(forms.ModelForm):
             senior=senior,
             status="active",
         )
+        self.fields["need"].label = "Com o que você precisa de ajuda?"
+        self.fields["need"].help_text = "Escolha uma ajuda que você já cadastrou."
+        self.fields["details"].label = "Conte um pouco sobre a ajuda"
+        self.fields["details"].help_text = (
+            "Escreva somente o necessário. Não informe senhas, documentos ou dados médicos."
+        )
+        self.fields["region"].label = "Onde você precisa da ajuda?"
+        self.fields["region"].help_text = "Informe somente a cidade ou a região."
+        self.fields["priority"].label = "Quando você precisa?"
+        self.fields["preferred_service_mode"].label = "Como prefere receber a ajuda?"
 
 
 class ProfessionalInterestForm(forms.ModelForm):

@@ -1,5 +1,43 @@
 {% extends "base.html" %}
-{% block title %}Vínculos familiares — VivaBem{% endblock %}
-{% block body %}{% include "includes/app_header.html" %}
-<main id="conteudo" class="module-page"><div class="container">{% include "includes/messages.html" %}<div class="module-heading"><div><span class="eyebrow">Autorizações</span><h1>Vínculos familiares</h1><p>{% if user.role == 'senior' %}Você decide quem acompanha e quais informações ficam visíveis.{% else %}O acesso depende da autorização da pessoa idosa.{% endif %}</p></div>{% if user.role == 'family' %}<a class="button button-primary" href="{% url 'relationships:request' %}">Solicitar vínculo</a>{% endif %}</div><div class="record-grid">{% for link in links %}<article class="record-card"><div class="record-meta"><span>{% if user.role == 'senior' %}Familiar{% else %}Pessoa idosa{% endif %}</span><span class="record-status status-{{ link.status }}">{{ link.get_status_display }}</span></div><h2>{% if user.role == 'senior' %}{{ link.family.get_full_name|default:link.family.email }}{% else %}{{ link.senior.get_full_name|default:link.senior.email }}{% endif %}</h2>{% if user.role == 'senior' and link.status == 'pending' %}<div class="record-actions"><form method="post" action="{% url 'relationships:respond' link.pk 'approve' %}">{% csrf_token %}<button class="action-positive" type="submit">Autorizar</button></form><form method="post" action="{% url 'relationships:respond' link.pk 'reject' %}">{% csrf_token %}<button type="submit">Recusar</button></form></div>{% elif user.role == 'senior' and link.status == 'approved' %}<div class="record-actions"><a href="{% url 'relationships:permissions' link.pk %}">Definir permissões</a><form method="post" action="{% url 'relationships:revoke' link.pk %}">{% csrf_token %}<button type="submit">Revogar</button></form></div>{% elif user.role == 'family' and link.status == 'approved' %}<a class="card-link" href="{% url 'relationships:senior_overview' link.pk %}">Acompanhar informações autorizadas →</a>{% endif %}</article>{% empty %}<div class="empty-state"><h2>Nenhum vínculo</h2><p>{% if user.role == 'family' %}Solicite um vínculo usando o e-mail da pessoa idosa.{% else %}Solicitações de familiares aparecerão aqui.{% endif %}</p></div>{% endfor %}</div></div></main>
+{% block title %}{% if user.role == 'senior' %}Minha família{% else %}Pessoas acompanhadas{% endif %} — VivaBem{% endblock %}
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page">
+    <div class="container">
+        {% include "includes/messages.html" %}
+        <div class="module-heading">
+            <div>
+                <span class="eyebrow">Autorizações</span>
+                <h1>{% if user.role == 'senior' %}Minha família{% else %}Pessoas acompanhadas{% endif %}</h1>
+                <p>{% if user.role == 'senior' %}Você escolhe quem pode acompanhar e o que cada pessoa pode ver.{% else %}A pessoa idosa precisa permitir o acesso antes do acompanhamento.{% endif %}</p>
+            </div>
+            {% if user.role == 'family' %}<a class="button button-primary" href="{% url 'relationships:request' %}">Pedir autorização</a>{% endif %}
+        </div>
+        <div class="record-grid">
+            {% for link in links %}
+                <article class="record-card">
+                    <div class="record-meta"><span>{% if user.role == 'senior' %}Familiar{% else %}Pessoa idosa{% endif %}</span><span class="record-status status-{{ link.status }}">{% if link.status == 'pending' %}{% if user.role == 'senior' %}Esperando sua resposta{% else %}Esperando autorização{% endif %}{% elif link.status == 'approved' %}Acesso permitido{% elif link.status == 'rejected' %}Não autorizado{% else %}Acesso retirado{% endif %}</span></div>
+                    <h2>{% if user.role == 'senior' %}{{ link.family.get_full_name|default:link.family.email }}{% else %}{{ link.senior.get_full_name|default:link.senior.email }}{% endif %}</h2>
+                    {% if user.role == 'senior' and link.status == 'pending' %}
+                        <p>Esta pessoa pediu autorização para acompanhar você. Nenhuma informação foi compartilhada ainda.</p>
+                        <div class="record-actions">
+                            <form method="post" action="{% url 'relationships:respond' link.pk 'approve' %}">{% csrf_token %}<button class="action-positive" type="submit" data-confirm="Deseja permitir que esta pessoa acompanhe você? Depois, você escolherá o que ela poderá ver.">Permitir acompanhamento</button></form>
+                            <form method="post" action="{% url 'relationships:respond' link.pk 'reject' %}">{% csrf_token %}<button type="submit" data-confirm="Deseja recusar este pedido de acompanhamento?">Não permitir</button></form>
+                        </div>
+                    {% elif user.role == 'senior' and link.status == 'approved' %}
+                        <p>Esta pessoa está autorizada. Você continua decidindo quais informações ela pode consultar.</p>
+                        <div class="record-actions">
+                            <a href="{% url 'relationships:permissions' link.pk %}">Escolher o que pode ver</a>
+                            <form method="post" action="{% url 'relationships:revoke' link.pk %}">{% csrf_token %}<button type="submit" data-confirm="Deseja retirar o acesso desta pessoa? Ela deixará de acompanhar suas informações.">Retirar acesso</button></form>
+                        </div>
+                    {% elif user.role == 'family' and link.status == 'approved' %}
+                        <a class="card-link" href="{% url 'relationships:senior_overview' link.pk %}">Ver informações permitidas →</a>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <div class="empty-state"><h2>Nenhuma pessoa cadastrada</h2><p>{% if user.role == 'family' %}Peça autorização usando o e-mail da pessoa idosa.{% else %}Quando um familiar pedir autorização, ele aparecerá aqui. Nada será compartilhado automaticamente.{% endif %}</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
 {% endblock %}

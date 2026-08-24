@@ -1,5 +1,66 @@
 {% extends "base.html" %}
-{% block title %}Nova solicitação — VivaBem{% endblock %}
-{% block body %}{% include "includes/app_header.html" %}
-<main id="conteudo" class="module-page"><div class="container narrow-container"><a class="back-link" href="{% url 'needs:request_list' %}">← Voltar às solicitações</a><section class="form-card"><div class="form-card-heading"><span class="eyebrow">Pedido de apoio</span><h1 class="form-page-title">Nova solicitação</h1><p>Este recurso não atende emergências. Em situação urgente, procure os serviços públicos adequados.</p></div><form method="post" novalidate>{% csrf_token %}{% include "includes/form_fields.html" %}<button class="button button-primary button-block" type="submit">Publicar solicitação</button></form></section></div></main>
+{% load static %}
+
+{% block title %}Pedir ajuda — VivaBem{% endblock %}
+
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page">
+    <div class="container narrow-container">
+        <a class="back-link" href="{% url 'accounts:dashboard' %}">← Voltar ao painel</a>
+        {% include "includes/messages.html" %}
+
+        <section class="emergency-notice compact-emergency" aria-labelledby="request-emergency-title">
+            <span class="notice-icon" aria-hidden="true">!</span>
+            <div>
+                <h2 id="request-emergency-title">Este pedido não é para emergências</h2>
+                <p>Em uma emergência, ligue para o SAMU no número <strong>192</strong>.</p>
+            </div>
+        </section>
+
+        <section class="form-card guided-form-card">
+            <div class="form-card-heading">
+                <span class="eyebrow">Passo a passo</span>
+                <h1 class="form-page-title">Pedir ajuda</h1>
+                <p>Responda com calma. Você poderá voltar e conferir suas respostas.</p>
+            </div>
+
+            <form method="post" novalidate data-guided-form data-draft-key="vivabem-pedido-ajuda">
+                {% csrf_token %}
+                {% include "includes/form_error_summary.html" %}
+
+                <div class="guided-progress" aria-live="polite">
+                    <span data-step-counter>Etapa 1 de 5</span>
+                    <div class="guided-progress-track" aria-hidden="true"><span data-step-progress></span></div>
+                </div>
+                <p class="draft-note"><span aria-hidden="true">✓</span> Suas respostas ficam guardadas temporariamente enquanto esta aba estiver aberta.</p>
+
+                {% for field in form %}
+                    <fieldset class="guided-step" data-guided-step {% if field.errors %}data-has-error="true"{% endif %}>
+                        <legend>
+                            <span class="guided-step-icon" aria-hidden="true">
+                                {% if field.name == 'need' %}🤝{% elif field.name == 'details' %}✍️{% elif field.name == 'region' %}📍{% elif field.name == 'priority' %}📅{% else %}🏠{% endif %}
+                            </span>
+                            {{ field.label }}
+                        </legend>
+                        <div class="form-field">
+                            <label class="visually-hidden" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}
+                            {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                        </div>
+                    </fieldset>
+                {% endfor %}
+
+                <div class="guided-navigation" data-step-navigation>
+                    <button class="button button-secondary" type="button" data-step-back>Voltar</button>
+                    <button class="button button-primary" type="button" data-step-next>Continuar</button>
+                    <button class="button button-primary" type="submit" data-step-submit>Enviar meu pedido</button>
+                </div>
+                <noscript><button class="button button-primary button-block" type="submit">Enviar meu pedido</button></noscript>
+            </form>
+        </section>
+    </div>
+</main>
+<script src="{% static 'js/guided-form.js' %}" defer></script>
 {% endblock %}

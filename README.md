@@ -28,7 +28,12 @@ As credenciais reais nunca devem ser adicionadas ao Git.
 ## Funcionalidades disponíveis
 
 - Página inicial pública e responsiva.
+- Painel da pessoa idosa organizado por tarefas, com ações grandes e linguagem direta.
+- Barra global para ampliar o texto, selecionar um item para ouvir e abrir instruções de ajuda.
+- Pedido de ajuda dividido em cinco etapas, com progresso e rascunho temporário na aba.
+- Imagens simbólicas sempre acompanhadas de texto.
 - Cadastro separado para pessoa idosa e familiar.
+- Cadastro da pessoa idosa dividido em quatro etapas curtas.
 - Autenticação por e-mail e senha.
 - Recuperação de senha por link temporário enviado por e-mail.
 - Painel protegido conforme o perfil da conta.
@@ -48,6 +53,23 @@ As credenciais reais nunca devem ser adicionadas ao Git.
 - Encerramento de sessão por requisição POST protegida por CSRF.
 - Limite temporário de tentativas repetidas de entrada.
 - Administração de usuários pelo Django Admin.
+
+## Acessibilidade para o público idoso
+
+O VivaBem prioriza ações simples, botões grandes, contraste, foco de teclado, mensagens claras e
+prevenção de erros. A conta de pessoa idosa começa com o texto em A+. A leitura em voz alta permite
+escolher um item sem ativá-lo: o primeiro clique lê, e o próximo volta a funcionar normalmente. No
+computador, `Alt + O` ativa esse modo; no celular, o controle permanece no centro da lateral direita.
+A voz usa o recurso disponível no navegador e pode variar entre dispositivos. As imagens não
+substituem os textos, e nenhuma informação é compartilhada com um familiar sem autorização
+explícita.
+
+Essas decisões ainda precisam ser validadas com pessoas idosas reais durante a pesquisa de campo.
+O sistema não presume que todas as pessoas com mais de 60 anos possuem as mesmas necessidades.
+
+As senhas precisam ter pelo menos 8 caracteres, mas não exigem símbolos, números ou letras
+maiúsculas. Senhas muito comuns ou formadas somente por números continuam bloqueadas. O login com
+Google não está ativo porque depende de credenciais externas e configuração de consentimento OAuth.
 
 ## E-mail e recuperação de senha
 
@@ -71,3 +93,4 @@ As decisões arquiteturais ficam em `docs/architecture/` para apoiar a explicaç
 - [Visão geral funcional](docs/visao-geral-do-sistema.md)
 - [Guia de publicação no Render](docs/publicacao-render.md)
 - [Revisão final do MVP](docs/revisao-final.md)
+- [Decisão de acessibilidade para pessoas idosas](docs/architecture/005-acessibilidade-para-pessoas-idosas.md)

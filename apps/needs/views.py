@@ -49,9 +49,20 @@ def need_create(request):
         need = form.save(commit=False)
         need.senior = request.user
         need.save()
-        messages.success(request, "Necessidade registrada.")
+        if request.GET.get("continuar") == "pedido":
+            messages.success(request, "Ajuda cadastrada. Agora complete seu pedido.")
+            return redirect("needs:request_create")
+        messages.success(request, "Ajuda cadastrada com sucesso.")
         return redirect("needs:list")
-    return render(request, "needs/form.html", {"form": form, "page_title": "Nova necessidade"})
+    return render(
+        request,
+        "needs/form.html",
+        {
+            "form": form,
+            "page_title": "Com o que você precisa de ajuda?",
+            "continue_request": request.GET.get("continuar") == "pedido",
+        },
+    )
 
 
 @login_required
@@ -63,9 +74,13 @@ def need_edit(request, pk):
     form = NeedForm(request.POST or None, instance=need)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Necessidade atualizada.")
+        messages.success(request, "Ajuda atualizada com sucesso.")
         return redirect("needs:list")
-    return render(request, "needs/form.html", {"form": form, "page_title": "Editar necessidade"})
+    return render(
+        request,
+        "needs/form.html",
+        {"form": form, "page_title": "Editar ajuda cadastrada"},
+    )
 
 
 @login_required
@@ -94,6 +109,12 @@ def request_create(request):
     denied = require_role(request, UserRole.SENIOR, "Somente pessoas idosas solicitam ajuda.")
     if denied:
         return denied
+    if request.method == "GET" and not request.user.needs.filter(status=NeedStatus.ACTIVE).exists():
+        messages.info(
+            request,
+            "Primeiro, conte com o que precisa de ajuda. Depois você completará o pedido.",
+        )
+        return redirect(f"{reverse('needs:create')}?continuar=pedido")
     form = HelpRequestForm(request.POST or None, senior=request.user)
     if request.method == "POST" and form.is_valid():
         help_request = form.save()
@@ -102,7 +123,7 @@ def request_create(request):
             "Nova solicitação de ajuda",
             f"{request.user} criou uma solicitação que você pode acompanhar.",
         )
-        messages.success(request, "Solicitação de ajuda publicada.")
+        messages.success(request, "Seu pedido de ajuda foi enviado com sucesso.")
         return redirect("needs:request_detail", pk=help_request.pk)
     return render(request, "needs/request_form.html", {"form": form})
 
@@ -165,7 +186,7 @@ def request_status(request, pk, action):
         "Solicitação atualizada",
         f"Uma solicitação acompanhada agora está como {help_request.get_status_display().lower()}.",
     )
-    messages.success(request, "Status da solicitação atualizado.")
+    messages.success(request, "O andamento do pedido foi atualizado.")
     return redirect("needs:request_detail", pk=help_request.pk)
 
 
@@ -314,5 +335,5 @@ def respond_interest(request, request_pk, interest_pk, action):
         message=f"Seu interesse foi {interest.get_status_display().lower()}.",
         target_url=reverse("needs:opportunities"),
     )
-    messages.success(request, "Resposta enviada ao profissional.")
+    messages.success(request, "Sua escolha foi enviada ao profissional.")
     return redirect("needs:request_detail", pk=help_request.pk)

@@ -87,6 +87,22 @@ class NeedAndRequestFlowTests(TestCase):
         response = self.client.get(reverse("needs:request_detail", args=(self.help_request.pk,)))
         self.assertEqual(response.status_code, 404)
 
+    def test_request_form_is_guided_and_senior_without_need_starts_with_simple_step(self):
+        self.client.force_login(self.senior)
+        guided_response = self.client.get(reverse("needs:request_create"))
+
+        self.assertContains(guided_response, "data-guided-form")
+        self.assertContains(guided_response, "Etapa 1 de 5")
+        self.assertContains(guided_response, "Escolher o que ouvir")
+
+        self.client.force_login(self.other_senior)
+        first_step = self.client.get(reverse("needs:request_create"))
+
+        self.assertRedirects(
+            first_step,
+            f"{reverse('needs:create')}?continuar=pedido",
+        )
+
     def test_senior_creates_request_only_for_own_need(self):
         another_need = Need.objects.create(
             senior=self.other_senior,

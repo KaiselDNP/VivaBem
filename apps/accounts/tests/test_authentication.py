@@ -35,7 +35,47 @@ class SignUpFlowTests(TestCase):
         self.assertIsNotNone(user.accepted_terms_at)
         self.assertTrue(user.check_password(self.password))
         self.assertTrue(response.context["user"].is_authenticated)
-        self.assertContains(response, "Seu cadastro de pessoa idosa está ativo")
+        self.assertContains(response, "O que você quer fazer hoje?")
+        self.assertContains(response, "Pedir ajuda")
+        self.assertContains(response, 'data-default-font-size="large"')
+        self.assertContains(response, "Alt + O")
+
+    def test_senior_signup_is_guided_and_explains_simple_password(self):
+        response = self.client.get(reverse("accounts:signup_senior"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "data-guided-form")
+        self.assertContains(response, "Etapa 1 de 4")
+        self.assertContains(response, "Não precisa usar símbolos, números ou letras maiúsculas")
+        self.assertContains(response, "Use pelo menos 8 caracteres")
+
+    def test_eight_character_password_is_accepted_but_shorter_one_is_rejected(self):
+        simple_password = "CasaAzul"
+        accepted = self.client.post(
+            reverse("accounts:signup_senior"),
+            self.signup_data(
+                email="simples@example.com",
+                password1=simple_password,
+                password2=simple_password,
+            ),
+        )
+
+        self.assertRedirects(accepted, reverse("accounts:dashboard"))
+        self.client.logout()
+
+        short_password = "CasaAzu"
+        rejected = self.client.post(
+            reverse("accounts:signup_senior"),
+            self.signup_data(
+                email="curta@example.com",
+                password1=short_password,
+                password2=short_password,
+            ),
+        )
+
+        self.assertEqual(rejected.status_code, 200)
+        self.assertTrue(rejected.context["form"].errors.get("password2"))
+        self.assertFalse(get_user_model().objects.filter(email="curta@example.com").exists())
 
     def test_family_can_register(self):
         response = self.client.post(

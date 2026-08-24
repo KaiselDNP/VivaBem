@@ -95,13 +95,29 @@ class SignUpForm(UserCreationForm):
         if role not in {UserRole.SENIOR, UserRole.FAMILY, UserRole.PROFESSIONAL}:
             raise ValueError("Perfil de cadastro não permitido.")
         self.role = role
+        self.fields["first_name"].widget.attrs.update(
+            {"autofocus": True, "placeholder": "Digite seu nome"}
+        )
+        self.fields["last_name"].widget.attrs.update({"placeholder": "Digite seu sobrenome"})
         self.fields["password1"].label = "Senha"
+        self.fields["password1"].help_text = (
+            "Use pelo menos 8 caracteres. Pode ser uma frase fácil de lembrar."
+        )
         self.fields["password1"].widget.attrs.update(
-            {"autocomplete": "new-password", "placeholder": "Crie uma senha segura"}
+            {
+                "autocomplete": "new-password",
+                "placeholder": "Crie uma senha com 8 caracteres",
+                "minlength": 8,
+            }
         )
         self.fields["password2"].label = "Confirme a senha"
+        self.fields["password2"].help_text = "Digite a mesma senha mais uma vez."
         self.fields["password2"].widget.attrs.update(
-            {"autocomplete": "new-password", "placeholder": "Repita a senha"}
+            {
+                "autocomplete": "new-password",
+                "placeholder": "Repita a senha",
+                "minlength": 8,
+            }
         )
 
     def clean_email(self):

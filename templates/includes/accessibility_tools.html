@@ -1,0 +1,21 @@
+<aside class="accessibility-tools" aria-label="Ferramentas de acessibilidade">
+    <div class="container accessibility-tools-inner">
+        <strong class="accessibility-title">Facilitar leitura:</strong>
+        <div class="accessibility-actions">
+            <button type="button" data-font-size="default" aria-label="Usar tamanho normal de texto">A</button>
+            <button type="button" data-font-size="large" aria-label="Aumentar o texto">A+</button>
+            <button type="button" data-font-size="xlarge" aria-label="Aumentar ainda mais o texto">A++</button>
+            <button class="read-aloud-button" type="button" data-read-aloud aria-pressed="false" aria-keyshortcuts="Alt+O" aria-label="Escolher uma parte da página para ouvir">
+                <span aria-hidden="true">🔊</span>
+                <span class="read-button-label" data-read-button-label>Escolher o que ouvir</span>
+                <kbd class="shortcut-hint" aria-hidden="true">Alt + O</kbd>
+            </button>
+            <a class="accessibility-help-link" href="{% url 'core:help' %}">Preciso de ajuda</a>
+        </div>
+        <span class="visually-hidden" data-accessibility-status aria-live="polite"></span>
+    </div>
+</aside>
+<div class="read-selection-prompt" data-read-selection-prompt role="status" hidden>
+    <span aria-hidden="true">🔊</span>
+    <span>Agora clique ou toque no que deseja ouvir. O primeiro clique serve somente para a leitura.</span>
+</div>

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Ajuda para usar o VivaBem{% endblock %}
+
+{% block body %}
+{% if user.is_authenticated %}
+    {% include "includes/app_header.html" %}
+{% else %}
+    {% include "accounts/_header.html" %}
+{% endif %}
+<main id="conteudo" class="module-page help-page">
+    <div class="container narrow-container">
+        <header class="module-heading simple-heading">
+            <div>
+                <span class="eyebrow">Passo a passo</span>
+                <h1>Como podemos ajudar?</h1>
+                <p>Escolha uma opção abaixo. Você também pode usar “Escolher o que ouvir”.</p>
+            </div>
+        </header>
+
+        <section class="emergency-notice" aria-labelledby="emergency-title">
+            <span class="notice-icon" aria-hidden="true">!</span>
+            <div>
+                <h2 id="emergency-title">Isto não é atendimento de emergência</h2>
+                <p>O VivaBem organiza pedidos de apoio. Em uma emergência, ligue para o SAMU no número <strong>192</strong>.</p>
+            </div>
+        </section>
+
+        <div class="help-option-grid">
+            {% if user.is_authenticated and user.role == 'senior' %}
+                <a class="help-option-card" href="{% url 'needs:request_create' %}">
+                    <span class="help-option-icon" aria-hidden="true">🤝</span>
+                    <strong>Pedir ajuda</strong>
+                    <span>Conte o que precisa em passos simples.</span>
+                </a>
+                <a class="help-option-card" href="{% url 'needs:request_list' %}">
+                    <span class="help-option-icon" aria-hidden="true">📋</span>
+                    <strong>Ver meus pedidos</strong>
+                    <span>Acompanhe as respostas recebidas.</span>
+                </a>
+                <a class="help-option-card" href="{% url 'relationships:list' %}">
+                    <span class="help-option-icon" aria-hidden="true">👨‍👩‍👧</span>
+                    <strong>Minha família</strong>
+                    <span>Escolha quem pode acompanhar você.</span>
+                </a>
+            {% else %}
+                <article class="help-option-card help-option-static">
+                    <span class="help-option-icon" aria-hidden="true">🔎</span>
+                    <strong>Encontre a opção desejada</strong>
+                    <span>Use o menu superior para abrir seu painel, perfil e avisos.</span>
+                </article>
+            {% endif %}
+            <article class="help-option-card help-option-static">
+                <span class="help-option-icon" aria-hidden="true">🔊</span>
+                <strong>Ouça somente o que escolher</strong>
+                <span>Ative a leitura e toque uma vez no texto ou botão. No computador, use Alt + O.</span>
+            </article>
+            <article class="help-option-card help-option-static">
+                <span class="help-option-icon" aria-hidden="true">A+</span>
+                <strong>Aumente as letras</strong>
+                <span>Use A+ ou A++ no começo da tela.</span>
+            </article>
+            <article class="help-option-card help-option-static">
+                <span class="help-option-icon" aria-hidden="true">🛡️</span>
+                <strong>Proteja seus dados</strong>
+                <span>Nunca informe senhas, documentos ou dados bancários em um pedido.</span>
+            </article>
+        </div>
+
+        <p class="human-help-note"><strong>Ainda está difícil?</strong> Peça ajuda a uma pessoa de confiança. Ela não deve usar sua senha nem decidir por você.</p>
+    </div>
+</main>
+{% endblock %}

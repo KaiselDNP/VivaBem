@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Minhas necessidades — VivaBem{% endblock %}
+{% block title %}Ajuda que cadastrei — VivaBem{% endblock %}
 {% block body %}
 {% include "includes/app_header.html" %}
 <main id="conteudo" class="module-page"><div class="container">
     {% include "includes/messages.html" %}
-    <div class="module-heading"><div><span class="eyebrow">Organização pessoal</span><h1>Minhas necessidades</h1><p>Registre apenas o necessário para organizar o apoio que procura.</p></div><a class="button button-primary" href="{% url 'needs:create' %}">Nova necessidade</a></div>
+    <div class="module-heading"><div><span class="eyebrow">Organização pessoal</span><h1>Ajuda que cadastrei</h1><p>Aqui ficam os assuntos para os quais você procura apoio.</p></div><a class="button button-primary" href="{% url 'needs:create' %}">Cadastrar uma ajuda</a></div>
     <div class="record-grid">
         {% for need in needs %}
-            <article class="record-card"><div class="record-meta"><span>{{ need.get_category_display }}</span><span class="record-status status-{{ need.status }}">{{ need.get_status_display }}</span></div><h2>{{ need.title }}</h2><p>{{ need.description }}</p><div class="record-actions"><a href="{% url 'needs:edit' need.pk %}">Editar</a>{% if need.status == 'active' %}<form method="post" action="{% url 'needs:resolve' need.pk %}">{% csrf_token %}<button type="submit">Marcar resolvida</button></form>{% endif %}</div></article>
-        {% empty %}<div class="empty-state"><h2>Nenhuma necessidade registrada</h2><p>Comece descrevendo uma necessidade atual de forma simples.</p></div>{% endfor %}
+            <article class="record-card"><div class="record-meta"><span>{{ need.get_category_display }}</span><span class="record-status status-{{ need.status }}">{{ need.get_status_display }}</span></div><h2>{{ need.title }}</h2><p>{{ need.description }}</p><div class="record-actions"><a href="{% url 'needs:edit' need.pk %}">Editar</a>{% if need.status == 'active' %}<form method="post" action="{% url 'needs:resolve' need.pk %}">{% csrf_token %}<button type="submit" data-confirm="Confirma que você não precisa mais desta ajuda?">Não preciso mais</button></form>{% endif %}</div></article>
+        {% empty %}<div class="empty-state"><h2>Nenhuma ajuda cadastrada</h2><p>Comece contando, de forma simples, com o que precisa de ajuda.</p></div>{% endfor %}
     </div>
 </div></main>
 {% endblock %}

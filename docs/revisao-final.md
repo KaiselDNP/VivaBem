@@ -14,6 +14,13 @@
 
 ## Responsividade e acessibilidade
 
+- Painel da pessoa idosa prioriza três tarefas concretas em vez de nomes técnicos dos módulos.
+- Pedido de ajuda apresenta uma pergunta por etapa e mantém alternativa funcional sem JavaScript.
+- Barra global permite ampliar o texto, ouvir o conteúdo e abrir a central de ajuda.
+- Imagens simbólicas permanecem acompanhadas por texto e ocultas de leitores de tela quando são
+  apenas decorativas.
+- Formulários apresentam resumo dos erros e preservam as respostas durante a correção.
+- Ações de cancelamento, recusa e retirada de acesso pedem confirmação explícita.
 - Conteúdo limitado por largura máxima, sem impedir o uso em telas grandes.
 - Grades passam para uma coluna em telas menores.
 - Tabelas administrativas permitem rolagem horizontal.

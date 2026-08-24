@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Minhas denúncias — VivaBem{% endblock %}
+{% block title %}Segurança e suporte — VivaBem{% endblock %}
 {% block body %}
 {% include "includes/app_header.html" %}
 <main id="conteudo" class="module-page">
     <div class="container">
         {% include "includes/messages.html" %}
         <div class="module-heading">
-            <div><span class="eyebrow">Segurança e confiança</span><h1>Minhas denúncias</h1><p>Acompanhe somente os registros enviados pela sua conta.</p></div>
-            <a class="button button-primary" href="{% url 'moderation:report_create' %}">Nova denúncia</a>
+            <div><span class="eyebrow">Segurança e confiança</span><h1>Segurança e suporte</h1><p>Informe um problema e acompanhe as respostas da equipe.</p></div>
+            <a class="button button-primary" href="{% url 'moderation:report_create' %}">Informar um problema</a>
         </div>
         <div class="record-grid">
             {% for report in reports %}
@@ -18,7 +18,7 @@
                     <small>Enviada em {{ report.created_at|date:"d/m/Y H:i" }}</small>
                 </a>
             {% empty %}
-                <div class="empty-state"><h2>Nenhuma denúncia enviada</h2><p>Se precisar relatar algo, use o botão “Nova denúncia”.</p></div>
+                <div class="empty-state"><h2>Nenhum problema informado</h2><p>Se algo deixar você desconfortável ou inseguro, escolha “Informar um problema”.</p></div>
             {% endfor %}
         </div>
     </div>

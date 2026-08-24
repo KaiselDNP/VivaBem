@@ -22,9 +22,7 @@
             </div>
             <form method="post" novalidate>
                 {% csrf_token %}
-                {% if form.non_field_errors %}
-                    <div class="form-alert" role="alert">{{ form.non_field_errors }}</div>
-                {% endif %}
+                {% include "includes/form_error_summary.html" %}
                 {% for field in form %}
                     <div class="form-field">
                         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -40,6 +38,7 @@
                 <span>Ainda não tem cadastro?</span>
                 <a href="{% url 'accounts:signup_choice' %}">Criar uma conta</a>
             </div>
+            <div class="simple-assistance-link"><a href="{% url 'core:help' %}">Preciso de ajuda para entrar</a></div>
         </section>
     </div>
 </main>

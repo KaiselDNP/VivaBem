@@ -1,9 +1,104 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Cadastro de {{ role_label }} — VivaBem{% endblock %}
 
 {% block body %}
 {% include "accounts/_header.html" %}
+{% if role_slug == 'senior' %}
+<main id="conteudo" class="auth-page senior-signup-page">
+    <div class="container narrow-container">
+        <header class="senior-signup-intro">
+            <a class="back-link" href="{% url 'accounts:signup_choice' %}">← Voltar</a>
+            <span class="senior-signup-icon" aria-hidden="true">🧓</span>
+            <span class="eyebrow">Cadastro simples</span>
+            <h1>Vamos criar sua conta</h1>
+            <p>Mostraremos uma pergunta por vez. Faça com calma e use “Escolher o que ouvir” quando precisar.</p>
+        </header>
+
+        <section class="form-card guided-form-card" aria-label="Cadastro de pessoa idosa">
+            <form method="post" novalidate data-guided-form>
+                {% csrf_token %}
+                {% include "includes/form_error_summary.html" %}
+
+                <div class="guided-progress" aria-live="polite">
+                    <span data-step-counter>Etapa 1 de 4</span>
+                    <div class="guided-progress-track" aria-hidden="true"><span data-step-progress></span></div>
+                </div>
+
+                <fieldset class="guided-step" data-guided-step {% if form.first_name.errors or form.last_name.errors %}data-has-error="true"{% endif %}>
+                    <legend><span class="guided-step-icon" aria-hidden="true">👤</span>Como você se chama?</legend>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="{{ form.first_name.id_for_label }}">Nome</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}<div class="field-error" role="alert">{{ form.first_name.errors }}</div>{% endif %}
+                        </div>
+                        <div class="form-field">
+                            <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}<div class="field-error" role="alert">{{ form.last_name.errors }}</div>{% endif %}
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="guided-step" data-guided-step {% if form.email.errors %}data-has-error="true"{% endif %}>
+                    <legend><span class="guided-step-icon" aria-hidden="true">✉️</span>Qual é o seu e-mail?</legend>
+                    <div class="form-field">
+                        <label for="{{ form.email.id_for_label }}">E-mail</label>
+                        {{ form.email }}
+                        <div class="field-help">Você usará este e-mail para entrar no VivaBem.</div>
+                        {% if form.email.errors %}<div class="field-error" role="alert">{{ form.email.errors }}</div>{% endif %}
+                    </div>
+                </fieldset>
+
+                <fieldset class="guided-step" data-guided-step {% if form.password1.errors or form.password2.errors %}data-has-error="true"{% endif %}>
+                    <legend><span class="guided-step-icon" aria-hidden="true">🔑</span>Crie uma senha simples</legend>
+                    <div class="simple-password-notice">
+                        <strong>Não precisa usar símbolos, números ou letras maiúsculas.</strong>
+                        <span>Use 8 ou mais caracteres. Uma frase curta pode ser mais fácil de lembrar.</span>
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.password1.id_for_label }}">Senha</label>
+                        {{ form.password1 }}
+                        {% if form.password1.help_text %}<div class="field-help">{{ form.password1.help_text }}</div>{% endif %}
+                        {% if form.password1.errors %}<div class="field-error" role="alert">{{ form.password1.errors }}</div>{% endif %}
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.password2.id_for_label }}">Digite a senha novamente</label>
+                        {{ form.password2 }}
+                        {% if form.password2.help_text %}<div class="field-help">{{ form.password2.help_text }}</div>{% endif %}
+                        {% if form.password2.errors %}<div class="field-error" role="alert">{{ form.password2.errors }}</div>{% endif %}
+                    </div>
+                </fieldset>
+
+                <fieldset class="guided-step" data-guided-step {% if form.accepted_privacy.errors %}data-has-error="true"{% endif %}>
+                    <legend><span class="guided-step-icon" aria-hidden="true">🛡️</span>Confira antes de terminar</legend>
+                    <div class="signup-final-summary">
+                        <p>Seus dados não serão compartilhados automaticamente.</p>
+                        <p>Você poderá mudar seu perfil e controlar o acesso da sua família.</p>
+                    </div>
+                    <div class="consent-field senior-consent-field">
+                        {{ form.accepted_privacy }}
+                        <label for="{{ form.accepted_privacy.id_for_label }}">Li e aceito o <a href="{% url 'core:privacy' %}" target="_blank" rel="noopener">aviso de privacidade</a>.</label>
+                    </div>
+                    {% if form.accepted_privacy.errors %}<div class="field-error" role="alert">{{ form.accepted_privacy.errors }}</div>{% endif %}
+                </fieldset>
+
+                <div class="guided-navigation" data-step-navigation>
+                    <button class="button button-secondary" type="button" data-step-back>Voltar</button>
+                    <button class="button button-primary" type="button" data-step-next>Continuar</button>
+                    <button class="button button-primary" type="submit" data-step-submit>Criar minha conta</button>
+                </div>
+                <noscript><button class="button button-primary button-block" type="submit">Criar minha conta</button></noscript>
+            </form>
+            <div class="form-footer"><span>Já possui uma conta?</span> <a href="{% url 'accounts:login' %}">Entrar</a></div>
+            <div class="assisted-registration-note"><strong>Precisa de ajuda?</strong><p>Uma pessoa de confiança pode acompanhar o preenchimento, mas não deve guardar sua senha.</p></div>
+        </section>
+    </div>
+</main>
+<script src="{% static 'js/guided-form.js' %}" defer></script>
+{% else %}
 <main id="conteudo" class="auth-page signup-page">
     <div class="container signup-layout">
         <section class="auth-intro" aria-labelledby="signup-title">
@@ -25,36 +120,20 @@
             </div>
             <form method="post" novalidate>
                 {% csrf_token %}
-                {% if form.non_field_errors %}
-                    <div class="form-alert" role="alert">{{ form.non_field_errors }}</div>
-                {% endif %}
+                {% include "includes/form_error_summary.html" %}
                 <div class="form-row">
                     {% for field in form %}
                         {% if field.name == 'first_name' or field.name == 'last_name' %}
-                            <div class="form-field">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {{ field }}
-                                {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
-                            </div>
+                            <div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}</div>
                         {% endif %}
                     {% endfor %}
                 </div>
                 {% for field in form %}
                     {% if field.name != 'first_name' and field.name != 'last_name' and field.name != 'accepted_privacy' %}
-                        <div class="form-field">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {{ field }}
-                            {% if field.help_text %}<div class="field-help">{{ field.help_text|safe }}</div>{% endif %}
-                            {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
-                        </div>
+                        <div class="form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}{% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}</div>
                     {% endif %}
                 {% endfor %}
-                <div class="consent-field">
-                    {{ form.accepted_privacy }}
-                    <label for="{{ form.accepted_privacy.id_for_label }}">
-                        Li e aceito o <a href="{% url 'core:privacy' %}" target="_blank" rel="noopener">aviso de privacidade</a> do VivaBem.
-                    </label>
-                </div>
+                <div class="consent-field">{{ form.accepted_privacy }}<label for="{{ form.accepted_privacy.id_for_label }}">Li e aceito o <a href="{% url 'core:privacy' %}" target="_blank" rel="noopener">aviso de privacidade</a> do VivaBem.</label></div>
                 {% if form.accepted_privacy.errors %}<div class="field-error" role="alert">{{ form.accepted_privacy.errors }}</div>{% endif %}
                 <button class="button button-primary button-block" type="submit">Criar minha conta</button>
             </form>
@@ -62,4 +141,5 @@
         </section>
     </div>
 </main>
+{% endif %}
 {% endblock %}

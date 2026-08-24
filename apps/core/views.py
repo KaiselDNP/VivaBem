@@ -10,5 +10,9 @@ class PrivacyView(TemplateView):
     template_name = "core/privacy.html"
 
 
+class HelpView(TemplateView):
+    template_name = "core/help.html"
+
+
 def health_check(request):
     return HttpResponse("ok", content_type="text/plain")

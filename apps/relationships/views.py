@@ -66,7 +66,7 @@ def request_link(request):
                     message=f"{request.user} pediu autorização para acompanhar informações.",
                     target_url=reverse("relationships:list"),
                 )
-                messages.success(request, "Solicitação enviada para autorização da pessoa idosa.")
+                messages.success(request, "Pedido de autorização enviado para a pessoa idosa.")
             else:
                 messages.info(request, "Já existe um vínculo ou solicitação para esse e-mail.")
             return redirect("relationships:list")
@@ -99,7 +99,7 @@ def respond_link(request, pk, action):
         message=f"Sua solicitação foi {link.get_status_display().lower()} por {request.user}.",
         target_url=reverse("relationships:list"),
     )
-    messages.success(request, "Resposta registrada.")
+    messages.success(request, "Sua resposta foi registrada.")
     return redirect("relationships:list")
 
 
@@ -117,7 +117,7 @@ def edit_permissions(request, pk):
     form = FamilyPermissionForm(request.POST or None, instance=permissions)
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Permissões do familiar atualizadas.")
+        messages.success(request, "Suas escolhas de compartilhamento foram salvas.")
         return redirect("relationships:list")
     return render(
         request,

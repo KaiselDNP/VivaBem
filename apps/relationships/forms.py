@@ -36,8 +36,16 @@ class FamilyPermissionForm(forms.ModelForm):
             "can_receive_notifications",
         )
         labels: ClassVar[dict[str, str]] = {
-            "can_view_needs": "Pode visualizar minhas necessidades",
-            "can_view_requests": "Pode acompanhar minhas solicitações de ajuda",
-            "can_view_professional_interests": "Pode visualizar profissionais interessados",
-            "can_receive_notifications": "Pode receber notificações de acompanhamento",
+            "can_view_needs": "Pode ver as ajudas que cadastrei",
+            "can_view_requests": "Pode acompanhar meus pedidos de ajuda",
+            "can_view_professional_interests": "Pode ver profissionais que se ofereceram",
+            "can_receive_notifications": "Pode receber avisos sobre meu acompanhamento",
+        }
+        help_texts: ClassVar[dict[str, str]] = {
+            "can_view_needs": "Mostra os assuntos para os quais você procura apoio.",
+            "can_view_requests": "Mostra o andamento e as informações dos seus pedidos.",
+            "can_view_professional_interests": (
+                "Mostra nomes e mensagens dos profissionais interessados."
+            ),
+            "can_receive_notifications": "Envia ao familiar avisos sobre mudanças importantes.",
         }

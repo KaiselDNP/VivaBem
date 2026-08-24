@@ -138,11 +138,25 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/dashboard.html"
 
     def get_context_data(self, **kwargs):
+        from apps.needs.models import HelpRequest, HelpRequestStatus
         from apps.professionals.models import ProfessionalProfile
         from apps.profiles.models import UserProfile
+        from apps.relationships.models import FamilyLink, FamilyLinkStatus
 
         context = super().get_context_data(**kwargs)
         context["profile"], _ = UserProfile.objects.get_or_create(user=self.request.user)
+        if self.request.user.role == UserRole.SENIOR:
+            senior_requests = HelpRequest.objects.filter(
+                need__senior=self.request.user
+            ).select_related("need")
+            context["recent_help_requests"] = senior_requests[:3]
+            context["active_request_count"] = senior_requests.filter(
+                status__in=(HelpRequestStatus.OPEN, HelpRequestStatus.ACCEPTED)
+            ).count()
+            context["pending_family_count"] = FamilyLink.objects.filter(
+                senior=self.request.user,
+                status=FamilyLinkStatus.PENDING,
+            ).count()
         if self.request.user.role == UserRole.PROFESSIONAL:
             context["professional_profile"], _ = ProfessionalProfile.objects.get_or_create(
                 user=self.request.user

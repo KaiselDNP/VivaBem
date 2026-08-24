@@ -7,6 +7,16 @@ senha e mantém o envio de e-mail configurável por variáveis de ambiente. O si
 limita tentativas repetidas de login por combinação de endereço de rede e e-mail, sem guardar
 o e-mail diretamente na chave de controle.
 
+Para reduzir a barreira de entrada do público idoso, a senha possui mínimo de 8 caracteres e não
+exige composição artificial com símbolos, números ou letras maiúsculas. Senhas comuns e senhas
+somente numéricas continuam bloqueadas, o login mantém limitação de tentativas e as senhas são
+armazenadas pelo mecanismo de hash do Django. O cadastro da pessoa idosa é apresentado em quatro
+etapas curtas.
+
+O login por Google não faz parte desta etapa porque exige credenciais OAuth, tela de consentimento,
+domínio e endereços de retorno configurados em uma conta externa. Nenhum botão sem funcionamento é
+exibido no protótipo.
+
 As rotas continuam protegidas por autenticação, perfil e propriedade do registro. Mudanças de
 estado usam POST e CSRF. Em produção, cookies seguros, HTTPS e HSTS são ativados pelas
 configurações documentadas no `.env.example`.

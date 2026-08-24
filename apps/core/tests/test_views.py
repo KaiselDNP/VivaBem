@@ -18,3 +18,17 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "serviços ou profissionais de saúde")
         self.assertContains(response, "data-theme-toggle")
         self.assertContains(response, "/static/js/theme.js")
+        self.assertContains(response, "data-font-size")
+        self.assertContains(response, "data-read-aloud")
+        self.assertContains(response, "/static/js/accessibility.js")
+
+    def test_help_page_is_public_and_uses_simple_instructions(self):
+        response = self.client.get(reverse("core:help"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Como podemos ajudar?")
+        self.assertContains(response, "Escolher o que ouvir")
+        self.assertContains(response, "Alt + O")
+        self.assertContains(response, "data-read-selection-prompt")
+        self.assertContains(response, "SAMU")
+        self.assertContains(response, "192")
