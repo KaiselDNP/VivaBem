@@ -27,6 +27,7 @@ class SeniorDashboardSimplicityTests(TestCase):
         self.assertNotContains(response, "Ajuda que cadastrei")
         self.assertNotContains(response, "Conta ativa")
         self.assertNotContains(response, "Seu último pedido")
+        self.assertNotContains(response, "data-reading-welcome")
 
     def test_only_latest_request_is_shown(self):
         older_need = Need.objects.create(

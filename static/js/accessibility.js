@@ -4,6 +4,8 @@
     const pageRole = document.documentElement.dataset.userRole || "anonymous";
     const configuredDefault = document.documentElement.dataset.defaultFontSize || "medium";
     const fontStorageKey = `vivabem-font-size-${pageRole}`;
+    const preferredFontStorageKey = "vivabem-preferred-font-size";
+    const readingWelcomeStorageKey = "vivabem-reading-welcome-complete";
     const allowedFontSizes = new Set(["small", "medium", "large", "xlarge"]);
     const fontSizeLabels = {
         small: "Pequena",
@@ -42,16 +44,64 @@
         return selectedSize;
     }
 
-    applyFontSize(safeStorageGet(fontStorageKey) || configuredDefault);
+    applyFontSize(
+        safeStorageGet(fontStorageKey) ||
+        safeStorageGet(preferredFontStorageKey) ||
+        configuredDefault
+    );
 
     function setupFontControls() {
         const select = document.querySelector("[data-font-size-select]");
         if (!select) return;
+        select.value = document.documentElement.dataset.fontSize || configuredDefault;
         select.addEventListener("change", function () {
             const selectedSize = applyFontSize(select.value);
             safeStorageSet(fontStorageKey, selectedSize);
+            safeStorageSet(preferredFontStorageKey, selectedSize);
             announce(`Tamanho da letra: ${fontSizeLabels[selectedSize]}.`);
         });
+    }
+
+    function setupReadingWelcome() {
+        const welcome = document.querySelector("[data-reading-welcome]");
+        if (!welcome || pageRole !== "anonymous" || safeStorageGet(readingWelcomeStorageKey)) return;
+
+        const backgroundElements = Array.from(document.body.children).filter(function (element) {
+            return element !== welcome;
+        });
+        const choices = Array.from(welcome.querySelectorAll("[data-reading-choice]"));
+
+        function closeWelcome(size) {
+            const selectedSize = applyFontSize(size);
+            safeStorageSet(preferredFontStorageKey, selectedSize);
+            ["anonymous", "senior", "family", "professional", "admin"].forEach(function (role) {
+                safeStorageSet(`vivabem-font-size-${role}`, selectedSize);
+            });
+            safeStorageSet(readingWelcomeStorageKey, "true");
+            welcome.hidden = true;
+            document.documentElement.classList.remove("reading-welcome-open");
+            backgroundElements.forEach(function (element) {
+                element.inert = false;
+            });
+            announce(`Tamanho da letra escolhido: ${fontSizeLabels[selectedSize]}.`);
+            const firstHeading = document.querySelector("#conteudo h1");
+            if (firstHeading) {
+                firstHeading.setAttribute("tabindex", "-1");
+                firstHeading.focus();
+            }
+        }
+
+        welcome.hidden = false;
+        document.documentElement.classList.add("reading-welcome-open");
+        backgroundElements.forEach(function (element) {
+            element.inert = true;
+        });
+        choices.forEach(function (choice) {
+            choice.addEventListener("click", function () {
+                closeWelcome(choice.dataset.readingChoice);
+            });
+        });
+        if (choices.length) choices[0].focus();
     }
 
     function setupSelectiveReading() {
@@ -221,6 +271,7 @@
 
     function setup() {
         setupFontControls();
+        setupReadingWelcome();
         setupSelectiveReading();
         setupPasswordVisibility();
         focusErrorSummary();

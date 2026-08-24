@@ -21,6 +21,8 @@ acessível, mas organizada por termos internos do sistema, ainda pode ser difíc
 - Exibir imagens simbólicas sempre acompanhadas por texto.
 - Disponibilizar os tamanhos Pequena, Média, Grande e Super grande, usando o tamanho Grande como
   padrão inicial das contas de pessoa idosa.
+- Antes do primeiro acesso público, perguntar se a pessoa prefere letras bem grandes e preservar a
+  escolha nas telas de entrada, cadastro e área autenticada, sem exigir que ela informe sua idade.
 - Oferecer leitura seletiva com a API de síntese de voz do navegador, sem enviar o conteúdo para um
   serviço externo. O primeiro clique seleciona e lê um item sem ativá-lo; em seguida, a navegação
   volta ao comportamento normal.

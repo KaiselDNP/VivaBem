@@ -26,6 +26,10 @@ class HomeViewTests(TestCase):
         self.assertContains(response, 'aria-keyshortcuts="F2"')
         self.assertContains(response, "data-read-aloud")
         self.assertContains(response, "/static/js/accessibility.js")
+        self.assertContains(response, "data-reading-welcome")
+        self.assertContains(response, "Você prefere letras bem grandes?")
+        self.assertContains(response, 'data-reading-choice="xlarge"')
+        self.assertContains(response, 'data-reading-choice="medium"')
 
     def test_help_page_is_public_and_uses_simple_instructions(self):
         response = self.client.get(reverse("core:help"))

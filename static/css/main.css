@@ -1308,6 +1308,96 @@ h3 { margin-bottom: 12px; font-size: 1.35rem; }
     .senior-signup-icon { width: 64px; height: 64px; font-size: 1.8rem; }
 }
 
+/* Escolha inicial de leitura. */
+.reading-welcome-open { overflow: hidden; }
+
+.reading-welcome {
+    position: fixed;
+    z-index: 500;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow-y: auto;
+    padding: 28px;
+    color: var(--ink);
+    background: var(--strong-bg);
+}
+
+.reading-welcome[hidden] { display: none; }
+
+.reading-welcome-card {
+    width: min(760px, 100%);
+    padding: clamp(30px, 6vw, 58px);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32);
+    text-align: center;
+}
+
+.reading-welcome-brand {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 20px;
+    color: var(--strong-text);
+    background: var(--green-700);
+    border-radius: 18px;
+    font-size: 1.55rem;
+    font-weight: 900;
+}
+
+.reading-welcome-card h1 { max-width: 620px; margin: 0 auto 16px; font-size: clamp(2.2rem, 6vw, 3.7rem); line-height: 1.08; }
+
+.reading-welcome-card > p { max-width: 620px; margin: 0 auto; color: var(--muted); }
+
+.reading-welcome-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 30px; }
+
+.reading-choice {
+    min-height: 136px;
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    gap: 15px;
+    align-items: center;
+    padding: 20px;
+    color: var(--ink);
+    background: var(--dashboard-bg);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+.reading-choice:hover { border-color: var(--green-700); }
+
+.reading-choice:focus-visible { outline: 4px solid var(--focus-ring); outline-offset: 3px; }
+
+.reading-choice-large { color: var(--strong-text); background: var(--strong-bg); border-color: var(--green-700); }
+
+.reading-choice-example {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    color: var(--green-900);
+    background: var(--green-100);
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: 900;
+}
+
+.reading-choice-example-large { font-size: 1.55rem; }
+
+.reading-choice > span:last-child { display: grid; gap: 4px; }
+
+.reading-choice strong { font-size: 1.22rem; }
+
+.reading-choice small { color: inherit; font-size: 0.92rem; line-height: 1.45; opacity: 0.86; }
+
+.reading-welcome-card .reading-welcome-note { margin-top: 22px; font-size: 0.9rem; }
+
 /* Ferramentas globais para leitura e compreensão. */
 .accessibility-tools {
     position: relative;
@@ -1536,6 +1626,12 @@ a.help-option-card:hover { border-color: var(--green-700); transform: translateY
 }
 
 @media (max-width: 640px) {
+    .reading-welcome { align-items: start; padding: 16px; }
+    .reading-welcome-card { padding: 28px 20px; border-radius: 18px; }
+    .reading-welcome-brand { width: 52px; height: 52px; margin-bottom: 14px; }
+    .reading-welcome-card h1 { font-size: clamp(2rem, 10vw, 2.8rem); }
+    .reading-welcome-options { grid-template-columns: 1fr; margin-top: 22px; }
+    .reading-choice { min-height: 108px; }
     .accessibility-title { display: none; }
     .accessibility-actions { width: 100%; display: grid; grid-template-columns: 1fr; }
     .font-size-control { width: 100%; justify-content: space-between; }
@@ -1569,6 +1665,7 @@ a.help-option-card:hover { border-color: var(--green-700); transform: translateY
     .accessibility-actions button,
     .accessibility-help-link,
     .password-visibility-button,
+    .reading-choice,
     .help-option-card,
     .emergency-notice { border: 2px solid ButtonText; }
 }
