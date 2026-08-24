@@ -2,9 +2,15 @@
     "use strict";
 
     const pageRole = document.documentElement.dataset.userRole || "anonymous";
-    const configuredDefault = document.documentElement.dataset.defaultFontSize || "default";
+    const configuredDefault = document.documentElement.dataset.defaultFontSize || "medium";
     const fontStorageKey = `vivabem-font-size-${pageRole}`;
-    const allowedFontSizes = new Set(["default", "large", "xlarge"]);
+    const allowedFontSizes = new Set(["small", "medium", "large", "xlarge"]);
+    const fontSizeLabels = {
+        small: "Pequena",
+        medium: "Média",
+        large: "Grande",
+        xlarge: "Super grande",
+    };
 
     function safeStorageGet(key) {
         try {
@@ -28,24 +34,23 @@
     }
 
     function applyFontSize(size) {
-        const selectedSize = allowedFontSizes.has(size) ? size : configuredDefault;
+        const normalizedSize = size === "default" ? "medium" : size;
+        const selectedSize = allowedFontSizes.has(normalizedSize) ? normalizedSize : configuredDefault;
         document.documentElement.dataset.fontSize = selectedSize;
-        document.querySelectorAll("[data-font-size]").forEach(function (button) {
-            const active = button.dataset.fontSize === selectedSize;
-            button.setAttribute("aria-pressed", String(active));
-        });
+        const select = document.querySelector("[data-font-size-select]");
+        if (select) select.value = selectedSize;
         return selectedSize;
     }
 
     applyFontSize(safeStorageGet(fontStorageKey) || configuredDefault);
 
     function setupFontControls() {
-        document.querySelectorAll("[data-font-size]").forEach(function (button) {
-            button.addEventListener("click", function () {
-                const selectedSize = applyFontSize(button.dataset.fontSize);
-                safeStorageSet(fontStorageKey, selectedSize);
-                announce(selectedSize === "default" ? "Tamanho normal ativado." : "Texto aumentado.");
-            });
+        const select = document.querySelector("[data-font-size-select]");
+        if (!select) return;
+        select.addEventListener("change", function () {
+            const selectedSize = applyFontSize(select.value);
+            safeStorageSet(fontStorageKey, selectedSize);
+            announce(`Tamanho da letra: ${fontSizeLabels[selectedSize]}.`);
         });
     }
 
@@ -69,10 +74,10 @@
             button.setAttribute("aria-pressed", String(active));
             button.setAttribute(
                 "aria-label",
-                active ? "Cancelar escolha de leitura" : "Escolher uma parte da página para ouvir"
+                active ? "Cancelar escolha de leitura" : "Ouvir um item da página. Atalho F2"
             );
             if (buttonLabel) {
-                buttonLabel.textContent = active ? "Cancelar leitura" : "Escolher o que ouvir";
+                buttonLabel.textContent = active ? "Cancelar" : "Ouvir um item";
             }
             if (prompt) prompt.hidden = !active;
             if (active) {
@@ -162,7 +167,9 @@
         );
 
         document.addEventListener("keydown", function (event) {
-            if (event.altKey && event.key.toLowerCase() === "o" && !event.repeat) {
+            const simpleShortcut = event.key === "F2";
+            const previousShortcut = event.altKey && event.key.toLowerCase() === "o";
+            if ((simpleShortcut || previousShortcut) && !event.repeat) {
                 event.preventDefault();
                 setSelectionMode(!selecting);
             } else if (event.key === "Escape" && selecting) {

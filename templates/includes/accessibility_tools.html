@@ -1,14 +1,20 @@
 <aside class="accessibility-tools" aria-label="Ferramentas de acessibilidade">
     <div class="container accessibility-tools-inner">
-        <strong class="accessibility-title">Facilitar leitura:</strong>
+        <strong class="accessibility-title">Leitura e texto</strong>
         <div class="accessibility-actions">
-            <button type="button" data-font-size="default" aria-label="Usar tamanho normal de texto">A</button>
-            <button type="button" data-font-size="large" aria-label="Aumentar o texto">A+</button>
-            <button type="button" data-font-size="xlarge" aria-label="Aumentar ainda mais o texto">A++</button>
-            <button class="read-aloud-button" type="button" data-read-aloud aria-pressed="false" aria-keyshortcuts="Alt+O" aria-label="Escolher uma parte da página para ouvir">
+            <div class="font-size-control">
+                <label for="font-size-select">Tamanho da letra</label>
+                <select id="font-size-select" data-font-size-select>
+                    <option value="small">Pequena</option>
+                    <option value="medium">Média</option>
+                    <option value="large">Grande</option>
+                    <option value="xlarge">Super grande</option>
+                </select>
+            </div>
+            <button class="read-aloud-button" type="button" data-read-aloud aria-pressed="false" aria-keyshortcuts="F2" aria-label="Ouvir um item da página. Atalho F2">
                 <span aria-hidden="true">🔊</span>
-                <span class="read-button-label" data-read-button-label>Escolher o que ouvir</span>
-                <kbd class="shortcut-hint" aria-hidden="true">Alt + O</kbd>
+                <span class="read-button-label" data-read-button-label>Ouvir um item</span>
+                <kbd class="shortcut-hint" aria-hidden="true">F2</kbd>
             </button>
             <a class="accessibility-help-link" href="{% url 'core:help' %}">Preciso de ajuda</a>
         </div>
@@ -17,5 +23,5 @@
 </aside>
 <div class="read-selection-prompt" data-read-selection-prompt role="status" hidden>
     <span aria-hidden="true">🔊</span>
-    <span>Agora clique ou toque no que deseja ouvir. O primeiro clique serve somente para a leitura.</span>
+    <span>Toque no texto ou botão que quer ouvir. Este toque apenas fará a leitura.</span>
 </div>

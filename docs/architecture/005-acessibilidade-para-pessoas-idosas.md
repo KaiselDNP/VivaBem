@@ -19,12 +19,12 @@ acessível, mas organizada por termos internos do sistema, ainda pode ser difíc
   disponível. Sem JavaScript, o formulário completo continua funcional.
 - Salvar um rascunho somente no armazenamento da aba atual e removê-lo no envio.
 - Exibir imagens simbólicas sempre acompanhadas por texto.
-- Disponibilizar tamanho de texto normal, grande e extragrande, usando o tamanho grande (A+) como
+- Disponibilizar os tamanhos Pequena, Média, Grande e Super grande, usando o tamanho Grande como
   padrão inicial das contas de pessoa idosa.
 - Oferecer leitura seletiva com a API de síntese de voz do navegador, sem enviar o conteúdo para um
   serviço externo. O primeiro clique seleciona e lê um item sem ativá-lo; em seguida, a navegação
   volta ao comportamento normal.
-- Permitir ativar a leitura por `Alt + O` no computador e manter um botão lateral centralizado em
+- Permitir ativar a leitura por `F2` no computador e manter um botão lateral centralizado em
   telas de celular.
 - Usar botões grandes, foco visível, resumos de erro e confirmações antes de ações destrutivas.
 - Explicar as permissões familiares no momento da escolha.

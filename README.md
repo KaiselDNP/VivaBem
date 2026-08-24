@@ -62,9 +62,9 @@ As credenciais reais nunca devem ser adicionadas ao Git.
 ## Acessibilidade para o público idoso
 
 O VivaBem prioriza ações simples, botões grandes, contraste, foco de teclado, mensagens claras e
-prevenção de erros. A conta de pessoa idosa começa com o texto em A+. A leitura em voz alta permite
+prevenção de erros. A conta de pessoa idosa começa com o texto no tamanho Grande. A leitura em voz alta permite
 escolher um item sem ativá-lo: o primeiro clique lê, e o próximo volta a funcionar normalmente. No
-computador, `Alt + O` ativa esse modo; no celular, o controle permanece no centro da lateral direita.
+computador, `F2` ativa esse modo; no celular, o controle permanece no centro da lateral direita.
 A voz usa o recurso disponível no navegador e pode variar entre dispositivos. As imagens não
 substituem os textos, e nenhuma informação é compartilhada com um familiar sem autorização
 explícita.

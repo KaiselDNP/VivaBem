@@ -38,7 +38,7 @@ class SignUpFlowTests(TestCase):
         self.assertContains(response, "O que você quer fazer hoje?")
         self.assertContains(response, "Pedir ajuda")
         self.assertContains(response, 'data-default-font-size="large"')
-        self.assertContains(response, "Alt + O")
+        self.assertContains(response, "F2")
 
     def test_senior_signup_is_guided_and_explains_simple_password(self):
         response = self.client.get(reverse("accounts:signup_senior"))
