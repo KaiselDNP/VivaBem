@@ -94,6 +94,13 @@ python manage.py test --settings=config.settings_test
 ruff check .
 ```
 
+## Demonstração pública temporária
+
+No Windows, `scripts/run_public_demo.cmd` inicia o servidor local com depuração desativada e aceita
+um endereço temporário `trycloudflare.com`. O link público ainda depende do `cloudflared` e funciona
+somente enquanto o computador, o servidor e o túnel estiverem ligados. Essa opção é para demonstração
+curta e não substitui uma publicação permanente.
+
 ## Documentação
 
 As decisões arquiteturais ficam em `docs/architecture/` para apoiar a explicação do TCC.
