@@ -23,6 +23,8 @@ acessível, mas organizada por termos internos do sistema, ainda pode ser difíc
   padrão inicial das contas de pessoa idosa.
 - Antes do primeiro acesso público, perguntar se a pessoa prefere letras bem grandes e preservar a
   escolha nas telas de entrada, cadastro e área autenticada, sem exigir que ela informe sua idade.
+- Nas telas da pessoa idosa, omitir rótulos decorativos pequenos, apresentar informações úteis em
+  texto normal e escrever ações com verbos e resultados claros.
 - Oferecer leitura seletiva com a API de síntese de voz do navegador, sem enviar o conteúdo para um
   serviço externo. O primeiro clique seleciona e lê um item sem ativá-lo; em seguida, a navegação
   volta ao comportamento normal.

@@ -7,7 +7,7 @@
         {% include "includes/messages.html" %}
         <div class="module-heading">
             <div>
-                <span class="eyebrow">Autorizações</span>
+                {% if user.role != 'senior' %}<span class="eyebrow">Autorizações</span>{% endif %}
                 <h1>{% if user.role == 'senior' %}Minha família{% else %}Pessoas acompanhadas{% endif %}</h1>
                 <p>{% if user.role == 'senior' %}Você escolhe quem pode acompanhar e o que cada pessoa pode ver.{% else %}A pessoa idosa precisa permitir o acesso antes do acompanhamento.{% endif %}</p>
             </div>
@@ -16,7 +16,7 @@
         <div class="record-grid">
             {% for link in links %}
                 <article class="record-card">
-                    <div class="record-meta"><span>{% if user.role == 'senior' %}Familiar{% else %}Pessoa idosa{% endif %}</span><span class="record-status status-{{ link.status }}">{% if link.status == 'pending' %}{% if user.role == 'senior' %}Esperando sua resposta{% else %}Esperando autorização{% endif %}{% elif link.status == 'approved' %}Acesso permitido{% elif link.status == 'rejected' %}Não autorizado{% else %}Acesso retirado{% endif %}</span></div>
+                    <div class="record-meta"><span>{% if user.role == 'senior' %}Pessoa da família{% else %}Pessoa idosa{% endif %}</span><span class="record-status status-{{ link.status }}">Situação: {% if link.status == 'pending' %}{% if user.role == 'senior' %}Esperando sua resposta{% else %}Esperando autorização{% endif %}{% elif link.status == 'approved' %}Acesso permitido{% elif link.status == 'rejected' %}Não autorizado{% else %}Acesso retirado{% endif %}</span></div>
                     <h2>{% if user.role == 'senior' %}{{ link.family.get_full_name|default:link.family.email }}{% else %}{{ link.senior.get_full_name|default:link.senior.email }}{% endif %}</h2>
                     {% if user.role == 'senior' and link.status == 'pending' %}
                         <p>Esta pessoa pediu autorização para acompanhar você. Nenhuma informação foi compartilhada ainda.</p>

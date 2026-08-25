@@ -94,6 +94,11 @@ class NeedAndRequestFlowTests(TestCase):
         self.assertContains(guided_response, "data-guided-form")
         self.assertContains(guided_response, "Etapa 1 de 5")
         self.assertContains(guided_response, "Ouvir um item")
+        self.assertContains(guided_response, "Próxima pergunta")
+        self.assertContains(guided_response, "Voltar uma pergunta")
+        self.assertContains(guided_response, "Enviar pedido de ajuda")
+        self.assertNotContains(guided_response, "Passo a passo")
+        self.assertNotContains(guided_response, "Suas respostas ficam guardadas")
 
         self.client.force_login(self.other_senior)
         first_step = self.client.get(reverse("needs:request_create"))

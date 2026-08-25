@@ -20,7 +20,6 @@
 
         <section class="form-card guided-form-card">
             <div class="form-card-heading">
-                <span class="eyebrow">Passo a passo</span>
                 <h1 class="form-page-title">Pedir ajuda</h1>
                 <p>Responda com calma. Você poderá voltar e conferir suas respostas.</p>
             </div>
@@ -33,8 +32,6 @@
                     <span data-step-counter>Etapa 1 de 5</span>
                     <div class="guided-progress-track" aria-hidden="true"><span data-step-progress></span></div>
                 </div>
-                <p class="draft-note"><span aria-hidden="true">✓</span> Suas respostas ficam guardadas temporariamente enquanto esta aba estiver aberta.</p>
-
                 {% for field in form %}
                     <fieldset class="guided-step" data-guided-step {% if field.errors %}data-has-error="true"{% endif %}>
                         <legend>
@@ -53,11 +50,11 @@
                 {% endfor %}
 
                 <div class="guided-navigation" data-step-navigation>
-                    <button class="button button-secondary" type="button" data-step-back>Voltar</button>
-                    <button class="button button-primary" type="button" data-step-next>Continuar</button>
-                    <button class="button button-primary" type="submit" data-step-submit>Enviar meu pedido</button>
+                    <button class="button button-secondary" type="button" data-step-back>Voltar uma pergunta</button>
+                    <button class="button button-primary" type="button" data-step-next>Próxima pergunta</button>
+                    <button class="button button-primary" type="submit" data-step-submit>Enviar pedido de ajuda</button>
                 </div>
-                <noscript><button class="button button-primary button-block" type="submit">Enviar meu pedido</button></noscript>
+                <noscript><button class="button button-primary button-block" type="submit">Enviar pedido de ajuda</button></noscript>
             </form>
         </section>
     </div>

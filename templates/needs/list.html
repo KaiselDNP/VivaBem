@@ -4,10 +4,10 @@
 {% include "includes/app_header.html" %}
 <main id="conteudo" class="module-page"><div class="container">
     {% include "includes/messages.html" %}
-    <div class="module-heading"><div><span class="eyebrow">Organização pessoal</span><h1>Ajuda que cadastrei</h1><p>Aqui ficam os assuntos para os quais você procura apoio.</p></div><a class="button button-primary" href="{% url 'needs:create' %}">Cadastrar uma ajuda</a></div>
+    <div class="module-heading"><div><h1>Ajuda que cadastrei</h1><p>Aqui ficam os assuntos para os quais você procura apoio.</p></div><a class="button button-primary" href="{% url 'needs:create' %}">Contar do que preciso</a></div>
     <div class="record-grid">
         {% for need in needs %}
-            <article class="record-card"><div class="record-meta"><span>{{ need.get_category_display }}</span><span class="record-status status-{{ need.status }}">{{ need.get_status_display }}</span></div><h2>{{ need.title }}</h2><p>{{ need.description }}</p><div class="record-actions"><a href="{% url 'needs:edit' need.pk %}">Editar</a>{% if need.status == 'active' %}<form method="post" action="{% url 'needs:resolve' need.pk %}">{% csrf_token %}<button type="submit" data-confirm="Confirma que você não precisa mais desta ajuda?">Não preciso mais</button></form>{% endif %}</div></article>
+            <article class="record-card"><div class="record-meta"><span>Tipo: {{ need.get_category_display }}</span><span class="record-status status-{{ need.status }}">Situação: {{ need.get_status_display }}</span></div><h2>{{ need.title }}</h2><p>{{ need.description }}</p><div class="record-actions"><a href="{% url 'needs:edit' need.pk %}">Mudar informações</a>{% if need.status == 'active' %}<form method="post" action="{% url 'needs:resolve' need.pk %}">{% csrf_token %}<button type="submit" data-confirm="Confirma que você não precisa mais desta ajuda?">Não preciso mais desta ajuda</button></form>{% endif %}</div></article>
         {% empty %}<div class="empty-state"><h2>Nenhuma ajuda cadastrada</h2><p>Comece contando, de forma simples, com o que precisa de ajuda.</p></div>{% endfor %}
     </div>
 </div></main>

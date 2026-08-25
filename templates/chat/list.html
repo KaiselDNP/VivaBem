@@ -20,7 +20,7 @@
         </section>
         {% if contacts %}
             <section class="module-section"><div class="section-heading"><span class="eyebrow">Contatos autorizados</span><h2>Iniciar conversa</h2></div><div class="record-grid">
-                {% for contact in contacts %}<article class="record-card"><div class="record-meta"><span>{{ contact.get_role_display }}</span></div><h3>{{ contact.get_full_name|default:contact.email }}</h3><form method="post" action="{% url 'chat:start' contact.pk %}">{% csrf_token %}<button class="button button-primary compact-button" type="submit">Conversar</button></form></article>{% endfor %}
+                {% for contact in contacts %}<article class="record-card"><div class="record-meta"><span>Contato: {{ contact.get_role_display }}</span></div><h3>{{ contact.get_full_name|default:contact.email }}</h3><form method="post" action="{% url 'chat:start' contact.pk %}">{% csrf_token %}<button class="button button-primary compact-button" type="submit">Começar conversa</button></form></article>{% endfor %}
             </div></section>
         {% endif %}
     </div>

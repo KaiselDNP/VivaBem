@@ -46,6 +46,17 @@ class QuickHelpRequestTests(TestCase):
         self.assertEqual(request.need.senior, self.senior)
         self.assertEqual(request.created_by, self.senior)
 
+    def test_senior_sees_clear_actions_without_small_decorative_text(self):
+        self.client.force_login(self.senior)
+
+        response = self.client.get(reverse("needs:quick_request"))
+
+        self.assertContains(response, "Próxima pergunta")
+        self.assertContains(response, "Voltar uma pergunta")
+        self.assertContains(response, "Enviar pedido de ajuda")
+        self.assertNotContains(response, "Passo a passo")
+        self.assertNotContains(response, "Suas respostas ficam guardadas")
+
     def test_family_needs_explicit_permission(self):
         self.client.force_login(self.family)
         url = reverse("needs:assisted_quick_request", args=(self.senior.pk,))

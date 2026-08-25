@@ -1148,6 +1148,52 @@ h3 { margin-bottom: 12px; font-size: 1.35rem; }
 .senior-more-options { max-width: 720px; margin: 30px auto 0; text-align: center; }
 .senior-more-options summary { min-height: 54px; display: inline-flex; align-items: center; padding: 10px 18px; color: var(--green-900); background: var(--green-100); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; font-weight: 800; }
 .senior-more-options[open] summary { margin-bottom: 4px; }
+
+/* A pessoa idosa vê somente textos necessários e sempre em tamanho confortável. */
+[data-user-role="senior"] .eyebrow,
+[data-user-role="senior"] .profile-pill { display: none; }
+
+[data-user-role="senior"] .form-card-heading p,
+[data-user-role="senior"] .module-heading p,
+[data-user-role="senior"] .profile-summary > p,
+[data-user-role="senior"] .photo-field > p,
+[data-user-role="senior"] .fieldset-intro,
+[data-user-role="senior"] .verification-notice,
+[data-user-role="senior"] .verification-explanation,
+[data-user-role="senior"] .credential-line,
+[data-user-role="senior"] .prototype-note,
+[data-user-role="senior"] .chat-safety-note,
+[data-user-role="senior"] .chat-heading p,
+[data-user-role="senior"] .quick-replies > span { font-size: 1rem; line-height: 1.7; }
+
+[data-user-role="senior"] .field-help { font-size: 1rem; line-height: 1.65; }
+
+[data-user-role="senior"] .record-meta {
+    align-items: flex-start;
+    font-size: 0.98rem;
+    line-height: 1.45;
+    text-transform: none;
+}
+
+[data-user-role="senior"] .record-supporting-info { margin-top: 14px; color: var(--muted); font-size: 1rem; }
+
+[data-user-role="senior"] .detail-list dt,
+[data-user-role="senior"] .mini-details dt { font-size: 0.98rem; text-transform: none; }
+
+[data-user-role="senior"] .record-actions a,
+[data-user-role="senior"] .record-actions button,
+[data-user-role="senior"] .notification-item button,
+[data-user-role="senior"] .notification-item a,
+[data-user-role="senior"] .chat-safety-actions a,
+[data-user-role="senior"] .chat-safety-actions button { min-height: 50px; font-size: 1rem; }
+
+[data-user-role="senior"] .notification-item span,
+[data-user-role="senior"] .notification-item p,
+[data-user-role="senior"] .chat-list-copy small,
+[data-user-role="senior"] .chat-list-copy > span,
+[data-user-role="senior"] .chat-bubble time { font-size: 0.96rem; line-height: 1.6; text-transform: none; }
+
+[data-user-role="senior"] .professional-visual-heading > div > span { font-size: 0.98rem; text-transform: none; }
 .senior-more-options .senior-secondary-links { margin-top: 12px; padding: 14px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; }
 
 /* Pedido de ajuda dividido em etapas. */

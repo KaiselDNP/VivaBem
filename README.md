@@ -67,6 +67,8 @@ mantém essa escolha nas telas seguintes. A conta de pessoa idosa começa com o 
 quando nenhuma preferência anterior foi escolhida. A leitura em voz alta permite
 escolher um item sem ativá-lo: o primeiro clique lê, e o próximo volta a funcionar normalmente. No
 computador, `F2` ativa esse modo; no celular, o controle permanece no centro da lateral direita.
+A área da pessoa idosa omite pequenos subtítulos decorativos, aumenta as informações necessárias e
+usa ações explícitas, como “Próxima pergunta”, “Fazer novo pedido” e “Salvar meu perfil”.
 A voz usa o recurso disponível no navegador e pode variar entre dispositivos. As imagens não
 substituem os textos, e nenhuma informação é compartilhada com um familiar sem autorização
 explícita.
