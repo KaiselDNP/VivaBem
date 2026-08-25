@@ -1,8 +1,11 @@
+from datetime import timedelta
 from typing import ClassVar
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.functions import Lower
+from django.utils import timezone
 
 from .managers import UserManager
 
@@ -26,6 +29,13 @@ class User(AbstractUser):
         blank=True,
         help_text="Registra quando o usuário aceitou os termos e o aviso de privacidade.",
     )
+    last_activity_at = models.DateTimeField(
+        "última atividade em",
+        null=True,
+        blank=True,
+        db_index=True,
+        help_text="Horário aproximado do último uso autenticado da plataforma.",
+    )
 
     USERNAME_FIELD: ClassVar[str] = "email"
     REQUIRED_FIELDS: ClassVar[list[str]] = []
@@ -46,3 +56,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.get_full_name() or self.email
+
+    @property
+    def is_online(self):
+        if not self.is_active or not self.last_activity_at:
+            return False
+        online_window = max(60, settings.USER_ONLINE_WINDOW_SECONDS)
+        return self.last_activity_at >= timezone.now() - timedelta(seconds=online_window)

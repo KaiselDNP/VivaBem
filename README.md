@@ -53,6 +53,7 @@ As credenciais reais nunca devem ser adicionadas ao Git.
   preserva apenas o evento de segurança e avisa a administração.
 - Envio e acompanhamento privado de denúncias.
 - Painel administrativo para denúncias, profissionais e situação das contas.
+- Indicador administrativo de presença aproximada, sem registrar páginas ou cliques.
 - Auditoria das decisões administrativas importantes.
 - Avisos internos para uma conta específica ou grupos por tipo de usuário.
 - Encerramento de sessão por requisição POST protegida por CSRF.

@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from apps.accounts.models import UserRole
 from apps.notifications.models import Notification, NotificationKind
@@ -64,6 +67,20 @@ class AdministrationTests(TestCase):
         self.assertEqual(response.context["user_summary"]["active"], 3)
         self.assertEqual(response.context["user_summary"]["professionals"], 1)
         self.assertContains(response, "Contas cadastradas")
+
+    def test_user_management_shows_online_and_last_activity_only_to_admin(self):
+        self.professional_user.last_activity_at = timezone.now()
+        self.professional_user.save(update_fields=("last_activity_at",))
+        self.family.last_activity_at = timezone.now() - timedelta(minutes=10)
+        self.family.save(update_fields=("last_activity_at",))
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("moderation:admin_users"))
+
+        self.assertContains(response, "Último uso")
+        self.assertContains(response, "Online agora", count=2)
+        family_local_activity = timezone.localtime(self.family.last_activity_at)
+        self.assertContains(response, family_local_activity.strftime("%d/%m/%Y"))
 
     def test_django_admin_uses_vivabem_interface(self):
         self.client.force_login(self.admin)

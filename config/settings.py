@@ -72,6 +72,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.accounts.middleware.UserActivityMiddleware",
     "apps.core.middleware.VivaBemSecurityHeadersMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -184,6 +185,8 @@ if EMAIL_USE_TLS and EMAIL_USE_SSL:
 LOGIN_MAX_ATTEMPTS = env_int("VIVABEM_LOGIN_MAX_ATTEMPTS", 5)
 LOGIN_LOCKOUT_SECONDS = env_int("VIVABEM_LOGIN_LOCKOUT_SECONDS", 600)
 PASSWORD_RESET_TIMEOUT = env_int("VIVABEM_PASSWORD_RESET_TIMEOUT", 3600)
+USER_ACTIVITY_UPDATE_SECONDS = env_int("VIVABEM_ACTIVITY_UPDATE_SECONDS", 120)
+USER_ONLINE_WINDOW_SECONDS = env_int("VIVABEM_ONLINE_WINDOW_SECONDS", 300)
 
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"

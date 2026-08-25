@@ -25,6 +25,10 @@ Páginas autenticadas recebem uma política que impede armazenamento no cache do
 recursos de câmera, microfone e geolocalização permanecem desabilitados porque não fazem parte
 do escopo do MVP.
 
+O sistema registra somente o horário aproximado da última atividade autenticada, limitado a uma
+gravação a cada dois minutos. O indicador “Online agora” considera os últimos cinco minutos, é
+visível apenas para administradores e não armazena páginas visitadas, cliques ou conteúdo.
+
 ## Motivo
 
 Essa solução evita criar um mecanismo próprio de tokens e aproveita componentes testados do

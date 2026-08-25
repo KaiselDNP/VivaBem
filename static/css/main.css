@@ -856,6 +856,14 @@ h3 { margin-bottom: 12px; font-size: 1.35rem; }
 
 .status-with-dot::before { content: ""; width: 7px; height: 7px; display: inline-block; margin-right: 7px; background: currentColor; border-radius: 50%; }
 
+.presence-status { display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 850; white-space: nowrap; }
+
+.presence-online { color: var(--green-900); background: var(--green-100); }
+
+.presence-online::before { content: ""; width: 9px; height: 9px; margin-right: 8px; background: #2f9d68; border: 2px solid var(--white); border-radius: 50%; box-shadow: 0 0 0 2px #2f9d68; }
+
+.presence-never { color: var(--muted); background: var(--dashboard-bg); }
+
 .table-review-link { min-height: 40px; display: inline-flex; align-items: center; padding: 7px 11px; background: var(--green-100); border-radius: 8px; text-decoration: none; white-space: nowrap; }
 
 .delivery-count { width: 38px; height: 38px; display: grid; place-items: center; color: var(--strong-text); background: var(--green-700); border-radius: 11px; font-weight: 900; }
