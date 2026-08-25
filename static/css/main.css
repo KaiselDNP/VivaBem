@@ -1723,3 +1723,274 @@ a.help-option-card:hover { border-color: var(--green-700); transform: translateY
     .help-option-card,
     .emergency-notice { border: 2px solid ButtonText; }
 }
+
+/* Identidades visuais dos perfis autenticados. Os controles mantêm o mesmo
+   formato e funcionamento; somente as superfícies e a hierarquia mudam. */
+[data-user-role="senior"] {
+    --role-page: #e7ebe7;
+    --role-surface: #f8f8f4;
+    --role-tint: #dce7df;
+    --role-accent: #466c5b;
+    --role-deep: #2d443c;
+    --role-line: #b9c6bf;
+    --role-header: #f7f8f4;
+}
+
+[data-user-role="family"] {
+    --role-page: #eee8df;
+    --role-surface: #faf6f0;
+    --role-tint: #e8d9c9;
+    --role-accent: #8a6448;
+    --role-deep: #5c4434;
+    --role-line: #d6c5b6;
+    --role-header: #fbf8f3;
+}
+
+[data-user-role="professional"] {
+    --role-page: #e7ecee;
+    --role-surface: #f6f8f8;
+    --role-tint: #d9e4e8;
+    --role-accent: #426576;
+    --role-deep: #243e49;
+    --role-line: #c3d0d5;
+    --role-header: #f7f9fa;
+}
+
+:root[data-theme="dark"][data-user-role="senior"] {
+    --role-page: #17201d;
+    --role-surface: #202a26;
+    --role-tint: #293c34;
+    --role-accent: #9cc1b0;
+    --role-deep: #20362d;
+    --role-line: #40534b;
+    --role-header: #1d2723;
+}
+
+:root[data-theme="dark"][data-user-role="family"] {
+    --role-page: #201c18;
+    --role-surface: #2a2520;
+    --role-tint: #44372b;
+    --role-accent: #d2ad8e;
+    --role-deep: #3d2e24;
+    --role-line: #55483d;
+    --role-header: #27211c;
+}
+
+:root[data-theme="dark"][data-user-role="professional"] {
+    --role-page: #151e22;
+    --role-surface: #1e292e;
+    --role-tint: #293c44;
+    --role-accent: #9fc2d0;
+    --role-deep: #182f39;
+    --role-line: #3d515a;
+    --role-header: #1b252a;
+}
+
+[data-user-role="senior"] .app-header,
+[data-user-role="family"] .app-header,
+[data-user-role="professional"] .app-header {
+    background: var(--role-header);
+    border-bottom-color: var(--role-line);
+}
+
+[data-user-role="senior"] .app-header { border-bottom-width: 2px; }
+
+[data-user-role="family"] .app-header .brand-mark,
+[data-user-role="professional"] .app-header .brand-mark { background: var(--role-accent); }
+
+[data-user-role="family"] .app-nav .app-nav-active,
+[data-user-role="professional"] .app-nav .app-nav-active {
+    color: var(--role-deep);
+    background: var(--role-tint);
+    box-shadow: inset 0 -3px 0 var(--role-accent);
+}
+
+[data-user-role="senior"] .dashboard-page,
+[data-user-role="senior"] .module-page,
+[data-user-role="senior"] .profile-page,
+[data-user-role="family"] .dashboard-page,
+[data-user-role="family"] .module-page,
+[data-user-role="family"] .profile-page,
+[data-user-role="professional"] .dashboard-page,
+[data-user-role="professional"] .module-page,
+[data-user-role="professional"] .profile-page { background-color: var(--role-page); }
+
+[data-user-role="family"] .dashboard-page,
+[data-user-role="family"] .module-page,
+[data-user-role="family"] .profile-page {
+    background-image: radial-gradient(circle at 8% 8%, color-mix(in srgb, var(--role-tint) 55%, transparent) 0 9rem, transparent 9.1rem);
+}
+
+[data-user-role="professional"] .dashboard-page,
+[data-user-role="professional"] .module-page,
+[data-user-role="professional"] .profile-page {
+    background-image: linear-gradient(135deg, color-mix(in srgb, var(--role-tint) 42%, transparent), transparent 38rem);
+}
+
+/* Pessoa idosa: poucos enfeites, contraste claro e leitura linear. */
+.dashboard-page-senior > .container { width: min(980px, calc(100% - 40px)); }
+
+[data-user-role="senior"] .app-nav a { min-height: 48px; font-size: 0.96rem; }
+
+[data-user-role="senior"] .welcome-panel,
+[data-user-role="senior"] .record-card,
+[data-user-role="senior"] .detail-panel,
+[data-user-role="senior"] .notification-item,
+[data-user-role="senior"] .chat-panel,
+[data-user-role="senior"] .profile-summary,
+[data-user-role="senior"] .form-card {
+    background: var(--role-surface);
+    border: 2px solid var(--role-line);
+    box-shadow: none;
+}
+
+[data-user-role="senior"] .record-grid { grid-template-columns: 1fr; }
+
+[data-user-role="senior"] .record-card,
+[data-user-role="senior"] .notification-item { border-radius: 16px; }
+
+[data-user-role="senior"] .module-heading { padding-bottom: 20px; border-bottom: 2px solid var(--role-line); }
+
+/* Familiar: aparência acolhedora e organizada para acompanhamento cotidiano. */
+.welcome-panel-family {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--role-surface), var(--role-tint));
+    border-color: var(--role-line);
+    box-shadow: 0 18px 45px rgba(91, 68, 52, 0.1);
+}
+
+.welcome-panel-family::after {
+    content: "";
+    position: absolute;
+    right: -54px;
+    bottom: -78px;
+    width: 220px;
+    height: 220px;
+    border: 34px solid color-mix(in srgb, var(--role-accent) 14%, transparent);
+    border-radius: 50%;
+}
+
+.welcome-panel-family > * { position: relative; z-index: 1; }
+
+[data-user-role="family"] .eyebrow,
+[data-user-role="family"] .card-link { color: var(--role-accent); }
+
+[data-user-role="family"] .dashboard-card,
+[data-user-role="family"] .record-card,
+[data-user-role="family"] .detail-panel,
+[data-user-role="family"] .notification-item,
+[data-user-role="family"] .chat-panel,
+[data-user-role="family"] .profile-summary,
+[data-user-role="family"] .form-card,
+[data-user-role="family"] .help-option-card {
+    background: var(--role-surface);
+    border-color: var(--role-line);
+}
+
+[data-user-role="family"] .dashboard-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    box-shadow: 0 14px 35px rgba(91, 68, 52, 0.08);
+}
+
+[data-user-role="family"] .dashboard-card > span {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 28px;
+    color: var(--role-deep);
+    background: var(--role-tint);
+    border-radius: 50%;
+}
+
+[data-user-role="family"] .dashboard-card:nth-child(2) { transform: translateY(12px); }
+
+[data-user-role="family"] .module-heading { padding-left: 20px; border-left: 5px solid var(--role-accent); }
+
+/* Profissional: superfícies mais precisas, sóbrias e com hierarquia de trabalho. */
+.welcome-panel-professional {
+    position: relative;
+    overflow: hidden;
+    color: #f5f8f9;
+    background: linear-gradient(120deg, var(--role-deep), #365866);
+    border-color: color-mix(in srgb, var(--role-accent) 60%, transparent);
+    box-shadow: 0 22px 50px rgba(27, 50, 60, 0.2);
+}
+
+.welcome-panel-professional::after {
+    content: "";
+    position: absolute;
+    right: 8%;
+    bottom: -92px;
+    width: 240px;
+    height: 240px;
+    border: 42px solid rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+}
+
+.welcome-panel-professional > * { position: relative; z-index: 1; }
+
+.welcome-panel-professional .eyebrow,
+.welcome-panel-professional h1 { color: #f5f8f9; }
+
+.welcome-panel-professional p { color: #d8e4e8; }
+
+[data-user-role="professional"] .dashboard-card,
+[data-user-role="professional"] .record-card,
+[data-user-role="professional"] .detail-panel,
+[data-user-role="professional"] .notification-item,
+[data-user-role="professional"] .chat-panel,
+[data-user-role="professional"] .profile-summary,
+[data-user-role="professional"] .form-card,
+[data-user-role="professional"] .help-option-card {
+    background: var(--role-surface);
+    border-color: var(--role-line);
+    border-radius: 14px;
+}
+
+[data-user-role="professional"] .dashboard-card {
+    border-top: 4px solid var(--role-accent);
+    box-shadow: 0 16px 38px rgba(35, 62, 73, 0.09);
+}
+
+[data-user-role="professional"] .dashboard-card > span {
+    margin-bottom: 38px;
+    color: var(--role-accent);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.16em;
+}
+
+[data-user-role="professional"] .card-link,
+[data-user-role="professional"] .eyebrow { color: var(--role-accent); }
+
+[data-user-role="professional"] .module-heading {
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--role-line);
+}
+
+[data-user-role="professional"] .record-card { box-shadow: 0 10px 28px rgba(35, 62, 73, 0.06); }
+
+@media (max-width: 850px) {
+    [data-user-role="family"] .dashboard-card:nth-child(2) { transform: none; }
+}
+
+@media (max-width: 640px) {
+    .dashboard-page-senior > .container { width: min(100% - 28px, 980px); }
+    .welcome-panel-family::after, .welcome-panel-professional::after { opacity: 0.55; }
+    [data-user-role="family"] .module-heading,
+    [data-user-role="professional"] .module-heading { padding-left: 14px; }
+}
+
+@media (forced-colors: active) {
+    .welcome-panel-family,
+    .welcome-panel-professional,
+    [data-user-role="senior"] .welcome-panel,
+    [data-user-role="family"] .dashboard-card,
+    [data-user-role="professional"] .dashboard-card { border: 2px solid CanvasText; }
+
+    .welcome-panel-family::after,
+    .welcome-panel-professional::after { display: none; }
+}

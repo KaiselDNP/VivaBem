@@ -4,14 +4,14 @@
 
 {% block body %}
 {% include "includes/app_header.html" %}
-<main id="conteudo" class="dashboard-page">
+<main id="conteudo" class="dashboard-page dashboard-page-{{ user.role }}">
     <div class="container">
         {% if messages %}
             {% for message in messages %}<div class="success-message" role="status">{{ message }}</div>{% endfor %}
         {% endif %}
-        <section class="welcome-panel{% if user.role == 'senior' %} senior-welcome-panel{% endif %}">
+        <section class="welcome-panel welcome-panel-{{ user.role }}{% if user.role == 'senior' %} senior-welcome-panel{% endif %}">
             <div>
-                <span class="eyebrow">Seu espaço no VivaBem</span>
+                <span class="eyebrow">{% if user.role == 'family' %}Cuidado compartilhado{% elif user.role == 'professional' %}Área profissional{% else %}Seu espaço no VivaBem{% endif %}</span>
                 <h1>Olá, {{ user.first_name|default:"boas-vindas" }}!</h1>
                 {% if user.role == 'senior' %}
                     <p>O que você quer fazer hoje?</p>

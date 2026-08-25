@@ -161,6 +161,37 @@ class LoginAndAccessTests(TestCase):
         self.assertContains(response, reverse("accounts:logout"))
         self.assertContains(response, "Sair</button>")
 
+    def test_dashboard_uses_the_visual_identity_of_each_role(self):
+        role_expectations = (
+            (self.user, UserRole.FAMILY, "Cuidado compartilhado"),
+            (
+                get_user_model().objects.create_user(
+                    email="idoso-visual@example.com",
+                    password=self.password,
+                    role=UserRole.SENIOR,
+                ),
+                UserRole.SENIOR,
+                "O que você quer fazer hoje?",
+            ),
+            (
+                get_user_model().objects.create_user(
+                    email="profissional-visual@example.com",
+                    password=self.password,
+                    role=UserRole.PROFESSIONAL,
+                ),
+                UserRole.PROFESSIONAL,
+                "Área profissional",
+            ),
+        )
+
+        for account, role, visible_text in role_expectations:
+            with self.subTest(role=role):
+                self.client.force_login(account)
+                response = self.client.get(reverse("accounts:dashboard"))
+                self.assertContains(response, f"dashboard-page-{role}")
+                self.assertContains(response, f"welcome-panel-{role}")
+                self.assertContains(response, visible_text)
+
     def test_logout_requires_post_and_ends_session(self):
         self.client.force_login(self.user)
 

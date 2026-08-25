@@ -54,6 +54,7 @@ As credenciais reais nunca devem ser adicionadas ao Git.
 - Envio e acompanhamento privado de denúncias.
 - Painel administrativo para denúncias, profissionais e situação das contas.
 - Indicador administrativo de presença aproximada, sem registrar páginas ou cliques.
+- Identidade visual adaptada por perfil: simples para a pessoa idosa, acolhedora para familiares e sóbria para profissionais.
 - Auditoria das decisões administrativas importantes.
 - Avisos internos para uma conta específica ou grupos por tipo de usuário.
 - Encerramento de sessão por requisição POST protegida por CSRF.
