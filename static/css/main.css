@@ -1727,39 +1727,39 @@ a.help-option-card:hover { border-color: var(--green-700); transform: translateY
 /* Identidades visuais dos perfis autenticados. Os controles mantêm o mesmo
    formato e funcionamento; somente as superfícies e a hierarquia mudam. */
 [data-user-role="senior"] {
-    --role-page: #d9dedb;
-    --role-surface: #eceeeb;
-    --role-tint: #dce7df;
+    --role-page: #cdd8d1;
+    --role-surface: #dfe7e1;
+    --role-tint: #cfddd4;
     --role-accent: #466c5b;
     --role-deep: #2d443c;
-    --role-line: #b9c6bf;
-    --role-header: #eef0ed;
+    --role-line: #aebfb5;
+    --role-header: #e2e9e4;
 }
 
 [data-user-role="family"] {
-    --role-page: #dcdfdc;
-    --role-surface: #eeefec;
-    --role-tint: #e8d9c9;
+    --role-page: #d0d9d3;
+    --role-surface: #e2e8e4;
+    --role-tint: #d7dfd6;
     --role-accent: #8a6448;
     --role-deep: #5c4434;
-    --role-line: #d6c5b6;
-    --role-header: #f0f0ed;
+    --role-line: #b7c4bc;
+    --role-header: #e4eae6;
 }
 
 [data-user-role="professional"] {
-    --role-page: #d8dee0;
-    --role-surface: #eaedef;
-    --role-tint: #d9e4e8;
+    --role-page: #cdd8d6;
+    --role-surface: #dfe7e5;
+    --role-tint: #d2dedb;
     --role-accent: #426576;
     --role-deep: #243e49;
-    --role-line: #c3d0d5;
-    --role-header: #eef1f2;
+    --role-line: #adc0bc;
+    --role-header: #e2e9e7;
 }
 
 :root:not([data-theme="dark"])[data-user-role="admin"] {
-    --white: #e9ece9;
-    --dashboard-bg: #d8dcda;
-    --soft-section: #dde1df;
+    --white: #dfe7e1;
+    --dashboard-bg: #ccd7d0;
+    --soft-section: #d6e0da;
 }
 
 :root[data-theme="dark"][data-user-role="senior"] {
