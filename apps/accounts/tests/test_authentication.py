@@ -192,6 +192,46 @@ class LoginAndAccessTests(TestCase):
                 self.assertContains(response, f"welcome-panel-{role}")
                 self.assertContains(response, visible_text)
 
+    def test_family_dashboard_prioritizes_three_plain_actions(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("accounts:dashboard"))
+
+        self.assertContains(response, "Acompanhar uma pessoa")
+        self.assertContains(response, "Pedir autorização")
+        self.assertContains(response, "Conversar")
+        self.assertContains(response, "Outras opções")
+        self.assertNotContains(response, "Complete seu perfil")
+
+    def test_professional_dashboard_prioritizes_work_actions(self):
+        professional = get_user_model().objects.create_user(
+            email="profissional-painel@example.com",
+            password=self.password,
+            role=UserRole.PROFESSIONAL,
+        )
+        self.client.force_login(professional)
+
+        response = self.client.get(reverse("accounts:dashboard"))
+
+        self.assertContains(response, "Encontrar pedidos de ajuda")
+        self.assertContains(response, "Conversar")
+        self.assertContains(response, "Meu perfil profissional")
+        self.assertContains(response, "Complete seu perfil profissional")
+        self.assertContains(response, "Outras opções")
+
+    def test_admin_dashboard_prioritizes_management_actions(self):
+        admin = get_user_model().objects.create_superuser(
+            email="administrador-painel@example.com",
+            password=self.password,
+        )
+        self.client.force_login(admin)
+
+        response = self.client.get(reverse("accounts:dashboard"))
+
+        self.assertContains(response, "Abrir gestão")
+        self.assertContains(response, "Analisar denúncias")
+        self.assertContains(response, "Enviar avisos")
+
     def test_logout_requires_post_and_ends_session(self):
         self.client.force_login(self.user)
 

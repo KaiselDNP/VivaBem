@@ -16,15 +16,11 @@
                 {% if user.role == 'senior' %}
                     <p>O que você quer fazer hoje?</p>
                 {% elif user.role == 'family' %}
-                    <p>Seu cadastro de familiar está ativo. Em breve, você poderá solicitar um vínculo e acompanhar informações autorizadas.</p>
+                    <p>O que você quer fazer hoje?</p>
                 {% elif user.role == 'professional' %}
-                    {% if professional_profile.is_complete %}
-                        <p>Seu perfil profissional está preenchido e pronto para as próximas etapas do VivaBem.</p>
-                    {% else %}
-                        <p>Seu acesso profissional está ativo. Complete os dados de atuação para preparar seu perfil.</p>
-                    {% endif %}
+                    <p>O que você quer fazer hoje?</p>
                 {% else %}
-                    <p>Seu acesso administrativo está ativo.</p>
+                    <p>O que você quer gerenciar hoje?</p>
                 {% endif %}
             </div>
             {% if user.role == 'professional' %}
@@ -53,8 +49,8 @@
                 <a class="senior-action-card" href="{% url 'needs:request_list' %}">
                     <span class="senior-action-icon" aria-hidden="true">📋</span>
                     <span class="senior-action-copy">
-                        <strong>Ver pedidos</strong>
-                        <span>{{ active_request_count }} em andamento.</span>
+                        <strong>Acompanhar pedidos</strong>
+                        <span>{% if active_request_count %}{{ active_request_count }} em andamento.{% else %}Nenhum pedido em andamento.{% endif %}</span>
                     </span>
                 </a>
                 <a class="senior-action-card" href="{% url 'chat:list' %}">
@@ -93,20 +89,84 @@
                     <a href="{% url 'moderation:report_list' %}">Segurança</a>
                 </nav>
             </details>
-        {% else %}
-        <section class="dashboard-grid" aria-label="Próximos recursos">
-            <article class="dashboard-card"><span>01</span><h2>Complete seu perfil</h2><p>Adicione seus dados básicos e uma foto para personalizar sua conta.</p><a class="card-link" href="{% url 'accounts:profile_edit' %}">Editar perfil →</a></article>
-            {% if user.role == 'family' %}
-                <article class="dashboard-card"><span>02</span><h2>Solicite um vínculo</h2><p>A pessoa idosa precisa autorizar antes de qualquer acesso.</p><a class="card-link" href="{% url 'relationships:list' %}">Ver vínculos →</a></article>
-                <article class="dashboard-card"><span>03</span><h2>Acompanhe com permissão</h2><p>Consulte somente necessidades e solicitações liberadas.</p></article>
-            {% elif user.role == 'professional' %}
-                <article class="dashboard-card"><span>02</span><h2>Encontre oportunidades</h2><p>Consulte solicitações sem exposição da identidade da pessoa idosa.</p><a class="card-link" href="{% url 'needs:opportunities' %}">Ver oportunidades →</a></article>
-                <article class="dashboard-card"><span>03</span><h2>Consulte a rede</h2><p>Pesquise profissionais por atuação, região e modalidade.</p><a class="card-link" href="{% url 'professionals:directory' %}">Pesquisar profissionais →</a></article>
-            {% else %}
-                <article class="dashboard-card"><span>02</span><h2>Administração</h2><p>Gerencie usuários, profissionais, denúncias e auditoria.</p><a class="card-link" href="{% url 'moderation:admin_dashboard' %}">Abrir gestão →</a></article>
-                <article class="dashboard-card"><span>03</span><h2>Denúncias</h2><p>Analise relatos enviados pelos usuários da plataforma.</p><a class="card-link" href="{% url 'moderation:admin_reports' %}">Analisar denúncias →</a></article>
+        {% elif user.role == 'family' %}
+            <section class="role-action-grid" aria-label="Ações para familiares">
+                <a class="role-action-card role-action-primary" href="{% url 'relationships:list' %}">
+                    <span class="role-action-icon" aria-hidden="true">🧓</span>
+                    <span><strong>Acompanhar uma pessoa</strong><small>Veja somente as informações permitidas.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+                <a class="role-action-card" href="{% url 'relationships:request' %}">
+                    <span class="role-action-icon" aria-hidden="true">🔗</span>
+                    <span><strong>Pedir autorização</strong><small>Conecte-se usando o e-mail da pessoa.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+                <a class="role-action-card" href="{% url 'chat:list' %}">
+                    <span class="role-action-icon" aria-hidden="true">💬</span>
+                    <span><strong>Conversar</strong><small>Fale com seus contatos autorizados.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+            </section>
+            <details class="role-more-options">
+                <summary>Outras opções</summary>
+                <nav aria-label="Outras opções para familiares">
+                    <a href="{% url 'accounts:profile_edit' %}">Meu perfil</a>
+                    <a href="{% url 'notifications:list' %}">Meus avisos</a>
+                    <a href="{% url 'professionals:directory' %}">Conhecer profissionais</a>
+                    <a href="{% url 'moderation:report_list' %}">Segurança</a>
+                </nav>
+            </details>
+        {% elif user.role == 'professional' %}
+            {% if not professional_profile.is_complete %}
+                <a class="role-attention-card" href="{% url 'accounts:profile_edit' %}">
+                    <span aria-hidden="true">!</span>
+                    <span><strong>Complete seu perfil profissional</strong><small>Isso é necessário para demonstrar interesse em pedidos.</small></span>
+                    <span aria-hidden="true">→</span>
+                </a>
             {% endif %}
-        </section>
+            <section class="role-action-grid" aria-label="Ações para profissionais">
+                <a class="role-action-card role-action-primary" href="{% url 'needs:opportunities' %}">
+                    <span class="role-action-icon" aria-hidden="true">🔎</span>
+                    <span><strong>Encontrar pedidos de ajuda</strong><small>Veja solicitações compatíveis com seu trabalho.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+                <a class="role-action-card" href="{% url 'chat:list' %}">
+                    <span class="role-action-icon" aria-hidden="true">💬</span>
+                    <span><strong>Conversar</strong><small>Fale com seus contatos no VivaBem.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+                <a class="role-action-card" href="{% url 'accounts:profile_edit' %}">
+                    <span class="role-action-icon" aria-hidden="true">👤</span>
+                    <span><strong>Meu perfil profissional</strong><small>Confira seus dados e sua verificação.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+            </section>
+            <details class="role-more-options">
+                <summary>Outras opções</summary>
+                <nav aria-label="Outras opções para profissionais">
+                    <a href="{% url 'notifications:list' %}">Meus avisos</a>
+                    <a href="{% url 'professionals:directory' %}">Conhecer profissionais</a>
+                    <a href="{% url 'moderation:report_list' %}">Segurança</a>
+                </nav>
+            </details>
+        {% else %}
+            <section class="role-action-grid" aria-label="Ações administrativas">
+                <a class="role-action-card role-action-primary" href="{% url 'moderation:admin_dashboard' %}">
+                    <span class="role-action-icon" aria-hidden="true">⚙️</span>
+                    <span><strong>Abrir gestão</strong><small>Veja usuários, profissionais e atividades.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+                <a class="role-action-card" href="{% url 'moderation:admin_reports' %}">
+                    <span class="role-action-icon" aria-hidden="true">🛡️</span>
+                    <span><strong>Analisar denúncias</strong><small>Consulte os relatos enviados.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+                <a class="role-action-card" href="{% url 'moderation:admin_announcements' %}">
+                    <span class="role-action-icon" aria-hidden="true">📢</span>
+                    <span><strong>Enviar avisos</strong><small>Comunique usuários da plataforma.</small></span>
+                    <span class="role-action-arrow" aria-hidden="true">→</span>
+                </a>
+            </section>
         {% endif %}
         <p class="privacy-shortcut"><a href="{% url 'core:privacy' %}">Consultar privacidade e controle dos meus dados</a></p>
         {% if user.is_staff %}<p class="admin-shortcut"><a class="button button-secondary" href="{% url 'admin:index' %}">Abrir administração</a></p>{% endif %}

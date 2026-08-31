@@ -4,19 +4,17 @@
             <span class="brand-mark" aria-hidden="true">V</span><span>VivaBem</span>
         </a>
         <nav class="app-nav" aria-label="Menu principal">
-            <a {% if request.resolver_match.namespace == 'accounts' and request.resolver_match.url_name == 'dashboard' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'accounts:dashboard' %}">Painel</a>
+            <a {% if request.resolver_match.namespace == 'accounts' and request.resolver_match.url_name == 'dashboard' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'accounts:dashboard' %}">Início</a>
             {% if user.role == 'senior' %}
                 <a {% if request.resolver_match.namespace == 'needs' and request.resolver_match.url_name == 'quick_request' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'needs:quick_request' %}">Pedir ajuda</a>
                 <a {% if request.resolver_match.namespace == 'needs' and request.resolver_match.url_name == 'request_list' or request.resolver_match.namespace == 'needs' and request.resolver_match.url_name == 'request_detail' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'needs:request_list' %}">Meus pedidos</a>
                 <a {% if request.resolver_match.namespace == 'chat' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'chat:list' %}">Conversar{% if unread_chat_count %} ({{ unread_chat_count }}){% endif %}</a>
             {% elif user.role == 'family' %}
-                <a {% if request.resolver_match.namespace == 'relationships' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'relationships:list' %}">Pessoas acompanhadas</a>
+                <a {% if request.resolver_match.namespace == 'relationships' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'relationships:list' %}">Acompanhar</a>
             {% elif user.role == 'professional' %}
-                <a {% if request.resolver_match.namespace == 'needs' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'needs:opportunities' %}">Oportunidades</a>
+                <a {% if request.resolver_match.namespace == 'needs' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'needs:opportunities' %}">Encontrar pedidos</a>
             {% endif %}
-            {% if user.role != 'senior' %}<a {% if request.resolver_match.namespace == 'professionals' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'professionals:directory' %}">Conhecer profissionais</a>{% endif %}
             {% if user.role != 'admin' and user.role != 'senior' %}<a {% if request.resolver_match.namespace == 'chat' %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'chat:list' %}">Conversas{% if unread_chat_count %} ({{ unread_chat_count }}){% endif %}</a>{% endif %}
-            {% if user.role != 'senior' %}<a {% if request.resolver_match.namespace == 'moderation' and 'admin_' not in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:report_list' %}">Segurança</a>{% endif %}
             {% if user.is_superuser %}<a {% if request.resolver_match.namespace == 'moderation' and 'admin_' in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% elif user.role == 'admin' and user.is_staff %}<a {% if request.resolver_match.namespace == 'moderation' and 'admin_' in request.resolver_match.url_name %}class="app-nav-active" aria-current="page"{% endif %} href="{% url 'moderation:admin_dashboard' %}">Gestão</a>{% endif %}
         </nav>
         <div class="dashboard-account">

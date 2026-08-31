@@ -21,7 +21,7 @@ class SeniorDashboardSimplicityTests(TestCase):
 
         self.assertContains(response, "O que você quer fazer hoje?")
         self.assertContains(response, "Pedir ajuda")
-        self.assertContains(response, "Ver pedidos")
+        self.assertContains(response, "Acompanhar pedidos")
         self.assertContains(response, "Conversar")
         self.assertContains(response, "Outras opções")
         self.assertNotContains(response, "Ajuda que cadastrei")
