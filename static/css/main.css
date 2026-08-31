@@ -1727,33 +1727,39 @@ a.help-option-card:hover { border-color: var(--green-700); transform: translateY
 /* Identidades visuais dos perfis autenticados. Os controles mantêm o mesmo
    formato e funcionamento; somente as superfícies e a hierarquia mudam. */
 [data-user-role="senior"] {
-    --role-page: #e7ebe7;
-    --role-surface: #f8f8f4;
+    --role-page: #d9dedb;
+    --role-surface: #eceeeb;
     --role-tint: #dce7df;
     --role-accent: #466c5b;
     --role-deep: #2d443c;
     --role-line: #b9c6bf;
-    --role-header: #f7f8f4;
+    --role-header: #eef0ed;
 }
 
 [data-user-role="family"] {
-    --role-page: #eee8df;
-    --role-surface: #faf6f0;
+    --role-page: #dcdfdc;
+    --role-surface: #eeefec;
     --role-tint: #e8d9c9;
     --role-accent: #8a6448;
     --role-deep: #5c4434;
     --role-line: #d6c5b6;
-    --role-header: #fbf8f3;
+    --role-header: #f0f0ed;
 }
 
 [data-user-role="professional"] {
-    --role-page: #e7ecee;
-    --role-surface: #f6f8f8;
+    --role-page: #d8dee0;
+    --role-surface: #eaedef;
     --role-tint: #d9e4e8;
     --role-accent: #426576;
     --role-deep: #243e49;
     --role-line: #c3d0d5;
-    --role-header: #f7f9fa;
+    --role-header: #eef1f2;
+}
+
+:root:not([data-theme="dark"])[data-user-role="admin"] {
+    --white: #e9ece9;
+    --dashboard-bg: #d8dcda;
+    --soft-section: #dde1df;
 }
 
 :root[data-theme="dark"][data-user-role="senior"] {
