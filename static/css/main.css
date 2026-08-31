@@ -1727,39 +1727,39 @@ a.help-option-card:hover { border-color: var(--green-700); transform: translateY
 /* Identidades visuais dos perfis autenticados. Os controles mantêm o mesmo
    formato e funcionamento; somente as superfícies e a hierarquia mudam. */
 [data-user-role="senior"] {
-    --role-page: #cdd8d1;
-    --role-surface: #dfe7e1;
-    --role-tint: #cfddd4;
+    --role-page: #a9bfbb;
+    --role-surface: #c4d3cf;
+    --role-tint: #b5cac5;
     --role-accent: #466c5b;
     --role-deep: #2d443c;
-    --role-line: #aebfb5;
-    --role-header: #e2e9e4;
+    --role-line: #8ea9a3;
+    --role-header: #bdcfcb;
 }
 
 [data-user-role="family"] {
-    --role-page: #d0d9d3;
-    --role-surface: #e2e8e4;
-    --role-tint: #d7dfd6;
+    --role-page: #afc1be;
+    --role-surface: #c7d4d1;
+    --role-tint: #b9cbc7;
     --role-accent: #8a6448;
     --role-deep: #5c4434;
-    --role-line: #b7c4bc;
-    --role-header: #e4eae6;
+    --role-line: #94aaa5;
+    --role-header: #c0cfcc;
 }
 
 [data-user-role="professional"] {
-    --role-page: #cdd8d6;
-    --role-surface: #dfe7e5;
-    --role-tint: #d2dedb;
+    --role-page: #a6bdbe;
+    --role-surface: #c1d2d2;
+    --role-tint: #b2c8c9;
     --role-accent: #426576;
     --role-deep: #243e49;
-    --role-line: #adc0bc;
-    --role-header: #e2e9e7;
+    --role-line: #8ca7a8;
+    --role-header: #bbcece;
 }
 
 :root:not([data-theme="dark"])[data-user-role="admin"] {
-    --white: #dfe7e1;
-    --dashboard-bg: #ccd7d0;
-    --soft-section: #d6e0da;
+    --white: #c3d3cf;
+    --dashboard-bg: #a8beba;
+    --soft-section: #b6c9c4;
 }
 
 :root[data-theme="dark"][data-user-role="senior"] {
@@ -1854,6 +1854,13 @@ a.help-option-card:hover { border-color: var(--green-700); transform: translateY
 
 [data-user-role="senior"] .record-card,
 [data-user-role="senior"] .notification-item { border-radius: 16px; }
+
+[data-user-role="senior"] .senior-action-card:not(.senior-action-primary),
+[data-user-role="senior"] .simple-request-item,
+[data-user-role="senior"] .senior-more-options .senior-secondary-links {
+    background: var(--role-surface);
+    border-color: var(--role-line);
+}
 
 [data-user-role="senior"] .module-heading { padding-bottom: 20px; border-bottom: 2px solid var(--role-line); }
 
