@@ -9,12 +9,14 @@
     <title>{% block title %}VivaBem{% endblock %}</title>
     <script src="{% static 'js/theme.js' %}"></script>
     <script src="{% static 'js/accessibility.js' %}?v=20260824-9"></script>
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20260831-15">
+    {% if user.is_authenticated %}<script src="{% static 'js/onboarding.js' %}?v=20260831-1" defer></script>{% endif %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20260831-18">
 </head>
 <body>
     {% if not user.is_authenticated %}{% include "includes/reading_welcome.html" %}{% endif %}
     <a class="skip-link" href="#conteudo">Ir para o conteúdo principal</a>
     {% include "includes/accessibility_tools.html" %}
     {% block body %}{% endblock %}
+    {% if user.is_authenticated %}{% include "includes/onboarding_tutorial.html" %}{% endif %}
 </body>
 </html>

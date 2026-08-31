@@ -1,5 +1,57 @@
 {% extends "base.html" %}
 {% block title %}Profissionais — VivaBem{% endblock %}
-{% block body %}{% include "includes/app_header.html" %}
-<main id="conteudo" class="module-page"><div class="container"><div class="module-heading"><div><span class="eyebrow">Rede de apoio</span><h1>Conhecer profissionais</h1><p>Veja quem oferece apoio, onde atende e o tipo de atendimento disponível.</p></div></div><form class="search-bar directory-search" method="get"><div><label for="professional-search">Quem você procura?</label><input id="professional-search" name="q" value="{{ query }}" placeholder="Digite um nome, profissão ou cidade"></div><div><label for="service-mode">Tipo de atendimento</label><select id="service-mode" name="mode"><option value="">Todos</option>{% for value, label in service_modes %}<option value="{{ value }}" {% if mode == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div><button class="button button-secondary" type="submit">Buscar</button></form><div class="record-grid">{% for profile in professionals %}<article class="record-card professional-card"><div class="professional-visual-heading"><span class="professional-visual-icon" aria-hidden="true">👤</span><div><span>{{ profile.profession }}</span><h2>{{ profile.user.get_full_name|default:"Profissional cadastrado" }}</h2></div></div><p><strong>{{ profile.specialty }}</strong></p><dl class="mini-details"><div><dt>Onde atende</dt><dd>{{ profile.service_region }}</dd></div><div><dt>Tipo de atendimento</dt><dd>{{ profile.get_service_mode_display }}</dd></div></dl><p class="verification-explanation verification-{{ profile.verification_status }}"><strong>{% if profile.verification_status == 'verified' %}✓ Cadastro conferido pelo VivaBem{% elif profile.verification_status == 'needs_review' %}Cadastro precisa de nova conferência{% else %}Cadastro aguardando conferência{% endif %}</strong><br>Esta conferência é administrativa e não substitui a validação de um conselho profissional.</p>{% if profile.user != user %}<a class="report-link" href="{% url 'moderation:report_create' %}?usuario={{ profile.user.pk }}">Informar um problema com este perfil</a>{% endif %}</article>{% empty %}<div class="empty-state"><h2>Nenhum profissional encontrado</h2><p>Tente buscar usando menos palavras.</p></div>{% endfor %}</div></div></main>
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page">
+    <div class="container">
+        <div class="module-heading simple-module-heading">
+            <div>
+                <h1>Encontrar profissionais</h1>
+                <p>Busque pelo nome, profissão, especialidade ou cidade.</p>
+            </div>
+        </div>
+        <form class="search-bar directory-search directory-search-simple" method="get" role="search">
+            <div>
+                <label for="professional-search">O que você procura?</label>
+                <input id="professional-search" name="q" value="{{ query }}" placeholder="Exemplo: fisioterapeuta em Avaré">
+            </div>
+            <div>
+                <label for="service-mode">Atendimento</label>
+                <select id="service-mode" name="mode">
+                    <option value="">Presencial ou on-line</option>
+                    {% for value, label in service_modes %}<option value="{{ value }}" {% if mode == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                </select>
+            </div>
+            <button class="button button-primary" type="submit">Buscar</button>
+        </form>
+        <p class="directory-safety-note"><strong>Importante:</strong> a conferência do VivaBem é administrativa. Antes de contratar, confirme o registro no conselho da profissão.</p>
+        <div class="record-grid professional-simple-grid" aria-live="polite">
+            {% for profile in professionals %}
+                <article class="record-card professional-card professional-simple-card">
+                    <div class="professional-visual-heading">
+                        <span class="professional-visual-icon" aria-hidden="true">👤</span>
+                        <div>
+                            <span>{{ profile.profession }}</span>
+                            <h2>{{ profile.user.get_full_name|default:"Profissional cadastrado" }}</h2>
+                        </div>
+                    </div>
+                    {% if profile.specialty %}<p class="professional-specialty">{{ profile.specialty }}</p>{% endif %}
+                    <dl class="simple-card-details professional-details">
+                        <div><dt>Região</dt><dd>{{ profile.service_region }}</dd></div>
+                        <div><dt>Atendimento</dt><dd>{{ profile.get_service_mode_display }}</dd></div>
+                    </dl>
+                    <p class="verification-line verification-{{ profile.verification_status }}">
+                        {% if profile.verification_status == 'verified' %}<strong>✓ Cadastro conferido</strong>{% elif profile.verification_status == 'needs_review' %}<strong>Cadastro em nova conferência</strong>{% else %}<strong>Cadastro aguardando conferência</strong>{% endif %}
+                    </p>
+                    {% if profile.user != user %}<a class="report-link" href="{% url 'moderation:report_create' %}?usuario={{ profile.user.pk }}">Informar problema neste perfil</a>{% endif %}
+                </article>
+            {% empty %}
+                <div class="empty-state">
+                    <h2>Nenhum profissional encontrado</h2>
+                    <p>Tente usar somente a profissão ou a cidade.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
 {% endblock %}

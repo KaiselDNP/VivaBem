@@ -23,11 +23,23 @@ class SeniorDashboardSimplicityTests(TestCase):
         self.assertContains(response, "Pedir ajuda")
         self.assertContains(response, "Acompanhar pedidos")
         self.assertContains(response, "Conversar")
+        self.assertContains(response, "Ajuda para usar o VivaBem")
         self.assertContains(response, "Outras opções")
         self.assertNotContains(response, "Ajuda que cadastrei")
         self.assertNotContains(response, "Conta ativa")
         self.assertNotContains(response, "Seu último pedido")
         self.assertNotContains(response, "data-reading-welcome")
+        self.assertContains(response, "data-onboarding-tutorial")
+        self.assertContains(response, "Como começar")
+        self.assertContains(response, "Ver tutorial rápido")
+        self.assertContains(response, "/static/js/onboarding.js")
+
+    def test_help_page_explains_assistance_without_sharing_password(self):
+        response = self.client.get(reverse("core:help"))
+
+        self.assertContains(response, "Receber ajuda de um familiar")
+        self.assertContains(response, "Um familiar pode ajudar sem usar sua senha")
+        self.assertContains(response, "escolhe exatamente o que ele pode fazer")
 
     def test_only_latest_request_is_shown(self):
         older_need = Need.objects.create(

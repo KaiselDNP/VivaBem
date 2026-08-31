@@ -23,11 +23,20 @@
                     <p>O que você quer gerenciar hoje?</p>
                 {% endif %}
             </div>
-            {% if user.role == 'professional' %}
-                <span class="verification-badge verification-{{ professional_profile.verification_status }}">{{ professional_profile.get_verification_status_display }}</span>
-            {% elif user.role != 'senior' %}
-                <span class="status-badge">Conta ativa</span>
-            {% endif %}
+            <div class="welcome-profile-summary">
+                <a class="welcome-avatar-link" href="{% url 'accounts:profile_edit' %}" aria-label="Abrir meu perfil">
+                    {% if user.profile.photo %}
+                        <img class="avatar dashboard-welcome-avatar" src="{% url 'accounts:profile_photo' %}?v={{ user.profile.updated_at|date:'Uu' }}" alt="">
+                    {% else %}
+                        <span class="avatar avatar-initials dashboard-welcome-avatar" aria-hidden="true">{{ user.first_name|first|upper|default:"V" }}</span>
+                    {% endif %}
+                </a>
+                {% if user.role == 'professional' %}
+                    <span class="verification-badge verification-{{ professional_profile.verification_status }}">{{ professional_profile.get_verification_status_display }}</span>
+                {% elif user.role != 'senior' %}
+                    <span class="status-badge">Conta ativa</span>
+                {% endif %}
+            </div>
         </section>
         {% if user.role == 'senior' %}
             {% if pending_family_count %}
@@ -61,6 +70,12 @@
                     </span>
                 </a>
             </section>
+
+            <a class="senior-help-shortcut" href="{% url 'core:help' %}">
+                <span aria-hidden="true">?</span>
+                <span><strong>Ajuda para usar o VivaBem</strong><small>Veja explicações simples ou saiba como um familiar pode ajudar.</small></span>
+                <span aria-hidden="true">→</span>
+            </a>
 
             {% if recent_help_requests %}<section class="senior-recent-section" aria-labelledby="recent-requests-title">
                 <div class="section-heading compact-heading">
@@ -168,6 +183,10 @@
                 </a>
             </section>
         {% endif %}
+        <div class="dashboard-help-links">
+            <button type="button" class="tutorial-reopen" data-onboarding-open>Ver tutorial rápido</button>
+            <a href="{% url 'core:help' %}">Abrir central de ajuda</a>
+        </div>
         <p class="privacy-shortcut"><a href="{% url 'core:privacy' %}">Consultar privacidade e controle dos meus dados</a></p>
         {% if user.is_staff %}<p class="admin-shortcut"><a class="button button-secondary" href="{% url 'admin:index' %}">Abrir administração</a></p>{% endif %}
     </div>

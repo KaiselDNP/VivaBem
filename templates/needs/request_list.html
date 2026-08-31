@@ -1,5 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Meus pedidos — VivaBem{% endblock %}
-{% block body %}{% include "includes/app_header.html" %}
-<main id="conteudo" class="module-page"><div class="container">{% include "includes/messages.html" %}<div class="module-heading"><div><h1>Meus pedidos</h1><p>Veja em que etapa está cada pedido e se algum profissional respondeu.</p></div><a class="button button-primary" href="{% url 'needs:request_create' %}">Fazer novo pedido</a></div><div class="record-grid">{% for item in help_requests %}<a class="record-card record-card-link" href="{% url 'needs:request_detail' item.pk %}"><div class="record-meta"><span>Tipo: {{ item.need.get_category_display }}</span><span class="record-status status-{{ item.status }}">Situação: {% if item.status == 'open' %}Esperando profissional{% elif item.status == 'accepted' %}Profissional escolhido{% elif item.status == 'completed' %}Ajuda concluída{% else %}Pedido cancelado{% endif %}</span></div><h2>{{ item.need.title }}</h2><p>{{ item.details|truncatechars:180 }}</p><p class="record-supporting-info"><strong>Local:</strong> {{ item.region }} <span aria-hidden="true">·</span> <strong>Quando:</strong> {{ item.get_priority_display }}</p><span class="card-link">Abrir e ver o andamento →</span></a>{% empty %}<div class="empty-state"><h2>Você ainda não fez um pedido</h2><p>Quando precisar, escolha “Pedir ajuda” e responda às perguntas.</p><a class="button button-primary" href="{% url 'needs:request_create' %}">Pedir ajuda agora</a></div>{% endfor %}</div></div></main>
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page">
+    <div class="container">
+        {% include "includes/messages.html" %}
+        <div class="module-heading simple-module-heading">
+            <div>
+                <h1>Meus pedidos de ajuda</h1>
+                <p>Abra um pedido para ver o andamento e as respostas.</p>
+            </div>
+            <a class="button button-primary" href="{% url 'needs:request_create' %}">Fazer novo pedido</a>
+        </div>
+        <div class="record-grid request-simple-grid">
+            {% for item in help_requests %}
+                <a class="record-card record-card-link request-simple-card" href="{% url 'needs:request_detail' item.pk %}" aria-label="{{ item.need.title }}. Abrir e ver o andamento">
+                    <span class="record-status status-{{ item.status }}">
+                        {% if item.status == 'open' %}Esperando profissional{% elif item.status == 'accepted' %}Profissional escolhido{% elif item.status == 'completed' %}Ajuda concluída{% else %}Pedido cancelado{% endif %}
+                    </span>
+                    <h2>{{ item.need.title }}</h2>
+                    <dl class="simple-card-details">
+                        <div><dt>Tipo de ajuda</dt><dd>{{ item.need.get_category_display }}</dd></div>
+                        <div><dt>Local</dt><dd>{{ item.region }}</dd></div>
+                        <div><dt>Quando</dt><dd>{{ item.get_priority_display }}</dd></div>
+                    </dl>
+                    <span class="card-link">Ver andamento <span aria-hidden="true">→</span></span>
+                </a>
+            {% empty %}
+                <div class="empty-state">
+                    <h2>Você ainda não fez um pedido</h2>
+                    <p>Quando precisar, escolha “Pedir ajuda” e responda às perguntas.</p>
+                    <a class="button button-primary" href="{% url 'needs:request_create' %}">Pedir ajuda agora</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
 {% endblock %}

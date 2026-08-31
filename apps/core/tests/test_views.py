@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 
@@ -8,6 +8,14 @@ class HomeViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, b"ok")
+        self.assertIn("X-Request-ID", response)
+
+    def test_readiness_check_confirms_database_connection(self):
+        response = self.client.get(reverse("core:readiness_check"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"status": "ok", "database": "ok"})
+        self.assertIn("X-Request-ID", response)
 
     def test_home_page_is_public_and_explains_scope(self):
         response = self.client.get(reverse("core:home"))
@@ -41,3 +49,11 @@ class HomeViewTests(TestCase):
         self.assertContains(response, "data-read-selection-prompt")
         self.assertContains(response, "SAMU")
         self.assertContains(response, "192")
+
+    @override_settings(DEBUG=False)
+    def test_unknown_page_has_a_simple_error_message(self):
+        response = self.client.get("/pagina-que-nao-existe/")
+
+        self.assertEqual(response.status_code, 404)
+        self.assertContains(response, "Não encontramos esta página", status_code=404)
+        self.assertContains(response, "Ir para o início", status_code=404)

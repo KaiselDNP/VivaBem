@@ -37,6 +37,8 @@ class NotificationAccessTests(TestCase):
         self.client.force_login(self.owner)
         response = self.client.get(reverse("notifications:list"))
         self.assertContains(response, self.notification.title)
+        self.assertContains(response, "Novo")
+        self.assertContains(response, "Marcar como visto")
         self.assertNotContains(response, "Mensagem privada de outro usuário")
 
     def test_user_cannot_mark_another_users_notification_as_read(self):

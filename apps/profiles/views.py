@@ -62,13 +62,20 @@ class ProfileEditView(LoginRequiredMixin, TemplateView):
 
         base_forms_are_valid = account_form.is_valid() and profile_form.is_valid()
         professional_form_is_valid = professional_form is None or professional_form.is_valid()
-        if base_forms_are_valid and professional_form_is_valid:
+        if base_forms_are_valid:
             account_form.save()
             profile_form.save()
-            if professional_form:
+            if professional_form and professional_form_is_valid:
                 professional_form.save()
-            messages.success(request, "Perfil atualizado com segurança.")
-            return redirect("accounts:profile_edit")
+            if professional_form is None or professional_form_is_valid:
+                messages.success(request, "Perfil atualizado com segurança.")
+                return redirect("accounts:profile_edit")
+
+            messages.success(
+                request,
+                "Sua foto e seus dados pessoais foram salvos. "
+                "Corrija os dados profissionais marcados.",
+            )
 
         context = self.get_context_data(
             account_form=account_form,

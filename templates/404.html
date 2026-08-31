@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Página não encontrada — VivaBem{% endblock %}
+{% block body %}
+<main id="conteudo" class="error-page"><div class="error-card"><span aria-hidden="true">?</span><h1>Não encontramos esta página</h1><p>O endereço pode estar incorreto ou a página pode ter mudado.</p><a class="button button-primary" href="{% url 'core:home' %}">Ir para o início</a></div></main>
+{% endblock %}

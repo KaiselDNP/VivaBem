@@ -1,5 +1,48 @@
 {% extends "base.html" %}
 {% block title %}Meus avisos — VivaBem{% endblock %}
-{% block body %}{% include "includes/app_header.html" %}
-<main id="conteudo" class="module-page"><div class="container narrow-container"><div class="module-heading"><div><span class="eyebrow">Atualizações importantes</span><h1>Meus avisos</h1><p>Aqui você encontra respostas sobre seus pedidos e sua família.</p></div>{% if unread_notification_count %}<form method="post" action="{% url 'notifications:mark_all_read' %}">{% csrf_token %}<button class="button button-secondary" type="submit">Marcar todos os avisos como vistos</button></form>{% endif %}</div><div class="notification-list">{% for item in notifications %}<article class="notification-item {% if not item.is_read %}notification-unread{% endif %}"><div><span>{% if not item.is_read %}Novo aviso. {% endif %}Recebido em {{ item.created_at|date:"d/m/Y" }} às {{ item.created_at|date:"H:i" }}</span><h2>{{ item.title }}</h2><p>{{ item.message }}</p></div>{% if not item.is_read %}<form method="post" action="{% url 'notifications:mark_read' item.pk %}">{% csrf_token %}<button type="submit">{% if item.target_url %}Abrir este aviso{% else %}Marcar este aviso como visto{% endif %}</button></form>{% elif item.target_url %}<a href="{{ item.target_url }}">Abrir este aviso</a>{% endif %}</article>{% empty %}<div class="empty-state"><h2>Nenhum aviso</h2><p>Quando algo importante acontecer, mostraremos aqui.</p></div>{% endfor %}</div></div></main>
+{% block body %}
+{% include "includes/app_header.html" %}
+<main id="conteudo" class="module-page">
+    <div class="container narrow-container">
+        <div class="module-heading simple-module-heading">
+            <div>
+                <h1>Meus avisos</h1>
+                <p>Veja primeiro o que é novo. Cada aviso explica o que aconteceu.</p>
+            </div>
+            {% if unread_notification_count %}
+                <form method="post" action="{% url 'notifications:mark_all_read' %}">
+                    {% csrf_token %}
+                    <button class="button button-secondary" type="submit">Marcar tudo como visto</button>
+                </form>
+            {% endif %}
+        </div>
+        <div class="notification-list" aria-label="Lista de avisos">
+            {% for item in notifications %}
+                <article class="notification-item notification-simple-card {% if not item.is_read %}notification-unread{% endif %}">
+                    <div class="notification-copy">
+                        <div class="notification-topline">
+                            {% if not item.is_read %}<strong class="new-badge">Novo</strong>{% endif %}
+                            <time datetime="{{ item.created_at|date:'c' }}">{{ item.created_at|date:"d/m/Y" }}, {{ item.created_at|date:"H:i" }}</time>
+                        </div>
+                        <h2>{{ item.title }}</h2>
+                        <p>{{ item.message }}</p>
+                    </div>
+                    {% if not item.is_read %}
+                        <form method="post" action="{% url 'notifications:mark_read' item.pk %}">
+                            {% csrf_token %}
+                            <button type="submit">{% if item.target_url %}Abrir aviso{% else %}Marcar como visto{% endif %}</button>
+                        </form>
+                    {% elif item.target_url %}
+                        <a href="{{ item.target_url }}">Abrir aviso</a>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <div class="empty-state">
+                    <h2>Nenhum aviso por enquanto</h2>
+                    <p>Quando algo importante acontecer, ele aparecerá aqui.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
 {% endblock %}

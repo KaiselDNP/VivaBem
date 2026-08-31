@@ -68,6 +68,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "apps.core.middleware.RequestMonitoringMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -187,6 +188,7 @@ LOGIN_LOCKOUT_SECONDS = env_int("VIVABEM_LOGIN_LOCKOUT_SECONDS", 600)
 PASSWORD_RESET_TIMEOUT = env_int("VIVABEM_PASSWORD_RESET_TIMEOUT", 3600)
 USER_ACTIVITY_UPDATE_SECONDS = env_int("VIVABEM_ACTIVITY_UPDATE_SECONDS", 120)
 USER_ONLINE_WINDOW_SECONDS = env_int("VIVABEM_ONLINE_WINDOW_SECONDS", 300)
+VIVABEM_SLOW_REQUEST_MS = env_int("VIVABEM_SLOW_REQUEST_MS", 1500)
 
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
@@ -208,3 +210,27 @@ SECURE_HSTS_PRELOAD = env_bool("VIVABEM_SECURE_HSTS_PRELOAD", False)
 if env_bool("VIVABEM_BEHIND_HTTPS_PROXY", False):
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 X_FRAME_OPTIONS = "DENY"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "concise": {
+            "format": "{asctime} {levelname} {name} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "concise",
+        },
+    },
+    "loggers": {
+        "vivabem.monitoring": {
+            "handlers": ["console"],
+            "level": os.getenv("VIVABEM_LOG_LEVEL", "INFO").upper(),
+            "propagate": False,
+        },
+    },
+}

@@ -1,0 +1,31 @@
+<div class="onboarding-overlay" data-onboarding-tutorial data-onboarding-user="{{ user.pk }}" hidden>
+    <section class="onboarding-card" role="dialog" aria-modal="true" aria-labelledby="onboarding-title" aria-describedby="onboarding-description">
+        <span class="onboarding-kicker">Guia rápido</span>
+        <h2 id="onboarding-title">Como começar</h2>
+        <p id="onboarding-description">São apenas três passos:</p>
+        <ol class="onboarding-steps">
+            {% if user.role == 'senior' %}
+                <li><strong>Peça ajuda</strong><span>Use o botão grande “Pedir ajuda”.</span></li>
+                <li><strong>Acompanhe</strong><span>Veja o andamento em “Meus pedidos”.</span></li>
+                <li><strong>Converse com segurança</strong><span>Fale apenas com pessoas autorizadas.</span></li>
+            {% elif user.role == 'family' %}
+                <li><strong>Peça autorização</strong><span>A pessoa idosa decide se permite o acesso.</span></li>
+                <li><strong>Acompanhe</strong><span>Você verá somente as informações permitidas.</span></li>
+                <li><strong>Converse</strong><span>Use o chat com seus contatos autorizados.</span></li>
+            {% elif user.role == 'professional' %}
+                <li><strong>Complete seu perfil</strong><span>Informe sua área e região de atendimento.</span></li>
+                <li><strong>Encontre pedidos</strong><span>Veja oportunidades compatíveis com seu trabalho.</span></li>
+                <li><strong>Converse com cuidado</strong><span>Use o chat somente para combinar o atendimento.</span></li>
+            {% else %}
+                <li><strong>Abra a gestão</strong><span>Consulte as áreas administrativas.</span></li>
+                <li><strong>Veja alertas</strong><span>Priorize denúncias e cadastros pendentes.</span></li>
+                <li><strong>Proteja os dados</strong><span>Acesse apenas o necessário para cada tarefa.</span></li>
+            {% endif %}
+        </ol>
+        <p class="onboarding-safety"><strong>Lembrete:</strong> nunca compartilhe sua senha.</p>
+        <div class="onboarding-actions">
+            <button class="button button-primary" type="button" data-onboarding-close>Começar a usar</button>
+            <a class="button button-secondary" href="{% url 'core:help' %}" data-onboarding-help>Preciso de ajuda</a>
+        </div>
+    </section>
+</div>

@@ -40,8 +40,8 @@
                 </a>
                 <a class="help-option-card" href="{% url 'relationships:list' %}">
                     <span class="help-option-icon" aria-hidden="true">👨‍👩‍👧</span>
-                    <strong>Minha família</strong>
-                    <span>Escolha quem pode acompanhar você.</span>
+                    <strong>Receber ajuda de um familiar</strong>
+                    <span>Autorize alguém de confiança sem compartilhar sua senha.</span>
                 </a>
             {% else %}
                 <article class="help-option-card help-option-static">
@@ -67,7 +67,22 @@
             </article>
         </div>
 
-        <p class="human-help-note"><strong>Ainda está difícil?</strong> Peça ajuda a uma pessoa de confiança. Ela não deve usar sua senha nem decidir por você.</p>
+        {% if user.is_authenticated and user.role == 'senior' %}
+            <section class="assisted-help-guide" aria-labelledby="assisted-help-title">
+                <span class="assisted-help-icon" aria-hidden="true">👨‍👩‍👧</span>
+                <div>
+                    <h2 id="assisted-help-title">Um familiar pode ajudar sem usar sua senha</h2>
+                    <ol>
+                        <li>O familiar cria a própria conta e pede sua autorização.</li>
+                        <li>Você aceita o vínculo e escolhe exatamente o que ele pode fazer.</li>
+                        <li>Se você permitir, ele poderá criar pedidos de ajuda em seu nome.</li>
+                    </ol>
+                    <a class="button button-secondary" href="{% url 'relationships:list' %}">Ver minha família</a>
+                </div>
+            </section>
+        {% endif %}
+
+        <p class="human-help-note"><strong>Ainda está difícil?</strong> Peça que uma pessoa de confiança acompanhe você enquanto usa o site. Sua senha e suas decisões continuam sendo somente suas.</p>
     </div>
 </main>
 {% endblock %}

@@ -110,5 +110,12 @@ As decisões arquiteturais ficam em `docs/architecture/` para apoiar a explicaç
 - [Fluxograma geral](docs/fluxograma.md)
 - [Visão geral funcional](docs/visao-geral-do-sistema.md)
 - [Guia de publicação no Render](docs/publicacao-render.md)
+
+## Monitoramento
+
+- `GET /status/` confirma que o processo web está respondendo.
+- `GET /status/pronto/` confirma também a conexão com o banco de dados.
+- Cada resposta inclui `X-Request-ID`, usado para localizar erros nos registros.
+- Requisições lentas são registradas a partir de `VIVABEM_SLOW_REQUEST_MS`.
 - [Revisão final do MVP](docs/revisao-final.md)
 - [Decisão de acessibilidade para pessoas idosas](docs/architecture/005-acessibilidade-para-pessoas-idosas.md)

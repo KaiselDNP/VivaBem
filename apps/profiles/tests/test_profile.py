@@ -8,6 +8,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from apps.accounts.models import UserRole
+from apps.professionals.models import ProfessionalProfile
 from apps.profiles.models import UserProfile
 
 TEST_MEDIA_ROOT = tempfile.mkdtemp()
@@ -91,6 +92,7 @@ class ProfileTests(TestCase):
 
         photo_url = reverse("accounts:profile_photo")
         self.assertContains(response, f'src="{photo_url}?v=')
+        self.assertContains(response, "dashboard-welcome-avatar")
         self.assertNotContains(response, "avatar avatar-small avatar-initials")
 
     def test_user_can_remove_current_photo(self):
@@ -114,3 +116,40 @@ class ProfileTests(TestCase):
         profile.refresh_from_db()
         self.assertRedirects(response, reverse("accounts:profile_edit"))
         self.assertFalse(profile.photo)
+
+    def test_professional_photo_is_saved_even_if_professional_fields_need_correction(self):
+        professional = get_user_model().objects.create_user(
+            email="pablo@example.com",
+            password="UmaSenhaBemSegura123!",
+            first_name="Pablo",
+            role=UserRole.PROFESSIONAL,
+        )
+        ProfessionalProfile.objects.create(
+            user=professional,
+            profession="",
+            specialty="",
+        )
+        photo = SimpleUploadedFile("pablo.png", PNG_1X1, content_type="image/png")
+        self.client.force_login(professional)
+
+        response = self.client.post(
+            reverse("accounts:profile_edit"),
+            {
+                "first_name": "Pablo",
+                "last_name": "Anconi",
+                "city": "Avaré",
+                "photo": photo,
+                "profession": "",
+                "specialty": "",
+                "council": "",
+                "registration_number": "",
+                "service_region": "Avaré-SP",
+                "service_mode": "both",
+            },
+        )
+
+        profile = UserProfile.objects.get(user=professional)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(profile.photo.name.startswith(f"profiles/{professional.pk}/"))
+        self.assertContains(response, "Sua foto e seus dados pessoais foram salvos")
+        self.assertContains(response, "Este campo é obrigatório")
