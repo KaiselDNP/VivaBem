@@ -15,7 +15,7 @@
                     {% if item.unread_count %}<span class="chat-unread" aria-label="{{ item.unread_count }} mensagens não lidas">{{ item.unread_count }}</span>{% endif %}
                 </a>
             {% empty %}
-                <div class="empty-state"><h2>Nenhuma conversa iniciada</h2><p>Os contatos autorizados aparecem abaixo.</p></div>
+                <div class="empty-state"><span class="empty-state-icon">{% include "includes/icon.html" with name="chat" %}</span><h2>Nenhuma conversa iniciada</h2><p>Escolha um contato autorizado abaixo para começar.</p></div>
             {% endfor %}
         </section>
         {% if contacts %}

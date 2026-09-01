@@ -1,6 +1,7 @@
 {% if form.errors %}
     <div class="form-error-summary" role="alert" tabindex="-1" data-error-summary>
-        <h2>Não foi possível continuar ainda</h2>
+        <span class="form-error-icon" aria-hidden="true">!</span>
+        <div><h2>Não foi possível continuar ainda</h2>
         <p>Corrija os campos abaixo. As outras respostas foram mantidas.</p>
         <ul>
             {% for field in form %}
@@ -9,6 +10,6 @@
                 {% endif %}
             {% endfor %}
             {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
-        </ul>
+        </ul></div>
     </div>
 {% endif %}

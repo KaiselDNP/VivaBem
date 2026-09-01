@@ -36,7 +36,7 @@
                     <fieldset class="guided-step" data-guided-step {% if field.errors %}data-has-error="true"{% endif %}>
                         <legend>
                             <span class="guided-step-icon" aria-hidden="true">
-                                {% if field.name == 'need' %}🤝{% elif field.name == 'details' %}✍️{% elif field.name == 'region' %}📍{% elif field.name == 'priority' %}📅{% else %}🏠{% endif %}
+                                {% if field.name == 'need' %}{% include "includes/icon.html" with name="request" %}{% elif field.name == 'details' %}{% include "includes/icon.html" with name="edit" %}{% elif field.name == 'region' %}{% include "includes/icon.html" with name="location" %}{% elif field.name == 'priority' %}{% include "includes/icon.html" with name="calendar" %}{% else %}{% include "includes/icon.html" with name="home" %}{% endif %}
                             </span>
                             {{ field.label }}
                         </legend>

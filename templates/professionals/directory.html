@@ -25,11 +25,15 @@
             <button class="button button-primary" type="submit">Buscar</button>
         </form>
         <p class="directory-safety-note"><strong>Importante:</strong> a conferência do VivaBem é administrativa. Antes de contratar, confirme o registro no conselho da profissão.</p>
-        <div class="record-grid professional-simple-grid" aria-live="polite">
+        <div class="results-heading">
+            <h2>Profissionais encontrados</h2>
+            <span>{{ professionals|length }} resultado{{ professionals|length|pluralize }}</span>
+        </div>
+        <div class="record-grid professional-simple-grid" aria-live="polite" aria-busy="false">
             {% for profile in professionals %}
                 <article class="record-card professional-card professional-simple-card">
                     <div class="professional-visual-heading">
-                        <span class="professional-visual-icon" aria-hidden="true">👤</span>
+                        <span class="professional-visual-icon">{% include "includes/icon.html" with name="user" %}</span>
                         <div>
                             <span>{{ profile.profession }}</span>
                             <h2>{{ profile.user.get_full_name|default:"Profissional cadastrado" }}</h2>
@@ -47,8 +51,10 @@
                 </article>
             {% empty %}
                 <div class="empty-state">
+                    <span class="empty-state-icon">{% include "includes/icon.html" with name="search" %}</span>
                     <h2>Nenhum profissional encontrado</h2>
                     <p>Tente usar somente a profissão ou a cidade.</p>
+                    {% if query or mode %}<a class="button button-secondary" href="{% url 'professionals:directory' %}">Limpar busca</a>{% endif %}
                 </div>
             {% endfor %}
         </div>

@@ -39,8 +39,10 @@
                 </article>
             {% empty %}
                 <div class="empty-state">
+                    <span class="empty-state-icon">{% include "includes/icon.html" with name="family" %}</span>
                     <h2>Nenhuma pessoa aqui</h2>
                     <p>{% if user.role == 'family' %}Use o botão “Pedir autorização” e informe o e-mail da pessoa idosa.{% else %}Quando um familiar pedir sua autorização, o pedido aparecerá aqui.{% endif %}</p>
+                    {% if user.role == 'family' %}<a class="button button-primary" href="{% url 'relationships:request' %}">Pedir autorização</a>{% endif %}
                 </div>
             {% endfor %}
         </div>

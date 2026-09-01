@@ -10,7 +10,7 @@
     <div class="container narrow-container">
         <header class="senior-signup-intro">
             <a class="back-link" href="{% url 'accounts:signup_choice' %}">← Voltar</a>
-            <span class="senior-signup-icon" aria-hidden="true">🧓</span>
+            <span class="senior-signup-icon">{% include "includes/icon.html" with name="user" %}</span>
             <span class="eyebrow">Cadastro simples</span>
             <h1>Vamos criar sua conta</h1>
             <p>Mostraremos uma pergunta por vez. Faça com calma e use “Ouvir um item” quando precisar.</p>
@@ -27,7 +27,7 @@
                 </div>
 
                 <fieldset class="guided-step" data-guided-step {% if form.first_name.errors or form.last_name.errors %}data-has-error="true"{% endif %}>
-                    <legend><span class="guided-step-icon" aria-hidden="true">👤</span>Como você se chama?</legend>
+                    <legend><span class="guided-step-icon">{% include "includes/icon.html" with name="user" %}</span>Como você se chama?</legend>
                     <div class="form-row">
                         <div class="form-field">
                             <label for="{{ form.first_name.id_for_label }}">Nome</label>
@@ -43,7 +43,7 @@
                 </fieldset>
 
                 <fieldset class="guided-step" data-guided-step {% if form.email.errors %}data-has-error="true"{% endif %}>
-                    <legend><span class="guided-step-icon" aria-hidden="true">✉️</span>Qual é o seu e-mail?</legend>
+                    <legend><span class="guided-step-icon">{% include "includes/icon.html" with name="mail" %}</span>Qual é o seu e-mail?</legend>
                     <div class="form-field">
                         <label for="{{ form.email.id_for_label }}">E-mail</label>
                         {{ form.email }}
@@ -53,7 +53,7 @@
                 </fieldset>
 
                 <fieldset class="guided-step" data-guided-step {% if form.password1.errors or form.password2.errors %}data-has-error="true"{% endif %}>
-                    <legend><span class="guided-step-icon" aria-hidden="true">🔑</span>Crie uma senha simples</legend>
+                    <legend><span class="guided-step-icon">{% include "includes/icon.html" with name="key" %}</span>Crie uma senha simples</legend>
                     <div class="simple-password-notice">
                         <strong>Não precisa usar símbolos, números ou letras maiúsculas.</strong>
                         <span>Use 8 ou mais caracteres. Uma frase curta pode ser mais fácil de lembrar.</span>
@@ -73,7 +73,7 @@
                 </fieldset>
 
                 <fieldset class="guided-step" data-guided-step {% if form.accepted_privacy.errors %}data-has-error="true"{% endif %}>
-                    <legend><span class="guided-step-icon" aria-hidden="true">🛡️</span>Confira antes de terminar</legend>
+                    <legend><span class="guided-step-icon">{% include "includes/icon.html" with name="shield" %}</span>Confira antes de terminar</legend>
                     <div class="signup-final-summary">
                         <p>Seus dados não serão compartilhados automaticamente.</p>
                         <p>Você poderá mudar seu perfil e controlar o acesso da sua família.</p>

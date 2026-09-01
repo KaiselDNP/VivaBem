@@ -29,29 +29,29 @@
         <div class="help-option-grid">
             {% if user.is_authenticated and user.role == 'senior' %}
                 <a class="help-option-card" href="{% url 'needs:request_create' %}">
-                    <span class="help-option-icon" aria-hidden="true">🤝</span>
+                    <span class="help-option-icon">{% include "includes/icon.html" with name="request" %}</span>
                     <strong>Pedir ajuda</strong>
                     <span>Conte o que precisa em passos simples.</span>
                 </a>
                 <a class="help-option-card" href="{% url 'needs:request_list' %}">
-                    <span class="help-option-icon" aria-hidden="true">📋</span>
+                    <span class="help-option-icon">{% include "includes/icon.html" with name="list" %}</span>
                     <strong>Ver meus pedidos</strong>
                     <span>Acompanhe as respostas recebidas.</span>
                 </a>
                 <a class="help-option-card" href="{% url 'relationships:list' %}">
-                    <span class="help-option-icon" aria-hidden="true">👨‍👩‍👧</span>
+                    <span class="help-option-icon">{% include "includes/icon.html" with name="family" %}</span>
                     <strong>Receber ajuda de um familiar</strong>
                     <span>Autorize alguém de confiança sem compartilhar sua senha.</span>
                 </a>
             {% else %}
                 <article class="help-option-card help-option-static">
-                    <span class="help-option-icon" aria-hidden="true">🔎</span>
+                    <span class="help-option-icon">{% include "includes/icon.html" with name="search" %}</span>
                     <strong>Encontre a opção desejada</strong>
                     <span>Use o menu superior para abrir seu painel, perfil e avisos.</span>
                 </article>
             {% endif %}
             <article class="help-option-card help-option-static">
-                <span class="help-option-icon" aria-hidden="true">🔊</span>
+                <span class="help-option-icon">{% include "includes/icon.html" with name="volume" %}</span>
                 <strong>Ouça um item da tela</strong>
                 <span>Ative “Ouvir um item” e toque no texto ou botão. No computador, basta apertar F2.</span>
             </article>
@@ -61,7 +61,7 @@
                 <span>No começo da tela, escolha Pequena, Média, Grande ou Super grande.</span>
             </article>
             <article class="help-option-card help-option-static">
-                <span class="help-option-icon" aria-hidden="true">🛡️</span>
+                <span class="help-option-icon">{% include "includes/icon.html" with name="shield" %}</span>
                 <strong>Proteja seus dados</strong>
                 <span>Nunca informe senhas, documentos ou dados bancários em um pedido.</span>
             </article>
@@ -69,7 +69,7 @@
 
         {% if user.is_authenticated and user.role == 'senior' %}
             <section class="assisted-help-guide" aria-labelledby="assisted-help-title">
-                <span class="assisted-help-icon" aria-hidden="true">👨‍👩‍👧</span>
+                <span class="assisted-help-icon">{% include "includes/icon.html" with name="family" %}</span>
                 <div>
                     <h2 id="assisted-help-title">Um familiar pode ajudar sem usar sua senha</h2>
                     <ol>

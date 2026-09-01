@@ -28,6 +28,7 @@
                 </a>
             {% empty %}
                 <div class="empty-state">
+                    <span class="empty-state-icon">{% include "includes/icon.html" with name="request" %}</span>
                     <h2>Você ainda não fez um pedido</h2>
                     <p>Quando precisar, escolha “Pedir ajuda” e responda às perguntas.</p>
                     <a class="button button-primary" href="{% url 'needs:request_create' %}">Pedir ajuda agora</a>

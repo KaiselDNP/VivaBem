@@ -1,3 +1,3 @@
 {% if messages %}
-    {% for message in messages %}<div class="success-message" role="status">{{ message }}</div>{% endfor %}
+    {% for message in messages %}<div class="success-message site-message site-message-{{ message.tags|default:'info' }}" {% if message.tags == 'error' %}role="alert"{% else %}role="status"{% endif %}><span aria-hidden="true">{% if message.tags == 'error' %}!{% else %}✓{% endif %}</span><span>{{ message }}</span></div>{% endfor %}
 {% endif %}

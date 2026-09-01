@@ -4,7 +4,7 @@
 {% block title %}Editar perfil — VivaBem{% endblock %}
 
 {% block body %}
-{% include "accounts/_header.html" %}
+{% include "includes/app_header.html" %}
 <main id="conteudo" class="profile-page">
     <div class="container profile-layout">
         <aside class="profile-summary">
@@ -42,37 +42,43 @@
                 {% if account_form.non_field_errors or profile_form.non_field_errors or professional_form.non_field_errors %}
                     <div class="form-alert" role="alert">{{ account_form.non_field_errors }}{{ profile_form.non_field_errors }}{{ professional_form.non_field_errors }}</div>
                 {% endif %}
-                <div class="form-row">
-                    {% for field in account_form %}
-                        <div class="form-field">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {{ field }}
-                            {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
-                        </div>
+                <section class="profile-form-section" aria-labelledby="personal-data-title">
+                    <div class="profile-section-heading"><span class="profile-section-icon">{% include "includes/icon.html" with name="user" %}</span><div><h3 id="personal-data-title">Dados pessoais</h3><p>Informações usadas para identificar sua conta.</p></div></div>
+                    <div class="form-row">
+                        {% for field in account_form %}
+                            <div class="form-field">
+                                <div class="field-label-row"><label for="{{ field.id_for_label }}">{{ field.label }}</label><span>{% if field.field.required %}Obrigatório{% else %}Opcional{% endif %}</span></div>
+                                {{ field }}
+                                {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% for field in profile_form %}
+                        {% if field.name != 'photo' and field.name != 'remove_photo' %}
+                            <div class="form-field">
+                                <div class="field-label-row"><label for="{{ field.id_for_label }}">{{ field.label }}</label><span>{% if field.field.required %}Obrigatório{% else %}Opcional{% endif %}</span></div>
+                                {{ field }}
+                                {% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}
+                                {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
                     {% endfor %}
-                </div>
-                {% for field in profile_form %}
-                    {% if field.name != 'photo' and field.name != 'remove_photo' %}
-                        <div class="form-field">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {{ field }}
-                            {% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}
-                            {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
+                </section>
+                <section class="profile-form-section profile-photo-section" aria-labelledby="profile-photo-title">
+                    <div class="profile-section-heading"><span class="profile-section-icon">{% include "includes/icon.html" with name="edit" %}</span><div><h3 id="profile-photo-title">Foto de perfil</h3><p>JPG, PNG ou WebP, com no máximo 5 MB.</p></div></div>
+                    <div class="photo-field">
+                        <label for="{{ profile_form.photo.id_for_label }}">Escolher uma nova foto <span class="field-optional">Opcional</span></label>
+                        <p>Uma nova foto substituirá a imagem atual.</p>
+                        {{ profile_form.photo }}
+                        {% if profile_form.photo.errors %}<div class="field-error" role="alert">{{ profile_form.photo.errors }}</div>{% endif %}
+                    </div>
+                    {% if profile.photo %}
+                        <div class="consent-field remove-photo-field">
+                            {{ profile_form.remove_photo }}
+                            <label for="{{ profile_form.remove_photo.id_for_label }}">Remover minha foto atual</label>
                         </div>
                     {% endif %}
-                {% endfor %}
-                <div class="photo-field">
-                    <label for="{{ profile_form.photo.id_for_label }}">Foto de perfil</label>
-                    <p>JPG, PNG ou WebP, com no máximo 5 MB. Uma nova foto substitui a atual.</p>
-                    {{ profile_form.photo }}
-                    {% if profile_form.photo.errors %}<div class="field-error" role="alert">{{ profile_form.photo.errors }}</div>{% endif %}
-                </div>
-                {% if profile.photo %}
-                    <div class="consent-field remove-photo-field">
-                        {{ profile_form.remove_photo }}
-                        <label for="{{ profile_form.remove_photo.id_for_label }}">Remover minha foto atual</label>
-                    </div>
-                {% endif %}
+                </section>
                 {% if professional_form %}
                     <fieldset class="professional-fields">
                         <legend>Dados profissionais</legend>
@@ -80,7 +86,7 @@
                         <div class="form-row">
                             {% for field in professional_form %}
                                 <div class="form-field {% if field.name == 'service_region' or field.name == 'service_mode' %}form-field-full{% endif %}">
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    <div class="field-label-row"><label for="{{ field.id_for_label }}">{{ field.label }}</label><span>{% if field.field.required %}Obrigatório{% else %}Opcional{% endif %}</span></div>
                                     {{ field }}
                                     {% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}
                                     {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}

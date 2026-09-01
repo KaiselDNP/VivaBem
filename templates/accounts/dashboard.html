@@ -47,23 +47,28 @@
                 </a>
             {% endif %}
 
-            <section class="senior-action-grid senior-simple-actions" aria-label="O que você deseja fazer?">
+            <div class="dashboard-section-heading">
+                <h2 id="senior-main-actions">Ações principais</h2>
+                <p>Escolha uma opção para continuar.</p>
+            </div>
+
+            <section class="senior-action-grid senior-simple-actions" aria-labelledby="senior-main-actions">
                 <a class="senior-action-card senior-action-primary" href="{% url 'needs:quick_request' %}">
-                    <span class="senior-action-icon" aria-hidden="true">🤝</span>
+                    <span class="senior-action-icon">{% include "includes/icon.html" with name="request" %}</span>
                     <span class="senior-action-copy">
                         <strong>Pedir ajuda</strong>
                         <span>Conte do que precisa.</span>
                     </span>
                 </a>
                 <a class="senior-action-card" href="{% url 'needs:request_list' %}">
-                    <span class="senior-action-icon" aria-hidden="true">📋</span>
+                    <span class="senior-action-icon">{% include "includes/icon.html" with name="list" %}</span>
                     <span class="senior-action-copy">
                         <strong>Acompanhar pedidos</strong>
                         <span>{% if active_request_count %}{{ active_request_count }} em andamento.{% else %}Nenhum pedido em andamento.{% endif %}</span>
                     </span>
                 </a>
                 <a class="senior-action-card" href="{% url 'chat:list' %}">
-                    <span class="senior-action-icon" aria-hidden="true">💬</span>
+                    <span class="senior-action-icon">{% include "includes/icon.html" with name="chat" %}</span>
                     <span class="senior-action-copy">
                         <strong>Conversar</strong>
                         <span>Fale com pessoas autorizadas.</span>
@@ -105,19 +110,23 @@
                 </nav>
             </details>
         {% elif user.role == 'family' %}
-            <section class="role-action-grid" aria-label="Ações para familiares">
+            <div class="dashboard-section-heading">
+                <h2 id="family-main-actions">Ações principais</h2>
+                <p>Acompanhe uma pessoa ou fale com seus contatos.</p>
+            </div>
+            <section class="role-action-grid" aria-labelledby="family-main-actions">
                 <a class="role-action-card role-action-primary" href="{% url 'relationships:list' %}">
-                    <span class="role-action-icon" aria-hidden="true">🧓</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="family" %}</span>
                     <span><strong>Acompanhar uma pessoa</strong><small>Veja somente as informações permitidas.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>
                 <a class="role-action-card" href="{% url 'relationships:request' %}">
-                    <span class="role-action-icon" aria-hidden="true">🔗</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="link" %}</span>
                     <span><strong>Pedir autorização</strong><small>Conecte-se usando o e-mail da pessoa.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>
                 <a class="role-action-card" href="{% url 'chat:list' %}">
-                    <span class="role-action-icon" aria-hidden="true">💬</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="chat" %}</span>
                     <span><strong>Conversar</strong><small>Fale com seus contatos autorizados.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>
@@ -139,19 +148,23 @@
                     <span aria-hidden="true">→</span>
                 </a>
             {% endif %}
-            <section class="role-action-grid" aria-label="Ações para profissionais">
+            <div class="dashboard-section-heading">
+                <h2 id="professional-main-actions">Ações principais</h2>
+                <p>Encontre pedidos e acompanhe seus contatos.</p>
+            </div>
+            <section class="role-action-grid" aria-labelledby="professional-main-actions">
                 <a class="role-action-card role-action-primary" href="{% url 'needs:opportunities' %}">
-                    <span class="role-action-icon" aria-hidden="true">🔎</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="search" %}</span>
                     <span><strong>Encontrar pedidos de ajuda</strong><small>Veja solicitações compatíveis com seu trabalho.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>
                 <a class="role-action-card" href="{% url 'chat:list' %}">
-                    <span class="role-action-icon" aria-hidden="true">💬</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="chat" %}</span>
                     <span><strong>Conversar</strong><small>Fale com seus contatos no VivaBem.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>
                 <a class="role-action-card" href="{% url 'accounts:profile_edit' %}">
-                    <span class="role-action-icon" aria-hidden="true">👤</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="user" %}</span>
                     <span><strong>Meu perfil profissional</strong><small>Confira seus dados e sua verificação.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>
@@ -165,19 +178,23 @@
                 </nav>
             </details>
         {% else %}
-            <section class="role-action-grid" aria-label="Ações administrativas">
+            <div class="dashboard-section-heading">
+                <h2 id="admin-main-actions">Ações principais</h2>
+                <p>Acesse as áreas de gestão mais usadas.</p>
+            </div>
+            <section class="role-action-grid" aria-labelledby="admin-main-actions">
                 <a class="role-action-card role-action-primary" href="{% url 'moderation:admin_dashboard' %}">
-                    <span class="role-action-icon" aria-hidden="true">⚙️</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="settings" %}</span>
                     <span><strong>Abrir gestão</strong><small>Veja usuários, profissionais e atividades.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>
                 <a class="role-action-card" href="{% url 'moderation:admin_reports' %}">
-                    <span class="role-action-icon" aria-hidden="true">🛡️</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="shield" %}</span>
                     <span><strong>Analisar denúncias</strong><small>Consulte os relatos enviados.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>
                 <a class="role-action-card" href="{% url 'moderation:admin_announcements' %}">
-                    <span class="role-action-icon" aria-hidden="true">📢</span>
+                    <span class="role-action-icon">{% include "includes/icon.html" with name="announcement" %}</span>
                     <span><strong>Enviar avisos</strong><small>Comunique usuários da plataforma.</small></span>
                     <span class="role-action-arrow" aria-hidden="true">→</span>
                 </a>

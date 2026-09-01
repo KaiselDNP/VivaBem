@@ -18,7 +18,7 @@
                     <small>Enviada em {{ report.created_at|date:"d/m/Y H:i" }}</small>
                 </a>
             {% empty %}
-                <div class="empty-state"><h2>Nenhum problema informado</h2><p>Se algo deixar você desconfortável ou inseguro, escolha “Informar um problema”.</p></div>
+                <div class="empty-state"><span class="empty-state-icon">{% include "includes/icon.html" with name="shield" %}</span><h2>Nenhum problema informado</h2><p>Se algo deixar você desconfortável ou inseguro, escolha “Informar um problema”.</p></div>
             {% endfor %}
         </div>
     </div>
