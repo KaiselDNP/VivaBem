@@ -19,12 +19,12 @@ class DemoDataCommandTests(TestCase):
     def test_command_creates_reusable_demo_scenario(self):
         call_command("seed_demo_data")
         call_command("seed_demo_data")
+        call_command("seed_demo_data", reset=True)
 
         users = get_user_model().objects.filter(email__endswith="@demo.vivabem.test")
-        admin = users.get(role=UserRole.ADMIN)
-        self.assertEqual(users.count(), 4)
-        self.assertTrue(admin.is_superuser)
-        self.assertTrue(admin.check_password(self.password))
+        self.assertEqual(users.count(), 3)
+        self.assertFalse(users.filter(role=UserRole.ADMIN).exists())
+        self.assertTrue(all(user.check_password(self.password) for user in users))
         self.assertEqual(FamilyLink.objects.count(), 1)
         self.assertEqual(FamilyPermission.objects.count(), 1)
         self.assertEqual(HelpRequest.objects.count(), 1)

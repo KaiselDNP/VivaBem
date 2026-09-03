@@ -35,8 +35,8 @@ python manage.py seed_demo_data
 ```
 
 No Windows, `scripts/setup_demo_data.cmd` executa as migrações e esse comando automaticamente. Ele
-cria quatro contas locais terminadas em `@demo.vivabem.test`: `admin`, `idoso`, `familiar` e
-`profissional`. A senha padrão de demonstração é `VivaBemTeste2026!` e pode ser substituída pela
+cria três contas locais terminadas em `@demo.vivabem.test`: `idoso`, `familiar` e `profissional`.
+A senha padrão de demonstração é `VivaBemTeste2026!` e pode ser substituída pela
 variável local `VIVABEM_DEMO_PASSWORD`. O comando funciona somente com `VIVABEM_DEBUG=true`, pode ser
 repetido sem duplicar os registros e aceita `--reset` para recriar apenas os dados fictícios.
 

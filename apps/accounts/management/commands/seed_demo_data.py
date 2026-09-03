@@ -5,12 +5,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
+from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import UserRole
 from apps.chat.models import ChatMessage, Conversation
-from apps.moderation.models import Report, ReportCategory
+from apps.moderation.models import AdminAnnouncement, Report, ReportCategory
 from apps.needs.models import (
     HelpRequest,
     HelpRequestStatus,
@@ -49,9 +50,7 @@ class Command(BaseCommand):
 
         with transaction.atomic():
             if options["reset"]:
-                deleted, _ = get_user_model().objects.filter(
-                    email__iendswith=f"@{DEMO_DOMAIN}"
-                ).delete()
+                deleted = self._reset_demo_data()
                 self.stdout.write(f"Registros fictícios removidos: {deleted}.")
 
             users = self._create_users(password)
@@ -59,10 +58,24 @@ class Command(BaseCommand):
             self._create_scenario(users)
 
         self.stdout.write(self.style.SUCCESS("Dados locais de demonstração estão prontos."))
-        self.stdout.write("Contas: admin, idoso, familiar e profissional @demo.vivabem.test")
+        self.stdout.write("Contas: idoso, familiar e profissional @demo.vivabem.test")
         self.stdout.write(
             "Senha: valor de VIVABEM_DEMO_PASSWORD ou a senha de demonstração documentada."
         )
+
+    def _reset_demo_data(self):
+        demo_users = get_user_model().objects.filter(email__iendswith=f"@{DEMO_DOMAIN}")
+        AdminAnnouncement.objects.filter(created_by__in=demo_users).delete()
+        Report.objects.filter(reporter__in=demo_users).delete()
+        HelpRequest.objects.filter(need__senior__in=demo_users).delete()
+        Need.objects.filter(senior__in=demo_users).delete()
+        FamilyLink.objects.filter(
+            Q(senior__in=demo_users)
+            | Q(family__in=demo_users)
+            | Q(requested_by__in=demo_users)
+        ).delete()
+        deleted, _ = demo_users.delete()
+        return deleted
 
     def _upsert_user(self, *, email, password, first_name, last_name, role, is_staff=False):
         user_model = get_user_model()
@@ -81,14 +94,6 @@ class Command(BaseCommand):
 
     def _create_users(self, password):
         return {
-            "admin": self._upsert_user(
-                email=f"admin@{DEMO_DOMAIN}",
-                password=password,
-                first_name="Administrador",
-                last_name="Demonstração",
-                role=UserRole.ADMIN,
-                is_staff=True,
-            ),
             "senior": self._upsert_user(
                 email=f"idoso@{DEMO_DOMAIN}",
                 password=password,
@@ -124,10 +129,6 @@ class Command(BaseCommand):
         UserProfile.objects.update_or_create(
             user=users["professional"],
             defaults={"city": "Avaré", "bio": "Perfil fictício para testar o VivaBem."},
-        )
-        UserProfile.objects.update_or_create(
-            user=users["admin"],
-            defaults={"city": "Avaré"},
         )
         ProfessionalProfile.objects.update_or_create(
             user=users["professional"],
