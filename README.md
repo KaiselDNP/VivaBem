@@ -25,6 +25,24 @@ entre pessoas idosas, familiares autorizados e profissionais em Avaré-SP.
 
 As credenciais reais nunca devem ser adicionadas ao Git.
 
+### Banco local de demonstração
+
+O Git não armazena o banco real nem senhas pessoais. Para preparar os mesmos dados fictícios em
+qualquer computador, configure o `.env`, execute as migrações e rode:
+
+```powershell
+python manage.py seed_demo_data
+```
+
+No Windows, `scripts/setup_demo_data.cmd` executa as migrações e esse comando automaticamente. Ele
+cria quatro contas locais terminadas em `@demo.vivabem.test`: `admin`, `idoso`, `familiar` e
+`profissional`. A senha padrão de demonstração é `VivaBemTeste2026!` e pode ser substituída pela
+variável local `VIVABEM_DEMO_PASSWORD`. O comando funciona somente com `VIVABEM_DEBUG=true`, pode ser
+repetido sem duplicar os registros e aceita `--reset` para recriar apenas os dados fictícios.
+
+Para recriar a conta administrativa pessoal sem publicar a senha, preencha `VIVABEM_ADMIN_EMAIL` e
+`VIVABEM_ADMIN_PASSWORD` em cada `.env` local e execute `python manage.py bootstrap_admin`.
+
 ## Funcionalidades disponíveis
 
 - Página inicial pública e responsiva.
