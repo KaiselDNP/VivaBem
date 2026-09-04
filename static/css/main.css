@@ -3071,3 +3071,215 @@ a.help-option-card:hover { border-color: var(--green-700); transform: translateY
     .form-error-icon { width: 38px; height: 38px; }
     .empty-state { min-height: 200px; }
 }
+
+/* Animações discretas: dão retorno ao toque sem atrasar a navegação. */
+@view-transition { navigation: auto; }
+
+@keyframes page-arrive {
+    from { opacity: 0.55; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes header-arrive {
+    from { opacity: 0.55; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes menu-reveal {
+    from { opacity: 0; transform: translateY(-7px) scale(0.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes view-fade-out {
+    to { opacity: 0.55; transform: translateY(-14px); }
+}
+
+@keyframes view-fade-in {
+    from { opacity: 0.55; transform: translateY(14px); }
+}
+
+::view-transition-old(root) { animation: 240ms ease-out both view-fade-out; }
+::view-transition-new(root) { animation: 240ms ease-out both view-fade-in; }
+
+main { animation: 240ms ease-out both page-arrive; }
+.app-header { animation: 240ms ease-out both header-arrive; }
+
+.button,
+.text-button,
+.notification-link,
+.dashboard-avatar-link,
+.theme-toggle,
+.tutorial-reopen,
+.record-actions a,
+.record-actions button,
+.notification-item button,
+.quick-replies button,
+.chat-safety-menu summary {
+    transition: color 140ms ease, background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, transform 90ms ease;
+}
+
+.app-nav a {
+    position: relative;
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 120ms ease;
+}
+
+.app-nav-icon,
+.header-action-icon { transition: transform 160ms ease; }
+
+.role-action-card,
+.senior-action-card,
+.record-card-link,
+.chat-list-item,
+.signup-option,
+a.help-option-card,
+.simple-request-item {
+    transform-origin: center;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.role-action-icon,
+.senior-action-icon,
+.help-option-icon,
+.professional-visual-icon,
+.option-mark { transition: color 160ms ease, background-color 160ms ease, transform 180ms ease; }
+
+.role-action-arrow,
+.senior-action-arrow,
+.option-arrow,
+.card-link span { display: inline-block; transition: transform 160ms ease; }
+
+.role-more-options[open] nav,
+.senior-more-options[open] nav,
+.chat-safety-menu[open] .chat-safety-actions { animation: 170ms ease-out both menu-reveal; transform-origin: top center; }
+
+@media (hover: hover) and (pointer: fine) {
+    .app-nav a:hover { transform: translateY(-1px); }
+    .app-nav a:hover .app-nav-icon,
+    .notification-link:hover .header-action-icon { transform: scale(1.08); }
+
+    .role-action-card:hover,
+    .senior-action-card:hover,
+    .record-card-link:hover,
+    .chat-list-item:hover,
+    .signup-option:hover,
+    a.help-option-card:hover,
+    .simple-request-item:hover { transform: translateY(-3px); }
+
+    .role-action-card:hover .role-action-icon,
+    .senior-action-card:hover .senior-action-icon,
+    a.help-option-card:hover .help-option-icon,
+    .signup-option:hover .option-mark { transform: scale(1.04); }
+
+    .role-action-card:hover .role-action-arrow,
+    .senior-action-card:hover .senior-action-arrow,
+    .signup-option:hover .option-arrow,
+    .record-card-link:hover .card-link span { transform: translateX(4px); }
+}
+
+.button:active,
+.text-button:active,
+.notification-link:active,
+.dashboard-avatar-link:active,
+.theme-toggle:active,
+.tutorial-reopen:active,
+.record-actions a:active,
+.record-actions button:active,
+.quick-replies button:active,
+.role-action-card:active,
+.senior-action-card:active,
+.record-card-link:active,
+.chat-list-item:active,
+.signup-option:active,
+a.help-option-card:active,
+.simple-request-item:active { transform: translateY(1px) scale(0.985); }
+
+@media (prefers-reduced-motion: reduce) {
+    @view-transition { navigation: none; }
+
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) { animation: none; }
+
+    main,
+    .app-header { animation: none; }
+}
+
+/* Retorno imediato durante o carregamento da próxima página. */
+@keyframes navigation-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes navigation-feedback-in {
+    from { opacity: 0; transform: translate(-50%, 7px) scale(0.97); }
+    to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+.navigation-feedback {
+    position: fixed;
+    z-index: 200;
+    left: 50%;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    min-height: 50px;
+    display: inline-flex;
+    gap: 11px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    color: var(--action-primary-text);
+    background: var(--action-primary);
+    border: 2px solid color-mix(in srgb, var(--action-primary-text) 32%, transparent);
+    border-radius: 999px;
+    box-shadow: 0 12px 32px rgba(17, 39, 31, 0.24);
+    font-size: 0.95rem;
+    font-weight: 850;
+    animation: 150ms ease-out both navigation-feedback-in;
+}
+
+.navigation-feedback[hidden] { display: none; }
+
+.navigation-spinner {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 auto;
+    border: 3px solid color-mix(in srgb, var(--action-primary-text) 42%, transparent);
+    border-top-color: var(--action-primary-text);
+    border-radius: 50%;
+    animation: 650ms linear infinite navigation-spin;
+}
+
+html.navigation-pending { cursor: progress; }
+
+html.navigation-pending main,
+html.navigation-pending .app-header {
+    opacity: 0.55;
+    transform: translateY(-14px);
+    pointer-events: none;
+    transition: opacity 240ms ease-out, transform 240ms ease-out;
+}
+
+html.navigation-pending .accessibility-tools {
+    opacity: 0.65;
+    transform: translateY(-10px);
+    transition: opacity 240ms ease-out, transform 240ms ease-out;
+}
+
+@media (max-width: 640px) {
+    .navigation-feedback {
+        width: max-content;
+        max-width: calc(100% - 28px);
+        bottom: max(14px, env(safe-area-inset-bottom));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navigation-feedback { animation: none; }
+    .navigation-spinner { animation: none; border-top-color: transparent; }
+    html.navigation-pending main,
+    html.navigation-pending .app-header,
+    html.navigation-pending .accessibility-tools { transform: none; transition: none; }
+}

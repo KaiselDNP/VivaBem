@@ -9,12 +9,17 @@
     <title>{% block title %}VivaBem{% endblock %}</title>
     <script src="{% static 'js/theme.js' %}"></script>
     <script src="{% static 'js/accessibility.js' %}?v=20260824-9"></script>
+    <script src="{% static 'js/navigation-feedback.js' %}?v=20260902-1" defer></script>
     {% if user.is_authenticated %}<script src="{% static 'js/onboarding.js' %}?v=20260831-1" defer></script>{% endif %}
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20260901-2">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20260902-3">
 </head>
 <body>
     {% if not user.is_authenticated %}{% include "includes/reading_welcome.html" %}{% endif %}
     <a class="skip-link" href="#conteudo">Ir para o conteúdo principal</a>
+    <div class="navigation-feedback" data-navigation-feedback role="status" aria-live="polite" aria-atomic="true" hidden>
+        <span class="navigation-spinner" aria-hidden="true"></span>
+        <span data-navigation-message>Abrindo...</span>
+    </div>
     {% include "includes/accessibility_tools.html" %}
     {% block body %}{% endblock %}
     {% if user.is_authenticated %}{% include "includes/onboarding_tutorial.html" %}{% endif %}
